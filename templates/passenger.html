@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block title %}城市之眼 — 乘客端{% endblock %}
+{% block title %} ReVision City {% endblock %}
 
 {% block content %}
 
 <section id="screen-calib-1" class="screen active">
-  <h1 class="title-xl">你的視野狀況是？</h1>
+  <h1 class="title-lg">你的視覺狀況？</h1>
 
   <button class="choice-card" data-impairment="tunnel_vision">
     <span class="icon">
@@ -51,28 +51,48 @@
   </div>
 
   <div class="progress-dots">
-    <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+    <span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
   </div>
 </section>
 
 <section id="screen-calib-2" class="screen">
-  <h1 class="title-lg">點一下你現在看得最清楚的地方</h1>
+  <h1 class="title-lg">點擊目前視野範圍</h1>
 
   <div id="calib-canvas" class="calib-canvas-wrap">
     <div id="safe-zone-marker" class="safe-zone-marker"></div>
   </div>
 
   <p class="subtitle" style="text-align:center; margin-bottom:8px">拖曳滑桿調整範圍大小</p>
-  <input id="safe-zone-size-slider" type="range" min="24" max="140" step="4" value="60">
-  <p class="subtitle" style="text-align:center">先點畫面標記位置，再用滑桿調整大小</p>
-  <p class="subtitle" style="text-align:center">塗色（明亮）的圓圈＝你看得清楚的地方，圈外遮暗＝看不清楚</p>
+  <input id="safe-zone-size-slider" type="range" min="15" max="60" step="3" value="30">
+  <p class="subtitle" style="text-align:center">先點擊標記位置，再用滑桿調整大小</p>
 
   <div class="btn-footer">
-    <button id="btn-step2-next" class="btn btn-primary" disabled>下一步</button>
+    <button id="btn-step2-next" class="btn btn-primary" disabled>下一步：實際看看</button>
   </div>
 
   <div class="progress-dots">
-    <span class="dot"></span><span class="dot active"></span><span class="dot"></span>
+    <span class="dot"></span><span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+  </div>
+</section>
+
+<section id="screen-calib-preview" class="screen">
+  <h1 class="title-lg">實際視野範圍</h1>
+
+  <div id="calib-preview-wrap" class="calib-preview-wrap">
+    <video id="preview-video" autoplay playsinline muted></video>
+    <div id="preview-mask" class="preview-mask"></div>
+  </div>
+
+  <p id="preview-status" class="status-msg"></p>
+  <p class="subtitle" style="text-align:center">平舉手機，測試視野範圍</p>
+
+  <div class="action-row" style="margin-top:8px">
+    <button id="btn-preview-back" class="btn btn-secondary">重新調整</button>
+    <button id="btn-preview-continue" class="btn btn-secondary" style="border-color:var(--color-success); color:var(--color-success)">範圍剛好</button>
+  </div>
+
+  <div class="progress-dots">
+    <span class="dot"></span><span class="dot"></span><span class="dot active"></span><span class="dot"></span>
   </div>
 </section>
 
@@ -98,7 +118,7 @@
   </div>
 
   <div class="progress-dots">
-    <span class="dot"></span><span class="dot"></span><span class="dot active"></span>
+    <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot active"></span>
   </div>
 </section>
 

@@ -1,24 +1,24 @@
 :root {
   /* 色彩系統 */
-  --color-bg: #F7F5F0;            
-  --color-surface: #FFFFFF;        
-  --color-surface-muted: #ECE9E2;  
-  --color-text: #14181F;          
-  --color-text-muted: #5B6270;     
-  --color-border: #D8D4CA;        
+  --color-bg: #F7F5F0;            /* 溫暖淺灰白，不用純白避免反光刺眼 */
+  --color-surface: #FFFFFF;        /* 卡片底色 */
+  --color-surface-muted: #ECE9E2;  /* 次要卡片底色 */
+  --color-text: #14181F;           /* 主文字，接近黑但非純黑 */
+  --color-text-muted: #5B6270;     /* 次要文字 */
+  --color-border: #D8D4CA;         /* 一般邊框 */
 
-  --color-primary: #C8850C;        
-  --color-primary-text: #14181F;  
-  --color-secondary: #1D5FB8;     
-  --color-danger: #C62828;        
-  --color-success: #1E8E3E;        
+  --color-primary: #C8850C;        /* 主色：琥珀，用於強調/CTA */
+  --color-primary-text: #14181F;   /* 主色按鈕上的文字 */
+  --color-secondary: #1D5FB8;      /* 次要色：藍，用於次要動作 */
+  --color-danger: #C62828;         /* 錯誤/緊急 */
+  --color-success: #1E8E3E;        /* 成功/已確認 */
 
   --safe-zone-bg: rgba(200, 133, 12, 0.12);
   --safe-zone-border: #C8850C;
 
   /* 字體系統 */
   --font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "PingFang TC", sans-serif;
-  --font-scale: 1; 
+  --font-scale: 1; /* 由使用者校準結果動態覆寫 */
 
   --font-xl: calc(2rem * var(--font-scale));
   --font-lg: calc(1.5rem * var(--font-scale));
@@ -77,6 +77,10 @@ a:focus-visible,
   }
 }
 
+/* ============ 單一流程容器 ============
+   核心規則：同一時間只顯示一個 .screen，
+   絕不做 grid 並列多個功能區塊（dashboard 樣式）
+================================================ */
 
 .screen {
   flex: 1;
@@ -365,6 +369,33 @@ input[type="range"] {
 .btn-footer {
   margin-top: auto;
   padding-top: var(--space-3);
+}
+
+/* ============ 校準 Step 2.5：實際視野預覽確認 ============ */
+
+.calib-preview-wrap {
+  position: relative;
+  flex: 1;
+  min-height: 380px;
+  background: #000;
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: var(--space-2);
+}
+
+.calib-preview-wrap video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.preview-mask {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: background 0.05s linear;
 }
 
 /* ============ 拍照頁 ============ */

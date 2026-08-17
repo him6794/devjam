@@ -1,7 +1,12 @@
+/* ============================================
+   司機端主邏輯
+   使用情境跟乘客端不同：一般視力、正在準備發車，需要快速一瞥
+   ============================================ */
+
 const driverState = {
   route: null,
-  knownAlertIds: new Set(),  
-  acknowledgedIds: new Set(), 
+  knownAlertIds: new Set(),   // 已經渲染過的警示，避免重複插入
+  acknowledgedIds: new Set(), // 已確認的警示 id
 };
 
 let pollTimer = null;
@@ -106,6 +111,7 @@ function formatTimeAgo(isoString) {
 }
 
 function playAlertSound() {
+  // 用短促的 Web Audio 蜂鳴取代外部音檔，避免多帶一個素材檔案
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     const osc = ctx.createOscillator();
@@ -117,5 +123,6 @@ function playAlertSound() {
     osc.start();
     osc.stop(ctx.currentTime + 0.3);
   } catch (err) {
+    // 靜默失敗即可，音效只是加分不是必要功能
   }
 }

@@ -1,6 +1,10 @@
+/* ============================================
+   乘客端主邏輯
+   ============================================ */
+
 const state = {
   impairmentType: null,
-  safeZone: { x: 50, y: 50, radius: 30 }, // 百分比座標
+  safeZone: { x: 50, y: 50, radiusPercent: 30 }, // x/y是畫面百分比位置，radiusPercent是佔畫面短邊的百分比
   fontScale: 1,
   voiceEnabled: true,
   currentBuses: [],
@@ -267,6 +271,9 @@ function speakLiveGuideAlert(text) {
   window.speechSynthesis.speak(utter);
 }
 
+// 校準 Step 2.5 的相機預覽串流（獨立於主相機）
+let previewStream = null;
+
 document.addEventListener("DOMContentLoaded", init);
 
 async function init() {
@@ -286,7 +293,12 @@ async function init() {
 
   if (profileRes.exists) {
     state.impairmentType = profileRes.impairment_type;
-    state.safeZone = profileRes.safe_zone || state.safeZone;
+    // 後端存的是 {x, y, radius}（radius = 佔畫面短邊百分比），前端
+    // 內部用 radiusPercent 命名，讀回時做對映
+    const z = profileRes.safe_zone;
+    if (z) {
+      state.safeZone = { x: z.x ?? 50, y: z.y ?? 50, radiusPercent: z.radius ?? 30 };
+    }
     state.fontScale = profileRes.font_scale;
     state.voiceEnabled = profileRes.voice_enabled;
     applyFontScale(state.fontScale);
@@ -297,6 +309,7 @@ async function init() {
   }
 }
 
+/* ---------------- 校準 Step 1：選視野狀況 ---------------- */
 
 function bindOnboardingEvents() {
   qsa(".choice-card[data-impairment]").forEach((card) => {
@@ -314,6 +327,17 @@ function bindOnboardingEvents() {
   });
 
   qs("#btn-step2-next").addEventListener("click", () => {
+    showScreen("screen-calib-preview");
+    setupCalibPreview();
+  });
+
+  qs("#btn-preview-back").addEventListener("click", () => {
+    stopPreviewCamera();
+    showScreen("screen-calib-2");
+  });
+
+  qs("#btn-preview-continue").addEventListener("click", () => {
+    stopPreviewCamera();
     showScreen("screen-calib-3");
   });
 
@@ -331,6 +355,7 @@ function bindOnboardingEvents() {
   qs("#btn-step3-finish").addEventListener("click", finishCalibration);
 }
 
+/* ---------------- 校準 Step 2：標記安全視野區 ---------------- */
 
 function setupCalibCanvas() {
   const canvas = qs("#calib-canvas");
@@ -338,9 +363,10 @@ function setupCalibCanvas() {
   const sizeSlider = qs("#safe-zone-size-slider");
 
   function updateMarkerSize() {
-    const size = state.safeZone.radius * 2;
-    marker.style.width = size + "px";
-    marker.style.height = size + "px";
+    const rect = canvas.getBoundingClientRect();
+    const radiusPx = (state.safeZone.radiusPercent / 100) * Math.min(rect.width, rect.height);
+    marker.style.width = radiusPx * 2 + "px";
+    marker.style.height = radiusPx * 2 + "px";
   }
 
   // 存的是「視窗(viewport)百分比」而不是 canvas 百分比：結果頁的
@@ -365,20 +391,76 @@ function setupCalibCanvas() {
   });
 
   sizeSlider.addEventListener("input", () => {
-    state.safeZone.radius = parseInt(sizeSlider.value, 10);
+    state.safeZone.radiusPercent = parseInt(sizeSlider.value, 10);
     updateMarkerSize();
   });
 
-  state.safeZone.radius = parseInt(sizeSlider.value, 10);
+  state.safeZone.radiusPercent = parseInt(sizeSlider.value, 10);
   updateMarkerSize();
 }
 
+/* ---------------- 校準 Step 2.5：實際視野預覽確認 ---------------- */
+
+async function setupCalibPreview() {
+  const video = qs("#preview-video");
+  const statusEl = qs("#preview-status");
+  statusEl.textContent = "";
+  statusEl.classList.remove("error");
+
+  if (!previewStream) {
+    try {
+      previewStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" },
+        audio: false,
+      });
+      video.srcObject = previewStream;
+    } catch (err) {
+      statusEl.textContent = "無法開啟相機預覽，直接套用你剛才的設定即可";
+      statusEl.classList.add("error");
+    }
+  }
+
+  // 等畫面版面穩定後再量測容器尺寸，遮罩大小才會準
+  requestAnimationFrame(renderPreviewMask);
+}
+
+function renderPreviewMask() {
+  const wrap = qs("#calib-preview-wrap");
+  const mask = qs("#preview-mask");
+  const rect = wrap.getBoundingClientRect();
+  const radiusPx = (state.safeZone.radiusPercent / 100) * Math.min(rect.width, rect.height);
+
+  mask.style.background =
+    `radial-gradient(circle at ${state.safeZone.x}% ${state.safeZone.y}%, ` +
+    `transparent 0px, transparent ${radiusPx}px, rgba(20,24,31,0.9) ${radiusPx + 1}px)`;
+}
+
+function stopPreviewCamera() {
+  if (previewStream) {
+    previewStream.getTracks().forEach((track) => track.stop());
+    previewStream = null;
+  }
+}
+
+window.addEventListener("resize", () => {
+  if (qs("#screen-calib-preview").classList.contains("active")) {
+    renderPreviewMask();
+  }
+});
+
+/* ---------------- 校準 Step 3：字級 + 語音開關 ---------------- */
 
 async function finishCalibration() {
   const profile = {
     user_id: getUserId(),
     impairment_type: state.impairmentType,
-    safe_zone: state.safeZone,
+    // 後端 SafeZone 的欄位是 radius（佔畫面短邊百分比），前端內部
+    // 用 radiusPercent 命名，送出時轉成後端形狀
+    safe_zone: {
+      x: state.safeZone.x,
+      y: state.safeZone.y,
+      radius: state.safeZone.radiusPercent,
+    },
     font_scale: state.fontScale,
     voice_enabled: state.voiceEnabled,
   };
@@ -398,6 +480,7 @@ async function finishCalibration() {
   startCamera();
 }
 
+/* ---------------- 拍照 / 掃描頁 ---------------- */
 
 async function startCamera() {
   if (mediaStream) return; // 已經開過了，不要重複要求權限
@@ -578,7 +661,7 @@ async function startScanning() {
   qs("#camera-status").textContent = "辨識中...";
   qs("#camera-status").classList.remove("error");
   scanTimer = setInterval(captureAndSend, SCAN_INTERVAL_MS);
-  captureAndSend(); 
+  captureAndSend(); // 立刻打第一次，不等第一個 interval
 }
 
 function stopScanning() {
@@ -638,7 +721,10 @@ async function captureAndSend() {
     qs("#camera-status").textContent = "找不到站牌，請調整角度或靠近一點";
     qs("#camera-status").classList.add("error");
   }
+  // 否則（not_found 且未達上限）什麼都不做，等下一輪 interval 繼續掃
 }
+
+/* ---------------- 結果頁渲染 ---------------- */
 
 function renderResult(data) {
   if (!data || !data.buses || data.buses.length === 0) {
@@ -724,20 +810,22 @@ function renderResult(data) {
 }
 
 // 把結果資訊窗放到校準時標記的「看得最清楚的地方」：x/y 是 viewport
-// 百分比（與 setupCalibCanvas 同源），radius 是像素半徑（與校準滑桿
-// 同源）。資訊窗用 position:fixed，所以 % 直接對齊 viewport，標記在哪
-// 就出現在哪；視窗大小跟著範圍走、字級依範圍縮放（--zone-scale）。
+// 百分比，radiusPercent 是佔畫面短邊的百分比（與校準滑桿同源，
+// 見 setupCalibCanvas）。資訊窗用 position:fixed，所以 % 直接對齊
+// viewport，標記在哪就出現在哪；視窗大小跟著範圍走、字級依範圍
+// 縮放（--zone-scale，以 30% 為基準）。
 function applySafeZoneWindow(el, zone) {
-  const radius = clampNum(zone?.radius ?? 30, 24, 140);
+  const pct = clampNum(zone?.radiusPercent ?? zone?.radius ?? 30, 15, 60);
   const x = clampNum(zone?.x ?? 50, 0, 100);
   const y = clampNum(zone?.y ?? 50, 0, 100);
-  const half = radius; // 視窗 = 2 × 半徑
+  const radiusPx = (pct / 100) * Math.min(window.innerWidth, window.innerHeight);
+  const half = radiusPx; // 視窗 = 2 × 半徑
 
-  el.style.width = el.style.height = `${radius * 2}px`;
+  el.style.width = el.style.height = `${radiusPx * 2}px`;
   // fixed 元素的 % 以 viewport 為基準；clamp() 讓視窗就算在邊緣也不會跑出螢幕
   el.style.left = `clamp(${half}px, ${x}%, calc(100% - ${half}px))`;
   el.style.top = `clamp(${half}px, ${y}%, calc(100% - ${half}px))`;
-  el.style.setProperty("--zone-scale", clampNum(radius / 60, 0.35, 2.5));
+  el.style.setProperty("--zone-scale", clampNum(pct / 30, 0.35, 2.5));
 }
 
 function clampNum(v, min, max) {
