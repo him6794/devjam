@@ -72,6 +72,19 @@ PASSENGER_HTML = """
       font-size: 0.9rem; font-weight: bold;
       box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     }
+    #walkModeBtn {
+      position: fixed; top: 178px; right: 10px; z-index: 20;
+      padding: 8px 14px; border-radius: 20px;
+      background: #37474f; color: #fff; border: none;
+      font-size: 0.9rem; font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+    #walkModeBtn.active { background: #c62828; }
+    #walkIndicator {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 30;
+      display: none; padding: 10px; text-align: center;
+      background: rgba(198,40,40,0.85); color: #fff; font-size: 0.95rem;
+    }
     #hint {
       position: fixed; bottom: 40%; left: 0; right: 0; z-index: 10;
       text-align: center; font-size: 1.2rem; color: rgba(255,255,255,0.85);
@@ -214,6 +227,8 @@ PASSENGER_HTML = """
   <button id="tripBar" title="設定要搭的公車路線與站牌">點擊設定要搭的公車路線與站牌</button>
   <button id="rateStopBtn" title="幫這個站評無障礙度">★ 評分本站</button>
   <button id="confirmBoardBtn" title="上車後拍車內顯示幕確認">🚌 確認上車</button>
+  <button id="walkModeBtn" title="家到公車站步行時的路況警示">🚶 開始步行模式</button>
+  <div id="walkIndicator">🚶 步行模式中，持續偵測周邊路況...</div>
 
   <div id="resultScreen">
     <div id="resultText"></div>
@@ -631,6 +646,67 @@ PASSENGER_HTML = """
       captureAndAnalyze();
     });
 
+    // 步行模式：家到公車站途中，每隔幾秒背景拍一張檢查路況，只有偵測到危險才出聲
+    const walkModeBtn = document.getElementById('walkModeBtn');
+    const walkIndicator = document.getElementById('walkIndicator');
+    let walkModeActive = false;
+    let walkModeTimer = null;
+    let walkModeBusy = false;
+
+    async function walkModeTick() {
+      if (walkModeBusy || busy) return;
+      if (video.videoWidth === 0) return; // 相機還沒就緒
+      walkModeBusy = true;
+      try {
+        const MAX_DIM = 768; // 步行模式求快，畫質需求比掃站牌低
+        const scale = Math.min(1, MAX_DIM / Math.max(video.videoWidth, video.videoHeight));
+        const c = document.createElement('canvas');
+        c.width = Math.round(video.videoWidth * scale);
+        c.height = Math.round(video.videoHeight * scale);
+        c.getContext('2d').drawImage(video, 0, 0, c.width, c.height);
+        const blob = await new Promise(resolve => c.toBlob(resolve, 'image/jpeg', 0.75));
+
+        const formData = new FormData();
+        formData.append('image', blob, 'walk.jpg');
+        const res = await fetch('/api/walking_hazard', { method: 'POST', body: formData });
+        const data = await res.json();
+
+        if (data.status === 'success' && data.hazard) {
+          if (navigator.vibrate) navigator.vibrate([120, 60, 120]);
+          walkIndicator.innerText = '⚠️ ' + data.summary;
+          if (profile.voice_enabled !== false) {
+            player.src = data.audio_url;
+            player.play();
+          }
+          setTimeout(() => {
+            if (walkModeActive) walkIndicator.innerText = '🚶 步行模式中，持續偵測周邊路況...';
+          }, 4000);
+        }
+      } catch (err) { /* 單次失敗不影響下一輪，忽略 */ }
+      finally { walkModeBusy = false; }
+    }
+
+    walkModeBtn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      walkModeActive = !walkModeActive;
+      if (walkModeActive) {
+        walkModeBtn.classList.add('active');
+        walkModeBtn.innerText = '⏹ 結束步行模式';
+        walkIndicator.style.display = 'block';
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+          video.srcObject = stream;
+        } catch (err) { /* 若相機已開啟則忽略 */ }
+        walkModeTimer = setInterval(walkModeTick, 7000);
+        walkModeTick();
+      } else {
+        walkModeBtn.classList.remove('active');
+        walkModeBtn.innerText = '🚶 開始步行模式';
+        walkIndicator.style.display = 'none';
+        if (walkModeTimer) clearInterval(walkModeTimer);
+      }
+    });
+
     tapLayer.addEventListener('click', captureAndAnalyze);
     resultScreen.addEventListener('click', captureAndAnalyze);
     checkProfile();
@@ -812,6 +888,37 @@ def api_analyze():
         "route": route,
         "tdx_eta_minutes": tdx_eta_minutes,
         "event_id": event_id,
+    })
+
+
+@app.route("/api/walking_hazard", methods=["POST"])
+def api_walking_hazard():
+    """步行模式：家到公車站途中的周邊障礙物警示。獨立端點，
+    不做 TDX 查詢、不記錄模組 4 事件（這是高頻率的背景輪詢，不是一次主動掃描）。"""
+    file = request.files.get("image")
+    if not file:
+        return jsonify({"status": "error", "message": "缺少照片"}), 400
+
+    job_id = str(uuid.uuid4())[:8]
+    image_path = os.path.join(UPLOAD_DIR, f"{job_id}.jpg")
+    file.save(image_path)
+    audio_path = os.path.join(AUDIO_DIR, f"{job_id}.mp3")
+
+    try:
+        result = run_pipeline(image_path, audio_path, walking_hazard=True)
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+    finally:
+        os.remove(image_path)
+
+    if not result["summary"]:
+        return jsonify({"status": "success", "hazard": False})
+
+    return jsonify({
+        "status": "success",
+        "hazard": True,
+        "summary": result["summary"],
+        "audio_url": f"/audio/{job_id}.mp3",
     })
 
 

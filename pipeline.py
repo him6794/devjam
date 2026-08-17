@@ -50,18 +50,44 @@ CONFIRM_BOARDING_PROMPT = """你是一個協助「隧道視野（視野狹窄）
 不要加其他敘述、不要客套話、不要 Markdown，一句話講完，數字一律用阿拉伯數字。
 """
 
+# 步行模式：家到公車站途中，每隔幾秒自動拍一張，只在「有明顯危險」時才出聲，
+# 平常安靜不打擾——這跟其他模式不同，「沒事」才是最常見、最該安靜的情況。
+HAZARD_SENTINEL = "SAFE"
+WALKING_HAZARD_PROMPT = f"""你是一個協助「隧道視野（視野狹窄）」患者步行時的即時避障助理。
+使用者正在走路前往公車站，這張照片是走路時隨手拍到的周遭畫面（可能會歪斜、模糊、拍到地面或天空）。
+
+只在畫面中有「明確、立即的危險」時才回應，例如：
+- 有車輛（機車/汽車/腳踏車）正朝使用者方向靠近或行駛過來
+- 地面有明顯高低差、坑洞、施工障礙物擋住去路
+- 前方有樓梯或台階
+
+如果有危險：用一句極短的話說明方位＋是什麼（例如：「右側有機車靠近」「前方有階梯」），
+不要加其他描述、不要客套話。
+
+如果畫面中沒有上述明確危險（大部分時候都是這樣，例如只是普通人行道、招牌、遠處的車）：
+只回傳英文單字 {HAZARD_SENTINEL}，不要加任何其他文字或標點。
+
+寧可漏報也不要對不明確的東西誤報，避免使用者被無意義的警告干擾。
+"""
+
 
 def describe_image(image_path: str, tdx_hint: str | None = None,
-                    confirm_boarding: bool = False) -> str:
+                    confirm_boarding: bool = False, walking_hazard: bool = False) -> str:
     """把照片丟給 Gemini 多模態模型，回傳語音友善的摘要文字。
     tdx_hint：來自 TDX 即時到站資料的候選範圍提示，用來縮小辨識範圍、提升準確度。
-    confirm_boarding：True 時改用「上車後確認」的簡短是/否提示語。"""
+    confirm_boarding：True 時改用「上車後確認」的簡短是/否提示語。
+    walking_hazard：True 時改用「步行避障」的提示語，沒有危險時回傳 HAZARD_SENTINEL。"""
     with open(image_path, "rb") as f:
         image_bytes = f.read()
 
     mime_type = "image/png" if image_path.lower().endswith(".png") else "image/jpeg"
 
-    prompt = CONFIRM_BOARDING_PROMPT if confirm_boarding else PROMPT
+    if confirm_boarding:
+        prompt = CONFIRM_BOARDING_PROMPT
+    elif walking_hazard:
+        prompt = WALKING_HAZARD_PROMPT
+    else:
+        prompt = PROMPT
     contents = [types.Part.from_bytes(data=image_bytes, mime_type=mime_type), prompt]
     if tdx_hint:
         contents.append(tdx_hint)
@@ -88,8 +114,14 @@ def synthesize_speech(text: str, output_path: str) -> str:
 
 
 def run_pipeline(image_path: str, output_audio_path: str, tdx_hint: str | None = None,
-                  confirm_boarding: bool = False) -> dict:
-    summary = describe_image(image_path, tdx_hint=tdx_hint, confirm_boarding=confirm_boarding)
+                  confirm_boarding: bool = False, walking_hazard: bool = False) -> dict:
+    summary = describe_image(
+        image_path, tdx_hint=tdx_hint,
+        confirm_boarding=confirm_boarding, walking_hazard=walking_hazard,
+    )
+    if walking_hazard and summary.strip().upper() == HAZARD_SENTINEL:
+        # 沒有危險：不用浪費時間跟成本合成語音，前端保持安靜就好
+        return {"summary": "", "audio_path": None}
     audio_path = synthesize_speech(summary, output_audio_path)
     return {"summary": summary, "audio_path": audio_path}
 
