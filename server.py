@@ -58,6 +58,13 @@ PASSENGER_HTML = """
       background: rgba(0,0,0,0.6); color: #fff; border: 1px solid rgba(255,255,255,0.4);
       font-size: 0.9rem; text-align: left;
     }
+    #rateStopBtn {
+      position: fixed; top: 98px; right: 10px; z-index: 20;
+      padding: 8px 14px; border-radius: 20px;
+      background: #6a1b9a; color: #fff; border: none;
+      font-size: 0.9rem; font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
     #hint {
       position: fixed; bottom: 40%; left: 0; right: 0; z-index: 10;
       text-align: center; font-size: 1.2rem; color: rgba(255,255,255,0.85);
@@ -121,6 +128,21 @@ PASSENGER_HTML = """
     #fbBoarded { background: #2e7d32; }
     #fbMissed { background: #ef6c00; }
     #fbNotThis { background: #616161; }
+
+    /* ---- 大字 ETA 全螢幕（到站提醒） ---- */
+    #etaScreen {
+      position: fixed; inset: 0; z-index: 60; display: none;
+      flex-direction: column; align-items: center; justify-content: center;
+      background: #0d1b2a; color: #fff; text-align: center; padding: 24px;
+    }
+    #etaRoute { font-size: 2.2rem; font-weight: bold; }
+    #etaMinutes { font-size: 7rem; font-weight: bold; line-height: 1; margin: 16px 0; color: #4fc3f7; }
+    #etaUnit { font-size: 1.6rem; color: #aaa; }
+    #etaStopName { font-size: 1.3rem; color: #ccc; margin-top: 12px; }
+    #etaEditBtn {
+      margin-top: 32px; padding: 12px 24px; font-size: 1rem;
+      background: #1976d2; color: #fff; border: none; border-radius: 20px;
+    }
   </style>
 </head>
 <body>
@@ -128,8 +150,8 @@ PASSENGER_HTML = """
     <div class="wizStep active" id="step1">
       <h2>第一次使用，請選擇你的視覺狀況</h2>
       <button class="calBtn" data-type="隧道視野">隧道視野</button>
-      <button class="calBtn" data-type="中心黑點">中心黑點</button>
-      <button class="calBtn" data-type="低視力">低視力</button>
+      <button class="calBtn" data-type="中央黑點">中央黑點</button>
+      <button class="calBtn" data-type="夜盲症">夜盲症</button>
       <button class="calBtn" data-type="全盲">全盲</button>
     </div>
 
@@ -157,6 +179,22 @@ PASSENGER_HTML = """
       <button class="calBtn" data-theme="light">白底黑字</button>
       <button class="calBtn" data-theme="dark">黑底白字</button>
     </div>
+
+    <div class="wizStep" id="step5">
+      <h2>是否需要旁白模式（語音播報結果）？</h2>
+      <button class="calBtn" data-voice="true">需要，用語音唸給我聽</button>
+      <button class="calBtn" data-voice="false">不用，只看畫面就好</button>
+    </div>
+
+    <div class="wizStep" id="step6">
+      <h2>是否同意匿名上傳使用資料？</h2>
+      <p style="color:#aaa; font-size:0.95rem; line-height:1.5;">
+        會記錄「站點、時段、辨識是否成功、你的障礙類型」這類匿名統計資料，
+        不會存你的照片或個人身分，用來協助改善城市無障礙設施。
+      </p>
+      <button class="calBtn" data-consent="true">同意，幫助改善城市無障礙</button>
+      <button class="calBtn" data-consent="false">不同意</button>
+    </div>
   </div>
 
   <video id="camera" autoplay playsinline muted></video>
@@ -167,10 +205,20 @@ PASSENGER_HTML = """
   <div id="tapLayer"></div>
   <button id="settingsBtn" title="調整設定">⚙ 調整視野／字體</button>
   <button id="tripBar" title="設定要搭的公車路線與站牌">點擊設定要搭的公車路線與站牌</button>
+  <button id="rateStopBtn" title="幫這個站評無障礙度">★ 評分本站</button>
 
   <div id="resultScreen">
     <div id="resultText"></div>
   </div>
+
+  <div id="etaScreen">
+    <div id="etaRoute"></div>
+    <div id="etaMinutes">--</div>
+    <div id="etaUnit">分鐘後到站</div>
+    <div id="etaStopName"></div>
+    <button id="etaEditBtn">✎ 修改路線／站牌</button>
+  </div>
+
   <button id="notifyBtn">通知司機：本班車有視障乘客等車</button>
   <div id="feedbackBar">
     <button id="fbBoarded">✅ 有搭上</button>
@@ -195,23 +243,42 @@ PASSENGER_HTML = """
     let busy = false;
     let lastRoute = null;
     let lastEventId = null;
-    let profile = { impairment_type: '', visible_radius_percent: 100, font_size_px: 32, theme: 'dark', voice_enabled: true };
+    let profile = {
+      impairment_type: '', visible_radius_percent: 100, font_size_px: 32,
+      theme: 'dark', voice_enabled: true, data_upload_consent: true,
+    };
     let chosenType = '';
+    let chosenTheme = 'dark';
+    let chosenVoice = true;
 
     // ---- 行程資訊（要搭的路線＋站牌）：接 TDX 即時到站資料 ----
     let tripRoute = localStorage.getItem('trip_route') || '';
     let tripStop = localStorage.getItem('trip_stop') || '';
     const tripBar = document.getElementById('tripBar');
+    const etaScreen = document.getElementById('etaScreen');
+    const etaRoute = document.getElementById('etaRoute');
+    const etaMinutes = document.getElementById('etaMinutes');
+    const etaStopName = document.getElementById('etaStopName');
 
     async function fetchTdxEta() {
       if (!tripRoute || !tripStop) return;
       try {
         const res = await fetch('/api/tdx_eta?route=' + encodeURIComponent(tripRoute) + '&stop=' + encodeURIComponent(tripStop));
         const data = await res.json();
-        if (data.status === 'success' && data.candidates && data.candidates.length > 0 && data.candidates[0].eta_minutes !== null) {
-          tripBar.innerText = tripRoute + ' 號公車預計 ' + data.candidates[0].eta_minutes + ' 分鐘後到站（' + tripStop + '）';
+        const minutes = (data.status === 'success' && data.candidates && data.candidates.length > 0)
+          ? data.candidates[0].eta_minutes : null;
+
+        if (minutes !== null && minutes !== undefined) {
+          tripBar.innerText = tripRoute + ' 號公車預計 ' + minutes + ' 分鐘後到站（' + tripStop + '）';
         } else {
           tripBar.innerText = tripRoute + ' 號公車 @ ' + tripStop + '（暫無即時資料）';
+        }
+
+        // 大字 ETA 畫面如果正開著，同步更新
+        if (etaScreen.style.display === 'flex') {
+          etaRoute.innerText = tripRoute + ' 號公車';
+          etaMinutes.innerText = (minutes !== null && minutes !== undefined) ? minutes : '--';
+          etaStopName.innerText = tripStop;
         }
       } catch (err) {
         tripBar.innerText = tripRoute + ' 號公車 @ ' + tripStop;
@@ -227,17 +294,41 @@ PASSENGER_HTML = """
       }
     }
 
-    tripBar.addEventListener('click', (e) => {
-      e.stopPropagation();
+    function editTrip() {
       const r = prompt('請輸入公車路線號碼（例如 307）', tripRoute);
-      if (r === null) return;
+      if (r === null) return false;
       const s = prompt('請輸入站牌名稱（例如 公館）', tripStop);
-      if (s === null) return;
+      if (s === null) return false;
       tripRoute = r.trim();
       tripStop = s.trim();
       localStorage.setItem('trip_route', tripRoute);
       localStorage.setItem('trip_stop', tripStop);
       updateTripBar();
+      return true;
+    }
+
+    // 行程列：還沒設定 → 跳出輸入框；已設定 → 直接開大字 ETA 畫面
+    tripBar.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (tripRoute && tripStop) {
+        etaRoute.innerText = tripRoute + ' 號公車';
+        etaStopName.innerText = tripStop;
+        etaMinutes.innerText = '--';
+        etaScreen.style.display = 'flex';
+        fetchTdxEta();
+      } else {
+        editTrip();
+      }
+    });
+
+    etaScreen.addEventListener('click', () => { etaScreen.style.display = 'none'; });
+    document.getElementById('etaEditBtn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (editTrip()) {
+        etaRoute.innerText = tripRoute + ' 號公車';
+        etaStopName.innerText = tripStop;
+        fetchTdxEta();
+      }
     });
 
     setInterval(fetchTdxEta, 20000);
@@ -278,6 +369,8 @@ PASSENGER_HTML = """
       fovSlider.dispatchEvent(new Event('input'));
       fontSlider.value = profile.font_size_px || 32;
       fontSlider.dispatchEvent(new Event('input'));
+      chosenTheme = profile.theme || 'dark';
+      chosenVoice = profile.voice_enabled !== false;
       wizard.style.display = 'flex';
       showWizStep('step1');
       try {
@@ -315,15 +408,32 @@ PASSENGER_HTML = """
     });
     document.getElementById('step3Next').addEventListener('click', () => showWizStep('step4'));
 
-    // Step 4：色調 -> 存檔完成
+    // Step 4：色調
     document.querySelectorAll('#step4 .calBtn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        chosenTheme = btn.dataset.theme;
+        showWizStep('step5');
+      });
+    });
+
+    // Step 5：旁白模式
+    document.querySelectorAll('#step5 .calBtn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        chosenVoice = btn.dataset.voice === 'true';
+        showWizStep('step6');
+      });
+    });
+
+    // Step 6：匿名上傳同意 -> 存檔完成
+    document.querySelectorAll('#step6 .calBtn').forEach(btn => {
       btn.addEventListener('click', async () => {
         profile = {
           impairment_type: chosenType,
           visible_radius_percent: parseInt(fovSlider.value, 10),
           font_size_px: parseInt(fontSlider.value, 10),
-          theme: btn.dataset.theme,
-          voice_enabled: true,
+          theme: chosenTheme,
+          voice_enabled: chosenVoice,
+          data_upload_consent: btn.dataset.consent === 'true',
         };
         await fetch('/api/profile', {
           method: 'POST',
@@ -468,6 +578,30 @@ PASSENGER_HTML = """
     document.getElementById('fbMissed').addEventListener('click', (e) => sendFeedback(e, 'missed', '沒搭上'));
     document.getElementById('fbNotThis').addEventListener('click', (e) => sendFeedback(e, 'not_this_one', '不是這台'));
 
+    // 使用者反饋 3a：幫公車站評無障礙度
+    document.getElementById('rateStopBtn').addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const stopName = tripStop || prompt('這是哪一站？', '');
+      if (!stopName) return;
+      const hasStairs = confirm('這個站有階梯（無電梯/無斜坡）嗎？\\n確定=有，取消=沒有');
+      const hasFacilities = confirm('這個站有無障礙設施嗎？（導盲磚、語音報站等）\\n確定=有，取消=沒有');
+      const ratingStr = prompt('整體無障礙友善程度打分（1-5，5 分最好）', '3');
+      const rating = parseInt(ratingStr, 10);
+      if (!rating || rating < 1 || rating > 5) return;
+      await fetch('/api/rate_stop', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          stop_name: stopName,
+          has_stairs: hasStairs,
+          has_accessible_facilities: hasFacilities,
+          rating: rating,
+        }),
+      });
+      statusEl.innerText = '感謝你幫「' + stopName + '」評分！';
+      if (navigator.vibrate) navigator.vibrate(60);
+    });
+
     tapLayer.addEventListener('click', captureAndAnalyze);
     resultScreen.addEventListener('click', captureAndAnalyze);
     checkProfile();
@@ -562,6 +696,7 @@ def api_save_profile():
         font_size_px=int(data.get("font_size_px", 32)),
         theme=data.get("theme", "dark"),
         voice_enabled=data.get("voice_enabled", True),
+        data_upload_consent=data.get("data_upload_consent", True),
     )
     return jsonify({"status": "success"})
 
@@ -608,29 +743,34 @@ def api_analyze():
         except Exception:
             pass  # TDX 掛掉就當作沒有這個提示，繼續走純視覺辨識
 
+    profile = db.get_user_profile(user_id) if user_id else None
+    # 模組 4：只有使用者在校準時同意「匿名上傳使用資料」才記錄事件，
+    # 而且不存 user_id 本身，符合「匿名」的承諾。
+    consent = profile.get("data_upload_consent", True) if profile else False
+    impairment_type = profile.get("impairment_type") if profile else None
+
     start_time = time.time()
     try:
         result = run_pipeline(image_path, audio_path, tdx_hint=tdx_hint)
-        success = True
     except Exception as e:
-        success = False
-        db.log_recognition_event(
-            user_id=user_id, stop_name=trip_stop, route=trip_route,
-            success=False, duration_seconds=time.time() - start_time,
-            impairment_type=None, used_tdx_hint=bool(tdx_hint),
-        )
+        if consent:
+            db.log_recognition_event(
+                user_id=None, stop_name=trip_stop, route=trip_route,
+                success=False, duration_seconds=time.time() - start_time,
+                impairment_type=impairment_type, used_tdx_hint=bool(tdx_hint),
+            )
         return jsonify({"status": "error", "message": str(e)}), 500
 
     route_match = re.search(r"\d{2,4}", result["summary"])
     route = route_match.group() if route_match else None
 
-    profile = db.get_user_profile(user_id) if user_id else None
-    event_id = db.log_recognition_event(
-        user_id=user_id, stop_name=trip_stop, route=route or trip_route,
-        success=True, duration_seconds=time.time() - start_time,
-        impairment_type=profile.get("impairment_type") if profile else None,
-        used_tdx_hint=bool(tdx_hint),
-    )
+    event_id = None
+    if consent:
+        event_id = db.log_recognition_event(
+            user_id=None, stop_name=trip_stop, route=route or trip_route,
+            success=True, duration_seconds=time.time() - start_time,
+            impairment_type=impairment_type, used_tdx_hint=bool(tdx_hint),
+        )
 
     return jsonify({
         "status": "success",
@@ -651,6 +791,22 @@ def api_feedback():
         return jsonify({"status": "error", "message": "缺少 event_id 或 feedback"}), 400
     db.update_event_feedback(event_id, feedback, data.get("note", ""))
     return jsonify({"status": "success"})
+
+
+@app.route("/api/rate_stop", methods=["POST"])
+def api_rate_stop():
+    data = request.get_json(force=True)
+    stop_name = data.get("stop_name")
+    if not stop_name:
+        return jsonify({"status": "error", "message": "缺少 stop_name"}), 400
+    rating_id = db.submit_stop_accessibility_rating(
+        stop_name=stop_name,
+        has_stairs=bool(data.get("has_stairs", False)),
+        has_accessible_facilities=bool(data.get("has_accessible_facilities", False)),
+        rating=int(data.get("rating", 3)),
+        note=data.get("note", ""),
+    )
+    return jsonify({"status": "success", "rating_id": rating_id})
 
 
 @app.route("/api/export.csv")

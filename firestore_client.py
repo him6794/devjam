@@ -29,13 +29,15 @@ def get_user_profile(user_id: str) -> dict | None:
 
 
 def save_user_profile(user_id: str, impairment_type: str, visible_radius_percent: int,
-                       font_size_px: int, theme: str, voice_enabled: bool) -> None:
+                       font_size_px: int, theme: str, voice_enabled: bool,
+                       data_upload_consent: bool = True) -> None:
     get_db().collection("users").document(user_id).set({
         "impairment_type": impairment_type,
         "visible_radius_percent": visible_radius_percent,
         "font_size_px": font_size_px,
         "theme": theme,
         "voice_enabled": voice_enabled,
+        "data_upload_consent": data_upload_consent,
         "updated_at": firestore.SERVER_TIMESTAMP,
     })
 
@@ -115,3 +117,21 @@ def list_recognition_events(limit: int = 500) -> list[dict]:
         data["event_id"] = d.id
         events.append(data)
     return events
+
+
+# ========== 公車站無障礙度評分（使用者反饋 3a） ==========
+
+def submit_stop_accessibility_rating(stop_name: str, has_stairs: bool,
+                                      has_accessible_facilities: bool,
+                                      rating: int, note: str = "") -> str:
+    """rating: 1-5，數字越大代表越無障礙友善。"""
+    doc_ref = get_db().collection("stop_accessibility_ratings").document()
+    doc_ref.set({
+        "stop_name": stop_name,
+        "has_stairs": has_stairs,
+        "has_accessible_facilities": has_accessible_facilities,
+        "rating": rating,
+        "note": note,
+        "created_at": firestore.SERVER_TIMESTAMP,
+    })
+    return doc_ref.id
