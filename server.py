@@ -44,10 +44,11 @@ PASSENGER_HTML = """
       background: rgba(0,0,0,0.55);
     }
     #settingsBtn {
-      position: fixed; top: 10px; right: 10px; z-index: 15;
-      width: 44px; height: 44px; border-radius: 50%;
-      background: rgba(0,0,0,0.55); color: #fff; border: 1px solid rgba(255,255,255,0.4);
-      font-size: 1.3rem;
+      position: fixed; top: 54px; right: 10px; z-index: 20;
+      padding: 10px 16px; border-radius: 20px;
+      background: #1976d2; color: #fff; border: none;
+      font-size: 1rem; font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     }
     #hint {
       position: fixed; bottom: 40%; left: 0; right: 0; z-index: 10;
@@ -145,7 +146,7 @@ PASSENGER_HTML = """
   <div id="status">城市之眼 — 點螢幕任意處掃描</div>
   <div id="hint">點一下畫面開始掃描</div>
   <div id="tapLayer"></div>
-  <button id="settingsBtn" title="調整設定">⚙</button>
+  <button id="settingsBtn" title="調整設定">⚙ 調整視野／字體</button>
 
   <div id="resultScreen">
     <div id="resultText"></div>
@@ -325,9 +326,12 @@ PASSENGER_HTML = """
       hintEl.style.display = 'none';
       statusEl.innerText = '分析中...';
 
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      canvas.getContext('2d').drawImage(video, 0, 0);
+      // 縮小到最長邊 1024px 再上傳，加快上傳與 Gemini 分析速度（辨識文字不需要原始解析度）
+      const MAX_DIM = 1024;
+      const scale = Math.min(1, MAX_DIM / Math.max(video.videoWidth, video.videoHeight));
+      canvas.width = Math.round(video.videoWidth * scale);
+      canvas.height = Math.round(video.videoHeight * scale);
+      canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
 
       canvas.toBlob(async (blob) => {
         try {

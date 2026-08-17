@@ -16,7 +16,7 @@ if not GEMINI_API_KEY:
 
 _client = genai.Client(api_key=GEMINI_API_KEY)
 
-TEXT_MODEL = "gemini-flash-latest"
+TEXT_MODEL = "gemini-flash-lite-latest"
 TTS_MODEL = "gemini-2.5-flash-preview-tts"
 TTS_VOICE = "Kore"
 
