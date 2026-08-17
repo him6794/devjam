@@ -8,7 +8,7 @@ import os
 import re
 import uuid
 
-from flask import Flask, request, jsonify, send_from_directory, render_template_string
+from flask import Flask, request, jsonify, render_template, render_template_string
 
 from pipeline import run_pipeline
 import firestore_client as db
@@ -441,12 +441,17 @@ DRIVER_HTML = """
 
 @app.route("/")
 def index():
-    return render_template_string(PASSENGER_HTML)
+    return render_template("passenger.html")
+
+
+@app.route("/passenger")
+def passenger():
+    return render_template("passenger.html")
 
 
 @app.route("/driver")
 def driver():
-    return render_template_string(DRIVER_HTML)
+    return render_template("driver.html")
 
 
 @app.route("/api/profile", methods=["GET"])
