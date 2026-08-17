@@ -28,12 +28,13 @@ def get_user_profile(user_id: str) -> dict | None:
     return doc.to_dict() if doc.exists else None
 
 
-def save_user_profile(user_id: str, impairment_type: str, safe_zone: str,
-                       font_size: str, voice_enabled: bool) -> None:
+def save_user_profile(user_id: str, impairment_type: str, visible_radius_percent: int,
+                       font_size_px: int, theme: str, voice_enabled: bool) -> None:
     get_db().collection("users").document(user_id).set({
         "impairment_type": impairment_type,
-        "safe_zone": safe_zone,
-        "font_size": font_size,
+        "visible_radius_percent": visible_radius_percent,
+        "font_size_px": font_size_px,
+        "theme": theme,
         "voice_enabled": voice_enabled,
         "updated_at": firestore.SERVER_TIMESTAMP,
     })

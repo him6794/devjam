@@ -43,44 +43,94 @@ PASSENGER_HTML = """
       padding: 16px; text-align: center; font-size: 1.1rem;
       background: rgba(0,0,0,0.55);
     }
-    #summaryBox {
-      position: fixed; bottom: 90px; left: 0; right: 0; z-index: 10;
-      padding: 20px 20px; background: rgba(0,0,0,0.75);
-      font-size: 1.6rem; line-height: 1.5; min-height: 60px;
-      display: none;
-    }
-    #notifyBtn {
-      position: fixed; bottom: 0; left: 0; right: 0; z-index: 20;
-      padding: 20px; font-size: 1.3rem; font-weight: bold;
-      background: #d32f2f; color: #fff; border: none;
-      display: none;
-    }
     #hint {
       position: fixed; bottom: 40%; left: 0; right: 0; z-index: 10;
       text-align: center; font-size: 1.2rem; color: rgba(255,255,255,0.85);
       pointer-events: none;
     }
-    #calibration {
+
+    /* ---- 校準精靈 ---- */
+    #wizard {
       position: fixed; inset: 0; z-index: 50; background: #111;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 24px; text-align: center;
+      padding: 24px; text-align: center; overflow-y: auto;
     }
-    #calibration h2 { font-size: 1.4rem; margin-bottom: 24px; }
+    #wizard h2 { font-size: 1.3rem; margin-bottom: 20px; }
+    .wizStep { display: none; width: 100%; max-width: 420px; }
+    .wizStep.active { display: block; }
     .calBtn {
-      width: 100%; max-width: 360px; margin: 8px 0; padding: 18px;
+      width: 100%; margin: 8px 0; padding: 18px;
       font-size: 1.2rem; border-radius: 10px; border: 2px solid #666;
       background: #222; color: #fff;
     }
     .calBtn:active { background: #444; }
+    .fovPreviewWrap {
+      position: relative; width: 100%; height: 260px; border-radius: 12px;
+      overflow: hidden; margin-bottom: 16px; background: #000;
+    }
+    #fovVideo { width: 100%; height: 100%; object-fit: cover; }
+    #fovMask {
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0) var(--r), rgba(0,0,0,0.92) var(--r));
+    }
+    input[type=range] { width: 100%; margin: 12px 0; }
+    #fontPreview, #themePreview {
+      border-radius: 10px; padding: 16px; margin: 12px 0; min-height: 50px;
+    }
+    .nextBtn {
+      margin-top: 16px; width: 100%; padding: 16px; font-size: 1.2rem;
+      background: #1976d2; color: #fff; border: none; border-radius: 10px;
+    }
+
+    /* ---- 全螢幕結果頁 ---- */
+    #resultScreen {
+      position: fixed; inset: 0; z-index: 40; display: none;
+      flex-direction: column; align-items: center; justify-content: center;
+      padding: 32px; text-align: center;
+    }
+    #resultText { line-height: 1.6; white-space: pre-wrap; }
+    #notifyBtn {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 45;
+      padding: 20px; font-size: 1.3rem; font-weight: bold;
+      background: #d32f2f; color: #fff; border: none;
+      display: none;
+    }
   </style>
 </head>
 <body>
-  <div id="calibration">
-    <h2>第一次使用，請選擇你的視覺狀況</h2>
-    <button class="calBtn" data-type="隧道視野">隧道視野</button>
-    <button class="calBtn" data-type="中心黑點">中心黑點</button>
-    <button class="calBtn" data-type="低視力">低視力</button>
-    <button class="calBtn" data-type="全盲">全盲</button>
+  <div id="wizard">
+    <div class="wizStep active" id="step1">
+      <h2>第一次使用，請選擇你的視覺狀況</h2>
+      <button class="calBtn" data-type="隧道視野">隧道視野</button>
+      <button class="calBtn" data-type="中心黑點">中心黑點</button>
+      <button class="calBtn" data-type="低視力">低視力</button>
+      <button class="calBtn" data-type="全盲">全盲</button>
+    </div>
+
+    <div class="wizStep" id="step2">
+      <h2>調整滑桿，直到圓圈範圍接近你看得清楚的視野</h2>
+      <div class="fovPreviewWrap">
+        <video id="fovVideo" autoplay playsinline muted></video>
+        <div id="fovMask" style="--r:50%;"></div>
+      </div>
+      <input type="range" id="fovSlider" min="10" max="100" value="60" />
+      <div id="fovLabel">目前設定：可視範圍 60%</div>
+      <button class="nextBtn" id="step2Next">下一步</button>
+    </div>
+
+    <div class="wizStep" id="step3">
+      <h2>調整字體大小</h2>
+      <div id="fontPreview">262 號公車，3 分鐘後到站</div>
+      <input type="range" id="fontSlider" min="20" max="64" value="32" />
+      <button class="nextBtn" id="step3Next">下一步</button>
+    </div>
+
+    <div class="wizStep" id="step4">
+      <h2>選擇畫面色調</h2>
+      <div id="themePreview">262 號公車，3 分鐘後到站</div>
+      <button class="calBtn" data-theme="light">白底黑字</button>
+      <button class="calBtn" data-theme="dark">黑底白字</button>
+    </div>
   </div>
 
   <video id="camera" autoplay playsinline muted></video>
@@ -88,9 +138,12 @@ PASSENGER_HTML = """
 
   <div id="status">城市之眼 — 點螢幕任意處掃描</div>
   <div id="hint">點一下畫面開始掃描</div>
-  <div id="summaryBox"></div>
-  <button id="notifyBtn">通知司機：本班車有視障乘客等車</button>
   <div id="tapLayer"></div>
+
+  <div id="resultScreen">
+    <div id="resultText"></div>
+  </div>
+  <button id="notifyBtn">通知司機：本班車有視障乘客等車</button>
   <audio id="player" style="display:none;"></audio>
 
   <script>
@@ -98,14 +151,17 @@ PASSENGER_HTML = """
     const canvas = document.getElementById('canvas');
     const statusEl = document.getElementById('status');
     const hintEl = document.getElementById('hint');
-    const summaryBox = document.getElementById('summaryBox');
     const player = document.getElementById('player');
     const tapLayer = document.getElementById('tapLayer');
-    const calibration = document.getElementById('calibration');
+    const wizard = document.getElementById('wizard');
     const notifyBtn = document.getElementById('notifyBtn');
+    const resultScreen = document.getElementById('resultScreen');
+    const resultText = document.getElementById('resultText');
 
     let busy = false;
     let lastRoute = null;
+    let profile = { impairment_type: '', visible_radius_percent: 100, font_size_px: 32, theme: 'dark', voice_enabled: true };
+    let chosenType = '';
 
     function getUserId() {
       let id = localStorage.getItem('user_id');
@@ -117,35 +173,82 @@ PASSENGER_HTML = """
     }
     const userId = getUserId();
 
+    function showWizStep(id) {
+      document.querySelectorAll('.wizStep').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
     async function checkProfile() {
       const res = await fetch('/api/profile?user_id=' + userId);
       const data = await res.json();
       if (data.exists) {
-        calibration.style.display = 'none';
+        profile = Object.assign(profile, data.profile);
+        wizard.style.display = 'none';
         initCamera();
       } else {
-        calibration.style.display = 'flex';
+        wizard.style.display = 'flex';
+        showWizStep('step1');
       }
     }
 
-    document.querySelectorAll('.calBtn').forEach(btn => {
+    // Step 1：障礙類型
+    document.querySelectorAll('#step1 .calBtn').forEach(btn => {
       btn.addEventListener('click', async () => {
-        const impairmentType = btn.dataset.type;
+        chosenType = btn.dataset.type;
+        showWizStep('step2');
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+          document.getElementById('fovVideo').srcObject = stream;
+        } catch (err) {
+          document.getElementById('fovLabel').innerText = '無法開啟相機預覽，可直接用滑桿設定';
+        }
+      });
+    });
+
+    // Step 2：可視範圍滑桿
+    const fovSlider = document.getElementById('fovSlider');
+    fovSlider.addEventListener('input', () => {
+      document.getElementById('fovMask').style.setProperty('--r', fovSlider.value + '%');
+      document.getElementById('fovLabel').innerText = '目前設定：可視範圍 ' + fovSlider.value + '%';
+    });
+    document.getElementById('step2Next').addEventListener('click', () => showWizStep('step3'));
+
+    // Step 3：字體大小
+    const fontSlider = document.getElementById('fontSlider');
+    fontSlider.addEventListener('input', () => {
+      document.getElementById('fontPreview').style.fontSize = fontSlider.value + 'px';
+    });
+    document.getElementById('step3Next').addEventListener('click', () => showWizStep('step4'));
+
+    // Step 4：色調 -> 存檔完成
+    document.querySelectorAll('#step4 .calBtn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        profile = {
+          impairment_type: chosenType,
+          visible_radius_percent: parseInt(fovSlider.value, 10),
+          font_size_px: parseInt(fontSlider.value, 10),
+          theme: btn.dataset.theme,
+          voice_enabled: true,
+        };
         await fetch('/api/profile', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            user_id: userId,
-            impairment_type: impairmentType,
-            safe_zone: impairmentType === '中心黑點' ? 'top' : 'center',
-            font_size: 'large',
-            voice_enabled: true,
-          }),
+          body: JSON.stringify(Object.assign({ user_id: userId }, profile)),
         });
-        calibration.style.display = 'none';
+        wizard.style.display = 'none';
         initCamera();
       });
     });
+
+    function applyTheme(el) {
+      if (profile.theme === 'light') {
+        el.style.background = '#fff';
+        el.style.color = '#000';
+      } else {
+        el.style.background = '#000';
+        el.style.color = '#fff';
+      }
+    }
 
     async function initCamera() {
       try {
@@ -158,13 +261,46 @@ PASSENGER_HTML = """
       }
     }
 
+    // 依可視範圍計算：每段顯示幾個字、停留幾秒（範圍越小，字越少、停越久）
+    function computePacing(text) {
+      const r = profile.visible_radius_percent || 100;
+      const charsPerChunk = Math.max(8, Math.round(0.6 * r + 8));
+      const secondsPerChunk = Math.max(2, Math.round(8 - r / 15));
+      const chunks = [];
+      for (let i = 0; i < text.length; i += charsPerChunk) {
+        chunks.push(text.slice(i, i + charsPerChunk));
+      }
+      return { chunks, secondsPerChunk };
+    }
+
+    function showResult(text) {
+      applyTheme(resultScreen);
+      resultText.style.fontSize = (profile.font_size_px || 32) + 'px';
+      resultScreen.style.display = 'flex';
+
+      const { chunks, secondsPerChunk } = computePacing(text);
+      let idx = 0;
+      resultText.innerText = chunks[0] || text;
+      if (chunks.length > 1) {
+        const timer = setInterval(() => {
+          idx++;
+          if (idx >= chunks.length) { clearInterval(timer); return; }
+          resultText.innerText = chunks[idx];
+        }, secondsPerChunk * 1000);
+      }
+    }
+
     async function captureAndAnalyze() {
       if (busy) return;
+      if (resultScreen.style.display === 'flex') {
+        resultScreen.style.display = 'none';
+        notifyBtn.style.display = 'none';
+        return;
+      }
       busy = true;
       if (navigator.vibrate) navigator.vibrate(80);
       hintEl.style.display = 'none';
       statusEl.innerText = '分析中...';
-      notifyBtn.style.display = 'none';
 
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
@@ -181,11 +317,12 @@ PASSENGER_HTML = """
           if (data.status !== 'success') {
             statusEl.innerText = '失敗: ' + data.message;
           } else {
-            statusEl.innerText = '點螢幕再次掃描';
-            summaryBox.innerText = data.summary;
-            summaryBox.style.display = 'block';
-            player.src = data.audio_url;
-            player.play();
+            statusEl.innerText = '點螢幕回到掃描';
+            showResult(data.summary);
+            if (profile.voice_enabled !== false) {
+              player.src = data.audio_url;
+              player.play();
+            }
             lastRoute = data.route;
             if (lastRoute) {
               notifyBtn.style.display = 'block';
@@ -214,6 +351,7 @@ PASSENGER_HTML = """
     });
 
     tapLayer.addEventListener('click', captureAndAnalyze);
+    resultScreen.addEventListener('click', captureAndAnalyze);
     checkProfile();
   </script>
 </body>
@@ -301,8 +439,9 @@ def api_save_profile():
     db.save_user_profile(
         user_id=data["user_id"],
         impairment_type=data.get("impairment_type", ""),
-        safe_zone=data.get("safe_zone", "center"),
-        font_size=data.get("font_size", "large"),
+        visible_radius_percent=int(data.get("visible_radius_percent", 100)),
+        font_size_px=int(data.get("font_size_px", 32)),
+        theme=data.get("theme", "dark"),
         voice_enabled=data.get("voice_enabled", True),
     )
     return jsonify({"status": "success"})
