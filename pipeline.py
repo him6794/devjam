@@ -33,20 +33,19 @@ PROMPT = """你是一個協助「隧道視野（視野狹窄）」患者的城�
 """
 
 
-def describe_image(image_path: str) -> str:
-    """把照片丟給 Gemini 多模態模型，回傳語音友善的摘要文字。"""
+def describe_image(image_path: str, tdx_hint: str | None = None) -> str:
+    """把照片丟給 Gemini 多模態模型，回傳語音友善的摘要文字。
+    tdx_hint：來自 TDX 即時到站資料的候選範圍提示，用來縮小辨識範圍、提升準確度。"""
     with open(image_path, "rb") as f:
         image_bytes = f.read()
 
     mime_type = "image/png" if image_path.lower().endswith(".png") else "image/jpeg"
 
-    response = _client.models.generate_content(
-        model=TEXT_MODEL,
-        contents=[
-            types.Part.from_bytes(data=image_bytes, mime_type=mime_type),
-            PROMPT,
-        ],
-    )
+    contents = [types.Part.from_bytes(data=image_bytes, mime_type=mime_type), PROMPT]
+    if tdx_hint:
+        contents.append(tdx_hint)
+
+    response = _client.models.generate_content(model=TEXT_MODEL, contents=contents)
     return response.text.strip()
 
 
@@ -67,8 +66,8 @@ def synthesize_speech(text: str, output_path: str) -> str:
     return output_path
 
 
-def run_pipeline(image_path: str, output_audio_path: str) -> dict:
-    summary = describe_image(image_path)
+def run_pipeline(image_path: str, output_audio_path: str, tdx_hint: str | None = None) -> dict:
+    summary = describe_image(image_path, tdx_hint=tdx_hint)
     audio_path = synthesize_speech(summary, output_audio_path)
     return {"summary": summary, "audio_path": audio_path}
 

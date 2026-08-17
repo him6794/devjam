@@ -3,3 +3,4 @@ flask-cors
 google-genai
 google-cloud-firestore
 google-cloud-texttospeech
+requests

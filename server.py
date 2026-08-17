@@ -6,12 +6,14 @@
 """
 import os
 import re
+import time
 import uuid
 
 from flask import Flask, request, jsonify, send_from_directory, render_template_string
 
 from pipeline import run_pipeline
 import firestore_client as db
+import tdx_client
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
@@ -49,6 +51,12 @@ PASSENGER_HTML = """
       background: #1976d2; color: #fff; border: none;
       font-size: 1rem; font-weight: bold;
       box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+    #tripBar {
+      position: fixed; top: 54px; left: 10px; z-index: 20;
+      max-width: 55%; padding: 10px 14px; border-radius: 20px;
+      background: rgba(0,0,0,0.6); color: #fff; border: 1px solid rgba(255,255,255,0.4);
+      font-size: 0.9rem; text-align: left;
     }
     #hint {
       position: fixed; bottom: 40%; left: 0; right: 0; z-index: 10;
@@ -102,6 +110,17 @@ PASSENGER_HTML = """
       background: #d32f2f; color: #fff; border: none;
       display: none;
     }
+    #feedbackBar {
+      position: fixed; bottom: 66px; left: 0; right: 0; z-index: 45;
+      display: none; gap: 8px; padding: 0 12px;
+    }
+    #feedbackBar button {
+      flex: 1; padding: 12px 4px; font-size: 0.95rem; font-weight: bold;
+      border: none; border-radius: 8px; color: #fff;
+    }
+    #fbBoarded { background: #2e7d32; }
+    #fbMissed { background: #ef6c00; }
+    #fbNotThis { background: #616161; }
   </style>
 </head>
 <body>
@@ -147,11 +166,17 @@ PASSENGER_HTML = """
   <div id="hint">點一下畫面開始掃描</div>
   <div id="tapLayer"></div>
   <button id="settingsBtn" title="調整設定">⚙ 調整視野／字體</button>
+  <button id="tripBar" title="設定要搭的公車路線與站牌">點擊設定要搭的公車路線與站牌</button>
 
   <div id="resultScreen">
     <div id="resultText"></div>
   </div>
   <button id="notifyBtn">通知司機：本班車有視障乘客等車</button>
+  <div id="feedbackBar">
+    <button id="fbBoarded">✅ 有搭上</button>
+    <button id="fbMissed">❌ 沒搭上</button>
+    <button id="fbNotThis">🚫 不是這台</button>
+  </div>
   <audio id="player" style="display:none;"></audio>
 
   <script>
@@ -165,11 +190,57 @@ PASSENGER_HTML = """
     const notifyBtn = document.getElementById('notifyBtn');
     const resultScreen = document.getElementById('resultScreen');
     const resultText = document.getElementById('resultText');
+    const feedbackBar = document.getElementById('feedbackBar');
 
     let busy = false;
     let lastRoute = null;
+    let lastEventId = null;
     let profile = { impairment_type: '', visible_radius_percent: 100, font_size_px: 32, theme: 'dark', voice_enabled: true };
     let chosenType = '';
+
+    // ---- 行程資訊（要搭的路線＋站牌）：接 TDX 即時到站資料 ----
+    let tripRoute = localStorage.getItem('trip_route') || '';
+    let tripStop = localStorage.getItem('trip_stop') || '';
+    const tripBar = document.getElementById('tripBar');
+
+    async function fetchTdxEta() {
+      if (!tripRoute || !tripStop) return;
+      try {
+        const res = await fetch('/api/tdx_eta?route=' + encodeURIComponent(tripRoute) + '&stop=' + encodeURIComponent(tripStop));
+        const data = await res.json();
+        if (data.status === 'success' && data.candidates && data.candidates.length > 0 && data.candidates[0].eta_minutes !== null) {
+          tripBar.innerText = tripRoute + ' 號公車預計 ' + data.candidates[0].eta_minutes + ' 分鐘後到站（' + tripStop + '）';
+        } else {
+          tripBar.innerText = tripRoute + ' 號公車 @ ' + tripStop + '（暫無即時資料）';
+        }
+      } catch (err) {
+        tripBar.innerText = tripRoute + ' 號公車 @ ' + tripStop;
+      }
+    }
+
+    function updateTripBar() {
+      if (tripRoute && tripStop) {
+        tripBar.innerText = tripRoute + ' 號公車 @ ' + tripStop;
+        fetchTdxEta();
+      } else {
+        tripBar.innerText = '點擊設定要搭的公車路線與站牌';
+      }
+    }
+
+    tripBar.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const r = prompt('請輸入公車路線號碼（例如 307）', tripRoute);
+      if (r === null) return;
+      const s = prompt('請輸入站牌名稱（例如 公館）', tripStop);
+      if (s === null) return;
+      tripRoute = r.trim();
+      tripStop = s.trim();
+      localStorage.setItem('trip_route', tripRoute);
+      localStorage.setItem('trip_stop', tripStop);
+      updateTripBar();
+    });
+
+    setInterval(fetchTdxEta, 20000);
 
     function getUserId() {
       let id = localStorage.getItem('user_id');
@@ -319,6 +390,7 @@ PASSENGER_HTML = """
       if (resultScreen.style.display === 'flex') {
         resultScreen.style.display = 'none';
         notifyBtn.style.display = 'none';
+        feedbackBar.style.display = 'none';
         return;
       }
       busy = true;
@@ -338,6 +410,8 @@ PASSENGER_HTML = """
           const formData = new FormData();
           formData.append('image', blob, 'scan.jpg');
           formData.append('user_id', userId);
+          if (tripRoute) formData.append('route', tripRoute);
+          if (tripStop) formData.append('stop_name', tripStop);
           const res = await fetch('/api/analyze', { method: 'POST', body: formData });
           const data = await res.json();
 
@@ -351,6 +425,8 @@ PASSENGER_HTML = """
               player.play();
             }
             lastRoute = data.route;
+            lastEventId = data.event_id;
+            feedbackBar.style.display = 'flex';
             if (lastRoute) {
               notifyBtn.style.display = 'block';
               notifyBtn.innerText = '通知司機：' + lastRoute + ' 號公車有視障乘客等車';
@@ -377,9 +453,25 @@ PASSENGER_HTML = """
       if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
     });
 
+    async function sendFeedback(e, feedback, label) {
+      e.stopPropagation();
+      if (!lastEventId) return;
+      await fetch('/api/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ event_id: lastEventId, feedback: feedback }),
+      });
+      statusEl.innerText = '已記錄：' + label;
+      if (navigator.vibrate) navigator.vibrate(60);
+    }
+    document.getElementById('fbBoarded').addEventListener('click', (e) => sendFeedback(e, 'boarded', '有搭上'));
+    document.getElementById('fbMissed').addEventListener('click', (e) => sendFeedback(e, 'missed', '沒搭上'));
+    document.getElementById('fbNotThis').addEventListener('click', (e) => sendFeedback(e, 'not_this_one', '不是這台'));
+
     tapLayer.addEventListener('click', captureAndAnalyze);
     resultScreen.addEventListener('click', captureAndAnalyze);
     checkProfile();
+    updateTripBar();
   </script>
 </body>
 </html>
@@ -474,11 +566,29 @@ def api_save_profile():
     return jsonify({"status": "success"})
 
 
+@app.route("/api/tdx_eta", methods=["GET"])
+def api_tdx_eta():
+    route = request.args.get("route")
+    stop = request.args.get("stop", "")
+    city = request.args.get("city", "Taipei")
+    if not route:
+        return jsonify({"status": "error", "message": "缺少 route"}), 400
+    try:
+        candidates = tdx_client.get_eta_candidates(city, route, stop)
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 502
+    return jsonify({"status": "success", "candidates": candidates})
+
+
 @app.route("/api/analyze", methods=["POST"])
 def api_analyze():
     file = request.files.get("image")
     if not file:
         return jsonify({"status": "error", "message": "缺少照片"}), 400
+
+    user_id = request.form.get("user_id")
+    trip_route = request.form.get("route")
+    trip_stop = request.form.get("stop_name")
 
     job_id = str(uuid.uuid4())[:8]
     image_path = os.path.join(UPLOAD_DIR, f"{job_id}.jpg")
@@ -486,20 +596,84 @@ def api_analyze():
 
     audio_path = os.path.join(AUDIO_DIR, f"{job_id}.mp3")
 
+    # 模組 3：用 TDX 即時到站資料縮小 AI Vision 的候選範圍（失敗不影響主流程）
+    tdx_hint = None
+    tdx_eta_minutes = None
+    if trip_route and trip_stop:
+        try:
+            candidates = tdx_client.get_eta_candidates("Taipei", trip_route, trip_stop)
+            tdx_hint = tdx_client.build_vision_hint(candidates, trip_route)
+            if candidates and candidates[0]["eta_minutes"] is not None:
+                tdx_eta_minutes = candidates[0]["eta_minutes"]
+        except Exception:
+            pass  # TDX 掛掉就當作沒有這個提示，繼續走純視覺辨識
+
+    start_time = time.time()
     try:
-        result = run_pipeline(image_path, audio_path)
+        result = run_pipeline(image_path, audio_path, tdx_hint=tdx_hint)
+        success = True
     except Exception as e:
+        success = False
+        db.log_recognition_event(
+            user_id=user_id, stop_name=trip_stop, route=trip_route,
+            success=False, duration_seconds=time.time() - start_time,
+            impairment_type=None, used_tdx_hint=bool(tdx_hint),
+        )
         return jsonify({"status": "error", "message": str(e)}), 500
 
     route_match = re.search(r"\d{2,4}", result["summary"])
     route = route_match.group() if route_match else None
+
+    profile = db.get_user_profile(user_id) if user_id else None
+    event_id = db.log_recognition_event(
+        user_id=user_id, stop_name=trip_stop, route=route or trip_route,
+        success=True, duration_seconds=time.time() - start_time,
+        impairment_type=profile.get("impairment_type") if profile else None,
+        used_tdx_hint=bool(tdx_hint),
+    )
 
     return jsonify({
         "status": "success",
         "summary": result["summary"],
         "audio_url": f"/audio/{job_id}.mp3",
         "route": route,
+        "tdx_eta_minutes": tdx_eta_minutes,
+        "event_id": event_id,
     })
+
+
+@app.route("/api/feedback", methods=["POST"])
+def api_feedback():
+    data = request.get_json(force=True)
+    event_id = data.get("event_id")
+    feedback = data.get("feedback")  # boarded / missed / not_this_one
+    if not event_id or not feedback:
+        return jsonify({"status": "error", "message": "缺少 event_id 或 feedback"}), 400
+    db.update_event_feedback(event_id, feedback, data.get("note", ""))
+    return jsonify({"status": "success"})
+
+
+@app.route("/api/export.csv")
+def api_export_csv():
+    import csv
+    import io
+
+    events = db.list_recognition_events()
+    output = io.StringIO()
+    fieldnames = [
+        "event_id", "created_at", "user_id", "stop_name", "route", "success",
+        "duration_seconds", "impairment_type", "used_tdx_hint", "feedback", "feedback_note",
+    ]
+    writer = csv.DictWriter(output, fieldnames=fieldnames, extrasaction="ignore")
+    writer.writeheader()
+    for e in events:
+        writer.writerow(e)
+
+    return app.response_class(
+        output.getvalue(),
+        mimetype="text/csv",
+        headers={"Content-Disposition": "attachment; filename=recognition_events.csv"},
+    )
 
 
 @app.route("/api/notify_driver", methods=["POST"])

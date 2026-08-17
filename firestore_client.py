@@ -69,3 +69,49 @@ def get_active_alerts(route: str) -> list[dict]:
 
     alerts.sort(key=lambda a: a.get("created_at"), reverse=True)
     return alerts
+
+
+# ========== 城市無障礙感測回饋（模組 4） ==========
+# 每次辨識自動記一筆事件，長期累積可分析「哪些站點/時段對視障者最難搭車」，
+# 補足愛心卡使用數據的樣本 noise 高、覆蓋路線有限的問題。
+
+def log_recognition_event(user_id: str | None, stop_name: str | None, route: str | None,
+                           success: bool, duration_seconds: float,
+                           impairment_type: str | None, used_tdx_hint: bool) -> str:
+    doc_ref = get_db().collection("recognition_events").document()
+    doc_ref.set({
+        "user_id": user_id,
+        "stop_name": stop_name,
+        "route": route,
+        "success": success,
+        "duration_seconds": round(duration_seconds, 2),
+        "impairment_type": impairment_type,
+        "used_tdx_hint": used_tdx_hint,
+        "feedback": None,  # 之後由 update_event_feedback 補上：boarded / missed / not_this_one
+        "feedback_note": None,
+        "created_at": firestore.SERVER_TIMESTAMP,
+    })
+    return doc_ref.id
+
+
+def update_event_feedback(event_id: str, feedback: str, note: str = "") -> None:
+    get_db().collection("recognition_events").document(event_id).update({
+        "feedback": feedback,
+        "feedback_note": note,
+    })
+
+
+def list_recognition_events(limit: int = 500) -> list[dict]:
+    docs = (
+        get_db()
+        .collection("recognition_events")
+        .order_by("created_at", direction=firestore.Query.DESCENDING)
+        .limit(limit)
+        .stream()
+    )
+    events = []
+    for d in docs:
+        data = d.to_dict()
+        data["event_id"] = d.id
+        events.append(data)
+    return events
