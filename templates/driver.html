@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}城市之眼 — 司機端{% endblock %}
+
+{% block content %}
+<section class="driver-screen">
+  <h1 class="title-lg">選擇監控路線</h1>
+
+  <div id="route-select-bar" class="route-select-bar">
+    <button class="route-btn" data-route="307">307</button>
+    <button class="route-btn" data-route="202">202</button>
+    <button class="route-btn" data-route="88">88</button>
+    <button class="route-btn" data-route="235">235</button>
+  </div>
+
+  <p id="monitoring-label" class="monitoring-label">尚未選擇路線</p>
+
+  <div id="alert-empty" class="alert-empty">
+    <svg viewBox="0 0 48 48" fill="none" stroke-width="2">
+      <circle cx="24" cy="24" r="20"/>
+      <path d="M24 14v10l7 4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <p>請先選擇路線開始監控</p>
+  </div>
+
+  <div id="alert-list" class="alert-list" hidden></div>
+
+  <div id="ack-section" hidden>
+    <div class="section-divider">已處理</div>
+    <div id="ack-list" class="alert-list"></div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/driver.js') }}"></script>
+{% endblock %}

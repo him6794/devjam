@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% block title %}城市之眼 — 乘客端{% endblock %}
+
+{% block content %}
+
+<section id="screen-calib-1" class="screen active">
+  <h1 class="title-xl">你的視野狀況是？</h1>
+
+  <button class="choice-card" data-impairment="tunnel_vision">
+    <span class="icon">
+      <svg viewBox="0 0 48 48" fill="none" stroke-width="2">
+        <circle cx="24" cy="24" r="20" stroke-dasharray="3 4"/>
+        <circle cx="24" cy="24" r="7"/>
+      </svg>
+    </span>
+    <span>
+      <p class="label">隧道視野</p>
+      <p class="desc">視野範圍變窄</p>
+    </span>
+  </button>
+
+  <button class="choice-card" data-impairment="central_scotoma">
+    <span class="icon">
+      <svg viewBox="0 0 48 48" fill="none" stroke-width="2">
+        <circle cx="24" cy="24" r="20"/>
+        <circle cx="24" cy="24" r="7" fill="currentColor" stroke="none"/>
+      </svg>
+    </span>
+    <span>
+      <p class="label">中心有缺損</p>
+      <p class="desc">畫面中央看不清楚</p>
+    </span>
+  </button>
+
+  <button class="choice-card" data-impairment="other">
+    <span class="icon">
+      <svg viewBox="0 0 48 48" fill="none" stroke-width="2">
+        <circle cx="24" cy="24" r="20"/>
+        <path d="M24 16v10" stroke-linecap="round"/>
+        <circle cx="24" cy="32" r="1.2" fill="currentColor" stroke="none"/>
+      </svg>
+    </span>
+    <span>
+      <p class="label">其他</p>
+      <p class="desc">尚不確定</p>
+    </span>
+  </button>
+
+  <div class="btn-footer">
+    <button id="btn-step1-next" class="btn btn-primary" disabled>下一步</button>
+  </div>
+
+  <div class="progress-dots">
+    <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+  </div>
+</section>
+
+<section id="screen-calib-2" class="screen">
+  <h1 class="title-lg">點一下你現在看得最清楚的地方</h1>
+
+  <div id="calib-canvas" class="calib-canvas-wrap">
+    <div id="safe-zone-marker" class="safe-zone-marker"></div>
+  </div>
+
+  <p class="subtitle" style="text-align:center; margin-bottom:8px">拖曳滑桿調整範圍大小</p>
+  <input id="safe-zone-size-slider" type="range" min="24" max="140" step="4" value="60">
+  <p class="subtitle" style="text-align:center">先點畫面標記位置，再用滑桿調整大小</p>
+
+  <div class="btn-footer">
+    <button id="btn-step2-next" class="btn btn-primary" disabled>下一步</button>
+  </div>
+
+  <div class="progress-dots">
+    <span class="dot"></span><span class="dot active"></span><span class="dot"></span>
+  </div>
+</section>
+
+<section id="screen-calib-3" class="screen">
+  <h1 class="title-lg">調整成你看得舒服的大小</h1>
+
+  <div class="preview-card">
+    <p id="preview-text">307路線 3分鐘後到站</p>
+  </div>
+
+  <input id="font-scale-slider" type="range" min="1" max="2.5" step="0.1" value="1.5">
+
+  <div class="toggle-row">
+    <span>語音播報</span>
+    <label class="switch">
+      <input id="voice-toggle" type="checkbox" checked>
+      <span class="track"></span>
+    </label>
+  </div>
+
+  <div class="btn-footer">
+    <button id="btn-step3-finish" class="btn btn-primary">完成校準</button>
+  </div>
+
+  <div class="progress-dots">
+    <span class="dot"></span><span class="dot"></span><span class="dot active"></span>
+  </div>
+</section>
+
+<section id="screen-camera" class="screen">
+  <div class="top-bar">
+    <button id="recalibrate-link" class="link-muted">重新校準</button>
+    <span></span>
+  </div>
+
+  <div class="camera-wrap">
+    <video id="camera-video" autoplay playsinline muted></video>
+  </div>
+
+  <p class="camera-hint">將鏡頭對準站牌</p>
+  <p id="camera-status" class="status-msg"></p>
+
+  <div class="shutter-wrap">
+    <button id="shutter-btn" class="shutter-btn" aria-label="拍下站牌">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+        <path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/>
+        <circle cx="12" cy="13" r="3.5"/>
+      </svg>
+    </button>
+  </div>
+</section>
+
+<section id="screen-result" class="screen">
+  <div class="top-bar">
+    <button class="link-muted" onclick="document.getElementById('recalibrate-link').click()">重新校準</button>
+    <span></span>
+  </div>
+
+  <div id="safe-zone-window" class="safe-zone-window">
+    <p id="result-route" class="route">307</p>
+    <p id="result-eta" class="eta">3 分鐘</p>
+    <p id="result-direction" class="direction">往台北車站</p>
+  </div>
+
+  <button id="other-buses-toggle" class="other-buses-toggle">還有2班車 ▾</button>
+  <div id="other-buses-list" class="other-buses-list"></div>
+
+  <div class="action-row">
+    <button id="btn-voice-replay" class="btn btn-secondary">🔊 語音複誦</button>
+    <button id="btn-notify-driver" class="btn btn-secondary">📢 通知司機</button>
+  </div>
+
+  <div class="btn-footer">
+    <button id="btn-scan-again" class="btn btn-primary">再拍一次</button>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/passenger.js') }}"></script>
+{% endblock %}
