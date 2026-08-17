@@ -19,6 +19,12 @@ AUDIO_DIR = os.path.join(BASE_DIR, "output")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(AUDIO_DIR, exist_ok=True)
 
+# user_id 直接當 Firestore document ID，限制字元集避免 path
+# manipulation（"a/b" 會被 Firestore 當成巢狀路徑寫進別的地方）。
+VALID_USER_ID = re.compile(r"^[A-Za-z0-9_-]{1,64}$")
+# 台灣公車路線編號：數字或數字+中文前綴（如 307、棕7、紅12）
+VALID_ROUTE = re.compile(r"^[一-鿿A-Za-z0-9]{1,8}$")
+
 app = Flask(__name__)
 
 PASSENGER_HTML = """
@@ -459,6 +465,8 @@ def api_get_profile():
     user_id = request.args.get("user_id")
     if not user_id:
         return jsonify({"status": "error", "message": "缺少 user_id"}), 400
+    if not VALID_USER_ID.match(user_id):
+        return jsonify({"status": "error", "message": "user_id 格式不合法"}), 400
     profile = db.get_user_profile(user_id)
     if profile is None:
         return jsonify({"exists": False})
@@ -468,8 +476,11 @@ def api_get_profile():
 @app.route("/api/profile", methods=["POST"])
 def api_save_profile():
     data = request.get_json(force=True)
+    user_id = data.get("user_id", "")
+    if not VALID_USER_ID.match(user_id):
+        return jsonify({"status": "error", "message": "user_id 格式不合法"}), 400
     db.save_user_profile(
-        user_id=data["user_id"],
+        user_id=user_id,
         impairment_type=data.get("impairment_type", ""),
         visible_radius_percent=int(data.get("visible_radius_percent", 100)),
         font_size_px=int(data.get("font_size_px", 32)),
@@ -493,8 +504,12 @@ def api_analyze():
 
     try:
         result = run_pipeline(image_path, audio_path)
-    except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+    except Exception:
+        # 不回傳 str(e)：內部錯誤訊息（檔案路徑、API 細節）不該洩漏給客戶端
+        print(f"[analyze] pipeline failed for job {job_id}", flush=True)
+        import traceback
+        traceback.print_exc()
+        return jsonify({"status": "error", "message": "辨識失敗，請再試一次"}), 500
 
     route_match = re.search(r"\d{2,4}", result["summary"])
     route = route_match.group() if route_match else None
@@ -514,6 +529,10 @@ def api_notify_driver():
     route = data.get("route")
     if not route:
         return jsonify({"status": "error", "message": "缺少路線號碼"}), 400
+    if not VALID_ROUTE.match(str(route)):
+        return jsonify({"status": "error", "message": "路線號碼格式不合法"}), 400
+    if user_id and not VALID_USER_ID.match(str(user_id)):
+        return jsonify({"status": "error", "message": "user_id 格式不合法"}), 400
 
     profile = db.get_user_profile(user_id) if user_id else None
     impairment_type = profile.get("impairment_type") if profile else None

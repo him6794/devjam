@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
+	"os"
 	"strings"
 	"sync"
 	"time"
@@ -44,15 +46,38 @@ type LiveGuideHandler struct {
 }
 
 func NewLiveGuideHandler(guide *skill.LiveGuide, stationStatus *StationStatusSkill) *LiveGuideHandler {
+	// 白名單跨源 WebSocket 檢查：Live session 每幀都燒 Gemini 額度，
+	// 惡意網站若能連上這個 WS 就可以塞假畫面/假音訊洗掉使用者的
+	// 語音額度（cross-site WebSocket hijacking）。允許的 host 用
+	// LIVE_GUIDE_ALLOWED_ORIGINS 逗號分隔覆寫，預設是正式網域加
+	// 本機開發用的 localhost。
+	allowedHosts := map[string]bool{
+		"devjam.justin0711.com": true,
+		"localhost":             true,
+		"127.0.0.1":             true,
+	}
+	if extra := os.Getenv("LIVE_GUIDE_ALLOWED_ORIGINS"); extra != "" {
+		for _, o := range strings.Split(extra, ",") {
+			o = strings.TrimSpace(o)
+			if u, err := url.Parse(o); err == nil && u.Hostname() != "" {
+				allowedHosts[u.Hostname()] = true
+			}
+		}
+	}
 	return &LiveGuideHandler{
 		guide:         guide,
 		stationStatus: stationStatus,
 		upgrader: websocket.Upgrader{
-			// The passenger page is same-origin (served by this project's
-			// own frontend container behind nginx, see docker-compose.yml),
-			// so there's no cross-site WebSocket use case to guard against
-			// here the way a public API would need to.
-			CheckOrigin: func(r *http.Request) bool { return true },
+			CheckOrigin: func(r *http.Request) bool {
+				// 同源連線可能不帶 Origin（部分客戶端）→ 放行；有帶的
+				// 只放行白名單 host，其餘拒絕（gorilla 回 403）。
+				origin := r.Header.Get("Origin")
+				if origin == "" {
+					return true
+				}
+				u, err := url.Parse(origin)
+				return err == nil && allowedHosts[u.Hostname()]
+			},
 		},
 	}
 }
