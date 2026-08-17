@@ -11,7 +11,7 @@ import uuid
 
 from flask import Flask, request, jsonify, send_from_directory, render_template_string
 
-from pipeline import run_pipeline
+from pipeline import run_pipeline, create_live_token
 import firestore_client as db
 import tdx_client
 
@@ -85,6 +85,14 @@ PASSENGER_HTML = """
       display: none; padding: 10px; text-align: center;
       background: rgba(198,40,40,0.85); color: #fff; font-size: 0.95rem;
     }
+    #liveDoorBtn {
+      position: fixed; top: 218px; right: 10px; z-index: 20;
+      padding: 8px 14px; border-radius: 20px;
+      background: #4527a0; color: #fff; border: none;
+      font-size: 0.9rem; font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+    #liveDoorBtn.active { background: #c62828; }
     #hint {
       position: fixed; bottom: 40%; left: 0; right: 0; z-index: 10;
       text-align: center; font-size: 1.2rem; color: rgba(255,255,255,0.85);
@@ -229,6 +237,7 @@ PASSENGER_HTML = """
   <button id="confirmBoardBtn" title="上車後拍車內顯示幕確認">🚌 確認上車</button>
   <button id="walkModeBtn" title="家到公車站步行時的路況警示">🚶 開始步行模式</button>
   <div id="walkIndicator">🚶 步行模式中，持續偵測周邊路況...</div>
+  <button id="liveDoorBtn" title="Gemini Live 即時導引找車門">🚪 找車門（即時）</button>
 
   <div id="resultScreen">
     <div id="resultText"></div>
@@ -707,6 +716,150 @@ PASSENGER_HTML = """
       }
     });
 
+    // ---- Gemini Live：即時導引找車門 ----
+    const liveDoorBtn = document.getElementById('liveDoorBtn');
+    let liveWs = null;
+    let liveAudioCtx = null;
+    let liveAudioQueue = [];
+    let livePlaying = false;
+    let liveFrameTimer = null;
+
+    function pcm16ToAudioBuffer(base64Data, ctx) {
+      const binary = atob(base64Data);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      const samples = Math.floor(bytes.length / 2);
+      const buffer = ctx.createBuffer(1, samples, 24000);
+      const channel = buffer.getChannelData(0);
+      const view = new DataView(bytes.buffer);
+      for (let i = 0; i < samples; i++) channel[i] = view.getInt16(i * 2, true) / 32768;
+      return buffer;
+    }
+
+    function playNextLiveAudio() {
+      if (livePlaying || liveAudioQueue.length === 0) return;
+      livePlaying = true;
+      const buffer = liveAudioQueue.shift();
+      const source = liveAudioCtx.createBufferSource();
+      source.buffer = buffer;
+      source.connect(liveAudioCtx.destination);
+      source.onended = () => { livePlaying = false; playNextLiveAudio(); };
+      source.start();
+    }
+
+    let liveTurnBusy = false;
+
+    function sendLiveFrame() {
+      if (!liveWs || liveWs.readyState !== WebSocket.OPEN) return;
+      if (liveTurnBusy) return; // 上一輪還在生成回應，先不送下一張，避免疊在一起
+      const c = document.createElement('canvas');
+      const scale = Math.min(1, 640 / Math.max(video.videoWidth, video.videoHeight));
+      c.width = Math.round(video.videoWidth * scale);
+      c.height = Math.round(video.videoHeight * scale);
+      c.getContext('2d').drawImage(video, 0, 0, c.width, c.height);
+      c.toBlob((blob) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64 = reader.result.split(',')[1];
+          if (liveWs && liveWs.readyState === WebSocket.OPEN) {
+            liveTurnBusy = true;
+            // 用 clientContent + turnComplete 明確觸發模型回應（realtimeInput 不會自動觸發）
+            liveWs.send(JSON.stringify({
+              clientContent: {
+                turns: [{ role: 'user', parts: [{ inlineData: { mimeType: 'image/jpeg', data: base64 } }] }],
+                turnComplete: true,
+              },
+            }));
+          }
+        };
+        reader.readAsDataURL(blob);
+      }, 'image/jpeg', 0.7);
+    }
+
+    async function startLiveDoorFinder() {
+      statusEl.innerText = '連線中...';
+      const res = await fetch('/api/live_token', { method: 'POST' });
+      const data = await res.json();
+      if (data.status !== 'success') { statusEl.innerText = '無法啟動即時模式：' + data.message; return; }
+
+      liveAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const wsUrl = 'wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContentConstrained?access_token=' + data.token;
+      liveWs = new WebSocket(wsUrl);
+
+      liveWs.onopen = () => {
+        liveWs.send(JSON.stringify({
+          setup: {
+            model: 'models/' + data.model,
+            generationConfig: {
+              responseModalities: ['AUDIO'],
+              speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Puck' } } },
+            },
+            systemInstruction: {
+              parts: [{ text: '你是協助隧道視野（視野狹窄）患者尋找公車車門的即時導引助理。' +
+                '使用者會持續傳送手機鏡頭畫面給你。請用非常簡短、口語的方位指示持續引導使用者靠近公車門，' +
+                '例如「車門在你左前方，再靠近一點」「快到了，正前方」「找到了，車門就在你面前」。' +
+                '語氣自然像朋友帶路，每次只講一句話，不要長篇描述畫面內容。' }],
+            },
+          },
+        }));
+      };
+
+      liveWs.onmessage = async (event) => {
+        let text = event.data;
+        if (event.data instanceof Blob) text = await event.data.text();
+        let msg;
+        try { msg = JSON.parse(text); } catch (err) { return; }
+
+        if (msg.setupComplete) {
+          statusEl.innerText = '🚪 找車門模式已連線，把鏡頭對準前方公車';
+          liveFrameTimer = setInterval(sendLiveFrame, 1500);
+          return;
+        }
+        const parts = msg.serverContent && msg.serverContent.modelTurn && msg.serverContent.modelTurn.parts;
+        if (parts) {
+          parts.forEach((p) => {
+            if (p.inlineData && p.inlineData.data) {
+              const buf = pcm16ToAudioBuffer(p.inlineData.data, liveAudioCtx);
+              liveAudioQueue.push(buf);
+              playNextLiveAudio();
+            }
+          });
+        }
+        if (msg.serverContent && msg.serverContent.generationComplete) {
+          liveTurnBusy = false; // 這輪講完了，可以送下一張畫面
+        }
+      };
+
+      liveWs.onerror = () => { statusEl.innerText = '找車門連線發生錯誤'; stopLiveDoorFinder(); };
+      liveWs.onclose = () => { if (liveDoorBtn.classList.contains('active')) stopLiveDoorFinder(); };
+    }
+
+    function stopLiveDoorFinder() {
+      if (liveFrameTimer) { clearInterval(liveFrameTimer); liveFrameTimer = null; }
+      if (liveWs) { try { liveWs.close(); } catch (err) {} liveWs = null; }
+      if (liveAudioCtx) { try { liveAudioCtx.close(); } catch (err) {} liveAudioCtx = null; }
+      liveAudioQueue = [];
+      livePlaying = false;
+      liveDoorBtn.classList.remove('active');
+      liveDoorBtn.innerText = '🚪 找車門（即時）';
+      statusEl.innerText = '點螢幕任意處掃描';
+    }
+
+    liveDoorBtn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      if (liveDoorBtn.classList.contains('active')) {
+        stopLiveDoorFinder();
+        return;
+      }
+      liveDoorBtn.classList.add('active');
+      liveDoorBtn.innerText = '⏹ 結束找車門';
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+        video.srcObject = stream;
+      } catch (err) { /* 相機可能已開啟，忽略 */ }
+      startLiveDoorFinder();
+    });
+
     tapLayer.addEventListener('click', captureAndAnalyze);
     resultScreen.addEventListener('click', captureAndAnalyze);
     checkProfile();
@@ -920,6 +1073,16 @@ def api_walking_hazard():
         "summary": result["summary"],
         "audio_url": f"/audio/{job_id}.mp3",
     })
+
+
+@app.route("/api/live_token", methods=["POST"])
+def api_live_token():
+    """發臨時權杖給前端，讓瀏覽器能直接連 Gemini Live 找車門，不暴露正式金鑰。"""
+    try:
+        data = create_live_token()
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+    return jsonify({"status": "success", **data})
 
 
 @app.route("/api/feedback", methods=["POST"])

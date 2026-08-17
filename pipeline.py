@@ -6,6 +6,7 @@
 語音合成：Cloud Text-to-Speech，用 IAM(ADC) 驗證（跟 Firestore 同一套，
 Cloud Run 上用內建服務身分，本機用 gcloud 登入）——比 Gemini 原生 TTS快約 3 倍。
 """
+import datetime
 import os
 
 from google import genai
@@ -17,7 +18,25 @@ if not GEMINI_API_KEY:
     from local_config import GEMINI_API_KEY  # 本機開發用，Cloud Run 上用環境變數
 
 _client = genai.Client(api_key=GEMINI_API_KEY)
+_live_client = genai.Client(api_key=GEMINI_API_KEY, http_options={"api_version": "v1alpha"})
 _tts_client = texttospeech.TextToSpeechClient()
+
+LIVE_MODEL = "gemini-3.1-flash-live-preview"
+
+
+def create_live_token() -> dict:
+    """發一個限時、限用一次的臨時權杖，讓前端瀏覽器能直接連 Gemini Live，
+    不用把正式 API 金鑰暴露在瀏覽器端。"""
+    now = datetime.datetime.now(datetime.timezone.utc)
+    token = _live_client.auth_tokens.create(
+        config={
+            "uses": 1,
+            "expire_time": (now + datetime.timedelta(minutes=30)).isoformat(),
+            "new_session_expire_time": (now + datetime.timedelta(minutes=3)).isoformat(),
+            "http_options": {"api_version": "v1alpha"},
+        }
+    )
+    return {"token": token.name, "model": LIVE_MODEL}
 
 TEXT_MODEL = "gemini-flash-lite-latest"
 TTS_VOICE_NAME = "cmn-TW-Wavenet-A"
