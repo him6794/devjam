@@ -43,6 +43,12 @@ PASSENGER_HTML = """
       padding: 16px; text-align: center; font-size: 1.1rem;
       background: rgba(0,0,0,0.55);
     }
+    #settingsBtn {
+      position: fixed; top: 10px; right: 10px; z-index: 15;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(0,0,0,0.55); color: #fff; border: 1px solid rgba(255,255,255,0.4);
+      font-size: 1.3rem;
+    }
     #hint {
       position: fixed; bottom: 40%; left: 0; right: 0; z-index: 10;
       text-align: center; font-size: 1.2rem; color: rgba(255,255,255,0.85);
@@ -139,6 +145,7 @@ PASSENGER_HTML = """
   <div id="status">城市之眼 — 點螢幕任意處掃描</div>
   <div id="hint">點一下畫面開始掃描</div>
   <div id="tapLayer"></div>
+  <button id="settingsBtn" title="調整設定">⚙</button>
 
   <div id="resultScreen">
     <div id="resultText"></div>
@@ -190,6 +197,22 @@ PASSENGER_HTML = """
         showWizStep('step1');
       }
     }
+
+    // 設定按鈕：重新打開精靈，並帶入目前已儲存的設定值
+    document.getElementById('settingsBtn').addEventListener('click', async (e) => {
+      e.stopPropagation();
+      chosenType = profile.impairment_type || '隧道視野';
+      fovSlider.value = profile.visible_radius_percent || 60;
+      fovSlider.dispatchEvent(new Event('input'));
+      fontSlider.value = profile.font_size_px || 32;
+      fontSlider.dispatchEvent(new Event('input'));
+      wizard.style.display = 'flex';
+      showWizStep('step1');
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+        document.getElementById('fovVideo').srcObject = stream;
+      } catch (err) { /* 相機預覽非必要，忽略 */ }
+    });
 
     // Step 1：障礙類型
     document.querySelectorAll('#step1 .calBtn').forEach(btn => {
