@@ -35,9 +35,15 @@ func main() {
 	nearestStops := skill.NewNearestStops(index)
 	stopETA := skill.NewStopETA(pdaClient, index)
 
+	// One orchestrator shared by the analyze pipeline and the live guide's
+	// station_status tool, so both paths run the same geo→transit waves.
+	orchestrator := agent.NewOrchestrator()
+	stationStatus := httpapi.NewStationStatusSkill(orchestrator, nearestStops, stopETA)
+
 	registry := skill.NewRegistry()
 	registry.Register(nearestStops)
 	registry.Register(stopETA)
+	registry.Register(stationStatus)
 
 	// Vision and route extraction share one Gemini client. It is optional:
 	// if Vertex AI credentials/project aren't configured, log it and keep
@@ -84,10 +90,16 @@ func main() {
 	})
 	if liveErr != nil {
 		log.Printf("server: Vertex AI Live client unavailable, live_guide disabled: %v", liveErr)
-		liveGuide = skill.NewLiveGuide(nil)
+		liveGuide = skill.NewLiveGuide(nil, nil)
 	} else {
-		liveGuide = skill.NewLiveGuide(liveClient)
-		log.Printf("server: live_guide enabled via Vertex AI Gemini Live (global)")
+		// The live session offers the model the same station data the
+		// analyze path uses: station_status runs the orchestrator waves,
+		// stop_eta drills into one specific station. The handler also runs
+		// station_status in the background and injects the ETA snapshot
+		// into every judgment prompt, so data questions are answered from
+		// context without a tool round trip.
+		liveGuide = skill.NewLiveGuide(liveClient, httpapi.NewLiveToolset(stationStatus, stopETA))
+		log.Printf("server: live_guide enabled via Vertex AI Gemini Live (global) with tools: station_status, stop_eta")
 	}
 
 	// TTS is likewise optional: without it, voice_audio_url in the response
@@ -121,11 +133,11 @@ func main() {
 	}
 
 	server := &httpapi.Server{
-		Analyze:    httpapi.NewAnalyzeHandler(agent.NewOrchestrator(), nearestStops, stopETA, visionSign, ttsSkill, profiles),
+		Analyze:    httpapi.NewAnalyzeHandler(orchestrator, nearestStops, stopETA, visionSign, ttsSkill, profiles),
 		Profile:    httpapi.NewProfileHandler(profiles),
 		VoiceRoute: httpapi.NewVoiceRouteHandler(sttSkill, routeExtract),
 		Navigate:   httpapi.NewNavigateHandler(navigate),
-		LiveGuide:  httpapi.NewLiveGuideHandler(liveGuide),
+		LiveGuide:  httpapi.NewLiveGuideHandler(liveGuide, stationStatus),
 		Registry:   registry,
 	}
 

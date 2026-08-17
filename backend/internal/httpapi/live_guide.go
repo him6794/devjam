@@ -1,8 +1,12 @@
 package httpapi
 
 import (
+	"context"
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
+	"strings"
 	"sync"
 	"time"
 
@@ -19,23 +23,30 @@ import (
 // and the model needs many frames in the same session to notice a bus
 // arriving or a door opening, not one frame per independent call.
 //
-// Wire protocol (binary WebSocket messages both ways):
-//   client -> server: raw JPEG bytes, one frame, sent roughly every 1-2s
+// Wire protocol (binary WebSocket messages client -> server):
+//   0x00 + JPEG bytes: one camera frame, sent roughly every second
+//   0x01 + PCM bytes: microphone audio (16kHz mono s16le), streamed continuously
+//   0x02 + UTF-8 JSON {"lat":..,"lng":..}: a GPS fix, so the model's
+//          station_status tool can answer "what's near me" without the
+//          model ever inventing a coordinate
 //   server -> client: UTF-8 text, one sentence to speak — only sent when
-//                      the model judged a recent frame worth a reply; most
-//                      judgment ticks produce no server message at all.
-// No JSON envelope: a bus rider's client only ever needs "here's a frame" /
-// "here's what to say", and skipping envelope parsing keeps the hot path
-// (one round trip roughly every 1-2s for the whole journey) cheap on both
-// ends.
+//          the model judged a turn worth a reply; most judgment ticks
+//          produce no server message at all. The client speaks it with its
+//          own device TTS.
 type LiveGuideHandler struct {
-	guide    *skill.LiveGuide
-	upgrader websocket.Upgrader
+	guide *skill.LiveGuide
+	// stationStatus is the background agent pipeline the judgment ticker
+	// runs so the model gets an ETA snapshot in its prompt context instead
+	// of spending a tool round trip per data question. nil disables the
+	// injection (plain judgment prompts only).
+	stationStatus *StationStatusSkill
+	upgrader      websocket.Upgrader
 }
 
-func NewLiveGuideHandler(guide *skill.LiveGuide) *LiveGuideHandler {
+func NewLiveGuideHandler(guide *skill.LiveGuide, stationStatus *StationStatusSkill) *LiveGuideHandler {
 	return &LiveGuideHandler{
-		guide: guide,
+		guide:         guide,
+		stationStatus: stationStatus,
 		upgrader: websocket.Upgrader{
 			// The passenger page is same-origin (served by this project's
 			// own frontend container behind nginx, see docker-compose.yml),
@@ -52,8 +63,10 @@ const liveGuideFrameDeadline = 15 * time.Second
 // verdict on the frames it's been receiving (see skill.LiveGuideSession
 // doc comment: video frames alone never complete a Live API turn, so
 // something has to solicit one on a schedule independent of frame
-// arrival). Slower than the ~2s frame cadence so each judgment call has
-// more than one fresh frame of context to work from.
+// arrival). Slower than the ~1s frame cadence so each judgment call has
+// more than one fresh frame of context to work from. Voice questions don't
+// wait on this ticker at all — the session's receive loop answers them the
+// moment the model responds.
 const liveGuideJudgmentInterval = 4 * time.Second
 
 func (h *LiveGuideHandler) Handle(c *gin.Context) {
@@ -64,7 +77,35 @@ func (h *LiveGuideHandler) Handle(c *gin.Context) {
 	}
 	defer conn.Close()
 
-	session, err := h.guide.Open(c.Request.Context())
+	writeMu := &sync.Mutex{}
+	writeText := func(text string) error {
+		writeMu.Lock()
+		defer writeMu.Unlock()
+		return conn.WriteMessage(websocket.TextMessage, []byte(text))
+	}
+
+	// done is closed (once) by stop; the two loops and the session's
+	// OnDone callback all funnel into stop, and the handler's final
+	// <-done waits for whichever of them goes first. Closing conn inside
+	// stop unblocks whichever loop (if any) is still inside a blocking
+	// network call — this is what makes "rider navigates away" actually
+	// stop the session promptly instead of waiting out an in-flight
+	// model turn.
+	done := make(chan struct{})
+	var stopOnce sync.Once
+	stop := func() { stopOnce.Do(func() { close(done); conn.Close() }) }
+
+	session, err := h.guide.Open(c.Request.Context(), skill.LiveCallbacks{
+		OnText: func(text string) {
+			if err := writeText(text); err != nil {
+				stop()
+			}
+		},
+		OnDone: func(err error) {
+			log.Printf("live_guide: session ended: %v", err)
+			stop()
+		},
+	})
 	if err != nil {
 		log.Printf("live_guide: open session failed: %v", err)
 		_ = conn.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseTryAgainLater, "live_guide unavailable"))
@@ -74,28 +115,15 @@ func (h *LiveGuideHandler) Handle(c *gin.Context) {
 
 	// Three independent loops sharing one WebSocket connection and one
 	// Live session:
-	//   - readLoop: consumes client frames as fast as they arrive, calls
-	//     PushFrame (which returns immediately — see live_guide.go), never
-	//     blocks on a model reply.
-	//   - judgmentLoop: on its own slower ticker, calls RequestJudgment
-	//     (the only call that blocks on a model turn) and forwards any
-	//     verdict to the client.
-	//   - the goroutine below watches for either loop's exit and closes
-	//     conn, which unblocks whichever loop (if any) is still inside a
-	//     blocking network call — this is what makes "rider navigates
-	//     away" actually stop the session promptly instead of waiting out
-	//     an in-flight judgment call.
-	done := make(chan struct{})
-	var stopOnce sync.Once
-	stop := func() { stopOnce.Do(func() { close(done); conn.Close() }) }
-
-	writeMu := &sync.Mutex{}
-	writeText := func(text string) error {
-		writeMu.Lock()
-		defer writeMu.Unlock()
-		return conn.WriteMessage(websocket.TextMessage, []byte(text))
-	}
-
+	//   - readLoop: consumes client frames/audio/GPS as fast as they
+	//     arrive, calls PushFrame/PushAudio (which return immediately —
+	//     see live_guide.go), never blocks on a model reply.
+	//   - judgmentLoop: on its own slower ticker, sends the judgment
+	//     nudge that completes a turn; the model's reply comes back
+	//     through the session's receive loop via the callbacks above.
+	//   - stop closes conn when any of the loops or the session ends,
+	//     which unblocks whichever one (if any) is still inside a
+	//     blocking network call.
 	go func() {
 		defer stop()
 		for {
@@ -107,17 +135,28 @@ func (h *LiveGuideHandler) Handle(c *gin.Context) {
 			if msgType != websocket.BinaryMessage || len(data) == 0 {
 				continue
 			}
-			if data[0] == 0x00 {
+			switch data[0] {
+			case 0x00:
 				if err := session.PushFrame(c.Request.Context(), data[1:]); err != nil {
 					log.Printf("live_guide: push frame failed: %v", err)
 					return
 				}
-			} else if data[0] == 0x01 {
+			case 0x01:
 				if err := session.PushAudio(c.Request.Context(), data[1:]); err != nil {
 					log.Printf("live_guide: push audio failed: %v", err)
 					return
 				}
-			} else {
+			case 0x02:
+				var fix struct {
+					Lat float64 `json:"lat"`
+					Lng float64 `json:"lng"`
+				}
+				if err := json.Unmarshal(data[1:], &fix); err != nil {
+					log.Printf("live_guide: bad GPS payload: %v", err)
+					continue
+				}
+				session.SetGPS(fix.Lat, fix.Lng)
+			default:
 				// Old client fallback just in case
 				if err := session.PushFrame(c.Request.Context(), data); err != nil {
 					log.Printf("live_guide: push frame failed: %v", err)
@@ -133,7 +172,7 @@ func (h *LiveGuideHandler) Handle(c *gin.Context) {
 		defer ticker.Stop()
 		// Tolerate transient Gemini errors (rate limits, timeouts) instead
 		// of killing the whole session on the first failure. Only give up
-		// after several consecutive errors — a single successful judgment
+		// after several consecutive errors — a single successful send
 		// resets the counter.
 		const maxConsecutiveErrors = 3
 		consecutiveErrors := 0
@@ -142,8 +181,8 @@ func (h *LiveGuideHandler) Handle(c *gin.Context) {
 			case <-done:
 				return
 			case <-ticker.C:
-				reply, err := session.RequestJudgment(c.Request.Context())
-				if err != nil {
+				info := h.backgroundStationInfo(c.Request.Context(), session)
+				if err := session.RequestJudgment(c.Request.Context(), info); err != nil {
 					consecutiveErrors++
 					log.Printf("live_guide: request judgment failed (%d/%d): %v", consecutiveErrors, maxConsecutiveErrors, err)
 					if consecutiveErrors >= maxConsecutiveErrors {
@@ -153,15 +192,52 @@ func (h *LiveGuideHandler) Handle(c *gin.Context) {
 					continue
 				}
 				consecutiveErrors = 0 // success resets the counter
-				if reply == "" {
-					continue // model judged nothing worth saying — most ticks land here
-				}
-				if err := writeText(reply); err != nil {
-					return
-				}
 			}
 		}
 	}()
 
 	<-done
+}
+
+// backgroundStationInfo runs the same orchestrator station lookup the
+// model's station_status tool uses, but on the server's own clock, and
+// formats a one-line ETA snapshot for injection into the judgment prompt.
+// That way a "還有幾分鐘" question is answered straight from model
+// context — one generation pass, zero tool round trips — while the tools
+// stay available for drill-downs (other stations, specific routes).
+//
+// Degrades to "" (plain prompt) rather than blocking or failing the tick:
+// no GPS yet, station not found, or the query exceeding its 3s budget all
+// just mean this tick carries no data, and the next tick retries.
+func (h *LiveGuideHandler) backgroundStationInfo(ctx context.Context, sess *skill.LiveGuideSession) string {
+	if h.stationStatus == nil {
+		return ""
+	}
+	gps := sess.GPS()
+	if gps == nil {
+		return ""
+	}
+	qctx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	defer cancel()
+	out, err := h.stationStatus.Do(qctx, StationStatusIn{Lat: gps.Lat, Lon: gps.Lon})
+	if err != nil || !out.Found {
+		return ""
+	}
+
+	parts := []string{fmt.Sprintf("最近的站牌「%s」", out.Name)}
+	for i, b := range out.Buses {
+		if i >= 3 {
+			break
+		}
+		bus := fmt.Sprintf("%s路", b.Route)
+		if b.Direction != "" {
+			bus = fmt.Sprintf("%s路（%s）", b.Route, b.Direction)
+		}
+		if b.HasETA {
+			parts = append(parts, fmt.Sprintf("%s還有%d分鐘", bus, b.ETAMinutes))
+		} else {
+			parts = append(parts, fmt.Sprintf("%s無到站時間", bus))
+		}
+	}
+	return strings.Join(parts, "，")
 }

@@ -29,9 +29,12 @@ const MAX_ROUTE_RECORD_SECONDS = 4;
 // 一起關掉，不留著背景連線耗費資源或觸發使用者沒預期的語音。
 let liveGuideSocket = null;
 let liveGuideTimer = null;
+let liveGuideGpsTimer = null;
 let liveGuideReconnectTimer = null;
 let liveGuideReconnectDelay = 1000; // exponential backoff: 1s → 2s → 4s → 8s (cap)
-const LIVE_GUIDE_FRAME_INTERVAL_MS = 2000;
+// 每秒一幀：對環境變化（公車進站、車門開啟）的反應比 2 秒快一倍
+const LIVE_GUIDE_FRAME_INTERVAL_MS = 1000;
+const LIVE_GUIDE_GPS_INTERVAL_MS = 10000;
 const LIVE_GUIDE_MAX_RECONNECT_DELAY = 8000;
 
 // ===== Live Guide 狀態追蹤（給面板用）=====
@@ -98,16 +101,19 @@ function startLiveGuide() {
     updateLiveGuidePanel();
     liveGuideTimer = setInterval(sendLiveGuideFrame, LIVE_GUIDE_FRAME_INTERVAL_MS);
     startLiveGuideMic();
+    sendLiveGuideGps();
+    liveGuideGpsTimer = setInterval(sendLiveGuideGps, LIVE_GUIDE_GPS_INTERVAL_MS);
   });
 
   liveGuideSocket.addEventListener("message", (event) => {
     // 伺服器只在模型判斷「這個畫面需要提醒」時才會送訊息——多數畫面完全
     // 不會收到任何 message，這正是模型自己判斷、而非被動等通知的結果。
+    // 模型回覆是純文字，由裝置自己的 TTS 唸出（視障使用者已設好的語速與語音）。
     let text = typeof event.data === "string" ? event.data : "";
     if (text) {
       if (text.includes("[FIND_STATION]")) {
         text = text.replace(/\[FIND_STATION\]/g, "").trim();
-        // AI 看到站牌了，自動觸發辨識
+        // 模型現在應改用 station_status 工具查詢；保留這個觸發當後備
         if (!scanning) startScanning();
       }
       if (text) {
@@ -123,12 +129,28 @@ function startLiveGuide() {
   liveGuideSocket.addEventListener("error", () => stopLiveGuide(true));
 }
 
+// ===== Live Guide GPS 推送 =====
+// station_status 工具需要位置：前端定期把 GPS 送給後端存著，模型呼叫工具時
+// 後端自動代入，模型永遠不需要知道經緯度數字。
+async function sendLiveGuideGps() {
+  if (!liveGuideSocket || liveGuideSocket.readyState !== WebSocket.OPEN) return;
+  const pos = await getGpsSafe();
+  if (!pos) return;
+  const json = new TextEncoder().encode(JSON.stringify({ lat: pos.lat, lng: pos.lng }));
+  const payload = new Uint8Array(1 + json.length);
+  payload[0] = 0x02; // GPS marker
+  payload.set(json, 1);
+  liveGuideSocket.send(payload.buffer);
+}
+
 // shouldReconnect: true 表示非使用者主動關閉（連線斷掉、伺服器錯誤），
 // 只要相機還開著就應該自動重連；false 表示使用者主動離開（重新校準、
 // 離開頁面），不應重連。
 function stopLiveGuide(shouldReconnect) {
   clearInterval(liveGuideTimer);
   liveGuideTimer = null;
+  clearInterval(liveGuideGpsTimer);
+  liveGuideGpsTimer = null;
   if (liveGuideSocket) {
     const socket = liveGuideSocket;
     liveGuideSocket = null; // 先清空，避免 close 事件的 stopLiveGuide 重入
