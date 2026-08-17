@@ -50,7 +50,7 @@ func (h *AnalyzeHandler) Handle(c *gin.Context) {
 		uid = userID(c)
 	}
 	imageData, imageMIME := decodeImage(req.Image)
-	bb := &agent.Blackboard{Lat: req.Location.Lat, Lon: req.Location.Lng, ImageData: imageData, ImageMIME: imageMIME}
+	bb := &agent.Blackboard{Lat: req.Location.Lat, Lon: req.Location.Lng, ImageData: imageData, ImageMIME: imageMIME, WantedRoute: req.WantedRoute}
 	ctx := c.Request.Context()
 
 	// Wave 1: geo lookup, profile lookup, and (if a photo was submitted
@@ -83,6 +83,10 @@ func (h *AnalyzeHandler) Handle(c *gin.Context) {
 
 	sort.SliceStable(bb.Buses, func(i, j int) bool {
 		a, b := bb.Buses[i], bb.Buses[j]
+		aw, bw := routeMatchesWanted(a.Route, bb.WantedRoute), routeMatchesWanted(b.Route, bb.WantedRoute)
+		if aw != bw {
+			return aw // the wanted route always sorts first
+		}
 		if a.HasETA != b.HasETA {
 			return a.HasETA // buses with a live ETA sort before "no data"
 		}
@@ -92,8 +96,9 @@ func (h *AnalyzeHandler) Handle(c *gin.Context) {
 	buses := make([]gin.H, 0, len(bb.Buses))
 	for _, b := range bb.Buses {
 		entry := gin.H{
-			"route":   b.Route,
-			"urgency": urgency(b, bb.Profile),
+			"route":     b.Route,
+			"urgency":   urgencyFor(b, bb.Profile, bb.WantedRoute),
+			"is_wanted": routeMatchesWanted(b.Route, bb.WantedRoute),
 		}
 		// direction/eta_minutes are always present as keys, null when
 		// pda5284 (or this project's 6-route demo index, see plan.md §2.1)
@@ -115,7 +120,13 @@ func (h *AnalyzeHandler) Handle(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":       "success",
 		"station_name": bb.NearestName,
-		"buses":        buses,
+		// wanted_route echoes the rider's stated route back; found=false
+		// tells the frontend this station doesn't serve it, so a
+		// vision-impaired rider learns that audibly instead of scanning
+		// the list for a route that isn't there.
+		"wanted_route":       bb.WantedRoute,
+		"wanted_route_found": wantedRouteFound(bb.Buses, bb.WantedRoute),
+		"buses":              buses,
 		"display": gin.H{
 			"safe_zone_position": safeZonePosition(bb.Profile.SafeZone.Y),
 			"font_scale":         nonZeroOr(bb.Profile.FontScale, 1.0),
@@ -124,7 +135,7 @@ func (h *AnalyzeHandler) Handle(c *gin.Context) {
 		// own already-configured device screen-reader rate/voice (plan.md §9)
 		// instead of a fixed-rate server clip; voice_audio_url is an optional
 		// Cloud TTS fallback for browsers without speechSynthesis support.
-		"voice_summary":   voiceSummary(bb.Buses),
+		"voice_summary":   voiceSummary(bb.Buses, bb.WantedRoute),
 		"voice_audio_url": h.synthesizeVoiceAudioURL(ctx, bb.Buses),
 	})
 }
@@ -138,7 +149,7 @@ func (h *AnalyzeHandler) synthesizeVoiceAudioURL(ctx context.Context, buses []ag
 	if h.tts == nil {
 		return ""
 	}
-	out, err := h.tts.Do(ctx, skill.TTSIn{Text: voiceSummary(buses)})
+	out, err := h.tts.Do(ctx, skill.TTSIn{Text: voiceSummary(buses, "")})
 	if err != nil {
 		log.Printf("tts failed: %v", err)
 		return ""
@@ -168,6 +179,40 @@ func urgency(b agent.BusReport, p agent.ProfileView) string {
 	}
 }
 
+// urgencyFor is urgency() with wanted-route suppression: once the rider
+// has stated a route, unrelated routes are capped at "low" so the wanted
+// route's arrival is what stands out visually and audibly instead of every
+// bus competing for attention. No stated route → unchanged behavior.
+func urgencyFor(b agent.BusReport, p agent.ProfileView, wanted string) string {
+	u := urgency(b, p)
+	if wanted != "" && !routeMatchesWanted(b.Route, wanted) {
+		return "low"
+	}
+	return u
+}
+
+// routeMatchesWanted reports whether a route name is the one the rider
+// stated. Exact match after trimming: route codes are short identifiers
+// ("307", "棕12"), so substring matching would risk false positives.
+func routeMatchesWanted(route, wanted string) bool {
+	wanted = strings.TrimSpace(wanted)
+	if wanted == "" {
+		return false
+	}
+	return strings.TrimSpace(route) == wanted
+}
+
+// wantedRouteFound reports whether the rider's stated route is served at
+// this station at all.
+func wantedRouteFound(buses []agent.BusReport, wanted string) bool {
+	for _, b := range buses {
+		if routeMatchesWanted(b.Route, wanted) {
+			return true
+		}
+	}
+	return false
+}
+
 // safeZonePosition maps the profile's safe-zone Y coordinate (0-100, top to
 // bottom of frame) to the coarse position keyword the frontend's display
 // block expects.
@@ -191,15 +236,36 @@ func nonZeroOr(v, fallback float64) float64 {
 	return v
 }
 
-func voiceSummary(buses []agent.BusReport) string {
+func voiceSummary(buses []agent.BusReport, wanted string) string {
 	if len(buses) == 0 {
 		return "目前沒有查到路線資訊"
 	}
 	first := buses[0]
+	if routeMatchesWanted(first.Route, wanted) {
+		if first.HasETA {
+			return fmt.Sprintf("你要搭的%s路還有%d分鐘進站，%s", first.Route, first.ETAMinutes, first.Direction)
+		}
+		return fmt.Sprintf("你要搭的%s路目前無即時資訊，%s", first.Route, first.Direction)
+	}
+	if wanted != "" {
+		// The station doesn't serve the wanted route — say so up front
+		// instead of reading an unrelated route and letting the rider
+		// assume it's theirs.
+		return fmt.Sprintf("此站牌沒有%s路，最近的是%s路，%s", wanted, first.Route, etaPhrase(first))
+	}
 	if first.HasETA {
 		return fmt.Sprintf("%s路還有%d分鐘進站，%s", first.Route, first.ETAMinutes, first.Direction)
 	}
 	return fmt.Sprintf("%s路目前無即時資訊，%s", first.Route, first.Direction)
+}
+
+// etaPhrase is the ETA half of a summary line, reused when the lead-in
+// sentence differs (wanted route missing from this station).
+func etaPhrase(b agent.BusReport) string {
+	if b.HasETA {
+		return fmt.Sprintf("%d分鐘進站", b.ETAMinutes)
+	}
+	return "目前無即時資訊"
 }
 
 // pickStation decides which of GeoAgent's candidates to lock onto, folding

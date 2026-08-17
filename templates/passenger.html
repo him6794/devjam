@@ -114,6 +114,15 @@
   <p class="camera-hint">將鏡頭對準站牌</p>
   <p id="camera-status" class="status-msg"></p>
 
+  <div class="route-setup">
+    <button id="btn-record-route" class="btn btn-secondary route-record-btn" type="button">🎤 說出想搭的路線</button>
+    <div class="route-input-row">
+      <input id="route-input" class="route-input" inputmode="numeric" placeholder="或輸入路線號碼，例如 307" aria-label="輸入路線號碼">
+      <button id="btn-set-route" class="btn btn-secondary route-select-btn" type="button">確定</button>
+    </div>
+    <p id="route-status" class="status-msg" aria-live="polite"></p>
+  </div>
+
   <div class="shutter-wrap">
     <button id="shutter-btn" class="shutter-btn" aria-label="拍下站牌">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
@@ -153,6 +162,7 @@
     <p id="result-route" class="route">307</p>
     <p id="result-eta" class="eta">3 分鐘</p>
     <p id="result-direction" class="direction">往台北車站</p>
+    <p id="result-wanted" class="wanted-tag" style="display:none"></p>
   </div>
 
   <button id="other-buses-toggle" class="other-buses-toggle">還有2班車 ▾</button>

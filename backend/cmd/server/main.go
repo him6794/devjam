@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 
+	speech "cloud.google.com/go/speech/apiv2"
 	"cloud.google.com/go/storage"
 	texttospeech "cloud.google.com/go/texttospeech/apiv1"
 	"google.golang.org/genai"
@@ -38,23 +39,30 @@ func main() {
 	registry.Register(nearestStops)
 	registry.Register(stopETA)
 
-	// Vision is optional: if Vertex AI credentials/project aren't
-	// configured, log it and keep serving GPS-only analyze rather than
-	// refusing to start. See agent.VisionAgent / httpapi.pickStation for
-	// how analyze degrades when this is nil.
-	var visionSign *skill.VisionReadSign
+	// Vision and route extraction share one Gemini client. It is optional:
+	// if Vertex AI credentials/project aren't configured, log it and keep
+	// serving GPS-only analyze rather than refusing to start. See
+	// agent.VisionAgent / httpapi.pickStation for how analyze degrades when
+	// this is nil; route_extract's regex fallback keeps the numeric-route
+	// voice path working without it.
+	var (
+		visionSign   *skill.VisionReadSign
+		routeExtract *skill.RouteExtract
+	)
 	genaiClient, err := genai.NewClient(context.Background(), &genai.ClientConfig{
 		Project:  envOr("GCP_PROJECT", "devjam26aug17tpe-1280"),
 		Location: envOr("GCP_LOCATION", "us-central1"),
 		Backend:  genai.BackendVertexAI,
 	})
 	if err != nil {
-		log.Printf("server: Vertex AI client unavailable, vision-based disambiguation disabled: %v", err)
+		log.Printf("server: Vertex AI client unavailable, vision-based disambiguation and spoken-numeral route extraction disabled: %v", err)
 	} else {
 		visionSign = skill.NewVisionReadSign(genaiClient)
 		registry.Register(visionSign)
 		log.Printf("server: vision_read_sign enabled via Vertex AI Gemini")
 	}
+	routeExtract = skill.NewRouteExtract(genaiClient) // nil client → regex-only fallback
+	registry.Register(routeExtract)
 
 	// TTS is likewise optional: without it, voice_audio_url in the response
 	// just comes back as "" instead of a playable URL (see
@@ -70,10 +78,27 @@ func main() {
 		log.Printf("server: tts enabled via Cloud Text-to-Speech")
 	}
 
+	// STT is optional like TTS: without it, /api/voice_route still answers
+	// text requests, and answers audio requests with 503 stt_unavailable so
+	// the frontend falls back to asking the rider to type the route (see
+	// httpapi.VoiceRouteHandler).
+	var sttSkill *skill.SpeechToText
+	sttClient, sttErr := speech.NewClient(context.Background())
+	if sttErr != nil {
+		log.Printf("server: Speech-to-Text client unavailable, voice_route audio disabled: %v", sttErr)
+	} else {
+		// STT v2 的同步 Recognize 只存在 global location（區域型 recognizer
+		// 僅供 streaming/batch），所以不能用 Vertex AI 的 GCP_LOCATION。
+		sttSkill = skill.NewSpeechToText(sttClient, envOr("GCP_PROJECT", "devjam26aug17tpe-1280"), envOr("STT_LOCATION", "global"), envOr("STT_MODEL", "latest_long"))
+		registry.Register(sttSkill)
+		log.Printf("server: speech_to_text enabled via Cloud Speech-to-Text")
+	}
+
 	server := &httpapi.Server{
-		Analyze:  httpapi.NewAnalyzeHandler(agent.NewOrchestrator(), nearestStops, stopETA, visionSign, ttsSkill, profiles),
-		Profile:  httpapi.NewProfileHandler(profiles),
-		Registry: registry,
+		Analyze:    httpapi.NewAnalyzeHandler(agent.NewOrchestrator(), nearestStops, stopETA, visionSign, ttsSkill, profiles),
+		Profile:    httpapi.NewProfileHandler(profiles),
+		VoiceRoute: httpapi.NewVoiceRouteHandler(sttSkill, routeExtract),
+		Registry:   registry,
 	}
 
 	r := httpapi.NewRouter(server)

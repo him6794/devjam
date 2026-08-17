@@ -3,6 +3,7 @@ module devjam-backend
 go 1.25.0
 
 require (
+	cloud.google.com/go/speech v1.36.0
 	cloud.google.com/go/storage v1.64.0
 	cloud.google.com/go/texttospeech v1.22.0
 	github.com/gin-gonic/gin v1.10.0

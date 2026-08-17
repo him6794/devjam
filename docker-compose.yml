@@ -10,6 +10,11 @@ services:
       GCP_PROJECT: ${GCP_PROJECT:-devjam26aug17tpe-1280}
       GCP_LOCATION: ${GCP_LOCATION:-us-central1}
       TTS_BUCKET: ${TTS_BUCKET:-devjam26aug17tpe-1280-tts-audio}
+      # 把本機 gcloud 的 application default credentials 掛進容器，
+      # Speech-to-Text / Text-to-Speech / Vertex AI 才有憑證可用。
+      GOOGLE_APPLICATION_CREDENTIALS: /secrets/adc.json
+    volumes:
+      - "${USERPROFILE}/AppData/Roaming/gcloud/application_default_credentials.json:/secrets/adc.json:ro"
     expose:
       - "8080"
     ports:

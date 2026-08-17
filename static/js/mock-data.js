@@ -37,14 +37,27 @@ const MockAPI = {
       status: "success",
       station_name: "捷運公館站",
       buses: [
-        { route: "307", eta_minutes: 3, direction: "往台北車站", urgency: "high" },
-        { route: "202", eta_minutes: 8, direction: "往公館", urgency: "medium" },
-        { route: "88", eta_minutes: 15, direction: "往新店", urgency: "low" },
+        { route: "307", eta_minutes: 3, direction: "往台北車站", urgency: "high", is_wanted: false },
+        { route: "202", eta_minutes: 8, direction: "往公館", urgency: "medium", is_wanted: false },
+        { route: "88", eta_minutes: 15, direction: "往新店", urgency: "low", is_wanted: false },
       ],
+      wanted_route: "",
+      wanted_route_found: false,
       display: { safe_zone_position: "top", font_scale: 1.5 },
       voice_summary: "307路線3分鐘後到站，往台北車站方向",
       voice_audio_url: "",
     };
+  },
+
+  // 模擬 POST /api/voice_route
+  async voiceRoute(payload) {
+    await delay(400);
+    const text = payload.text || "";
+    const m = /\d+/.exec(text);
+    if (m) {
+      return { status: "success", route: m[0], transcript: text };
+    }
+    return { status: "no_route", message: "沒有聽到路線號碼，請說出例如「307」。" };
   },
 
   // 模擬 POST /api/notify_driver

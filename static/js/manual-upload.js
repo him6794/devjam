@@ -76,6 +76,7 @@ async function uploadManualPhoto(file) {
       formData.append("image", file, file.name);
       formData.append("lat", position.lat);
       formData.append("lng", position.lng);
+      if (state.wantedRoute) formData.append("wanted_route", state.wantedRoute);
       data = await apiFetch("/api/analyze", { method: "POST", body: formData });
     }
 

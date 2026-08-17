@@ -68,7 +68,9 @@ test("manual upload keeps the GPS error path when test location is disabled", as
   await page.locator("#manual-test-location").uncheck();
   await page.locator("#manual-photo-input").setInputFiles(testImage);
 
-  await expect(page.locator("#manual-upload-status")).toHaveText("無法取得定位，請允許位置權限後再試。");
+  // 接上 GCP 憑證後 analyze 會多一個 Gemini Vision 呼叫（與 geo 平行），
+  // 回應可能落在 5-8 秒，所以這裡與下面的 expect 都用 15 秒上限
+  await expect(page.locator("#manual-upload-status")).toHaveText("無法取得定位，請允許位置權限後再試。", { timeout: 15000 });
   expect(await page.locator("#screen-result").getAttribute("class")).not.toContain("active");
   expect(await page.evaluate(() => window.__geoCalls)).toBe(1);
   expect(analyzeRequested).toBe(false);
@@ -97,7 +99,7 @@ test("manual upload explains when live GPS is outside the bus-stop radius", asyn
   await page.locator("#manual-test-location").uncheck();
   await page.locator("#manual-photo-input").setInputFiles(testImage);
 
-  await expect(page.locator("#manual-upload-status")).toHaveText("此位置附近找不到公車站，請換用公車站 GPS。");
+  await expect(page.locator("#manual-upload-status")).toHaveText("此位置附近找不到公車站，請換用公車站 GPS。", { timeout: 15000 });
   expect(await page.locator("#screen-result").getAttribute("class")).not.toContain("active");
   expect(await page.evaluate(() => window.__geoCalls)).toBe(1);
   expect(analyzeRequested).toBe(true);

@@ -36,6 +36,12 @@ type Blackboard struct {
 	NearestName  string
 	NearestDistM float64
 
+	// WantedRoute is the route code the rider wants to take (stated by
+	// voice or text via /api/voice_route); empty when unstated. Agents
+	// don't consume it today — the analyze handler uses it to prioritize
+	// and mark buses — but it lives here so a future Journey agent can.
+	WantedRoute string
+
 	Profile ProfileView
 
 	Buses []BusReport

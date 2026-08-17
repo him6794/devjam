@@ -661,6 +661,45 @@ input[type="range"] {
   padding: 0 var(--space-3);
 }
 
+/* 乘客端路線設定（語音/文字輸入想要搭的路線） */
+.route-setup {
+  margin: var(--space-2) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.route-record-btn {
+  width: 100%;
+  min-height: var(--touch-min);
+}
+
+.route-record-btn.recording {
+  background: var(--color-secondary);
+  color: #fff;
+  border-color: var(--color-secondary);
+}
+
+.route-input-row {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.wanted-tag {
+  margin-top: var(--space-1);
+  padding: 0.25em 0.6em;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-sm);
+  font-weight: 700;
+  color: #fff;
+  background: var(--color-secondary);
+  align-self: center;
+}
+
+.wanted-tag.missing {
+  background: var(--color-danger);
+}
+
 .monitoring-label {
   font-size: var(--font-sm);
   color: var(--color-text-muted);

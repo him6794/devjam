@@ -23,6 +23,9 @@ type analyzeRequest struct {
 	UserID   string          `json:"user_id"`
 	Location analyzeLocation `json:"location"`
 	Image    string          `json:"image"`
+	// WantedRoute is the route code the rider stated via /api/voice_route
+	// ("307"); empty when they didn't state one. See api.md §1/§5.
+	WantedRoute string `json:"wanted_route"`
 }
 
 func parseAnalyzeRequest(c *gin.Context) (analyzeRequest, error) {
@@ -78,7 +81,8 @@ func parseMultipartAnalyzeRequest(c *gin.Context) (analyzeRequest, error) {
 			Lng:       lng,
 			AccuracyM: parseOptionalMultipartFloat(c.PostForm("accuracy_m")),
 		},
-		Image: "data:" + mime + ";base64," + base64.StdEncoding.EncodeToString(data),
+		Image:       "data:" + mime + ";base64," + base64.StdEncoding.EncodeToString(data),
+		WantedRoute: c.PostForm("wanted_route"),
 	}, nil
 }
 

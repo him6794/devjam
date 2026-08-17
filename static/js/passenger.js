@@ -8,6 +8,7 @@ const state = {
   currentVoiceAudioUrl: "",
   currentRoute: null,
   currentStationName: "",
+  wantedRoute: "", // 使用者說出/輸入想搭的路線（api.md §5），空字串表示未設定
 };
 
 let scanning = false;
@@ -17,12 +18,16 @@ const MAX_SCAN_ATTEMPTS = 6;
 const SCAN_INTERVAL_MS = 2000;
 let mediaStream = null;
 let voiceAudio = null;
+let routeRecorder = null;
+let routeRecorderTimer = null;
+const MAX_ROUTE_RECORD_SECONDS = 4;
 
 document.addEventListener("DOMContentLoaded", init);
 
 async function init() {
   bindOnboardingEvents();
   bindResultEvents();
+  bindRouteSetup();
   qs("#recalibrate-link").addEventListener("click", () => {
     showScreen("screen-calib-1");
   });
@@ -183,6 +188,135 @@ function bindResultEvents() {
   });
 }
 
+// ===== 路線選擇（Journey Agent v1，api.md §5）=====
+// 語音（MediaRecorder 錄音 → /api/voice_route）或文字輸入，
+// 成功後存進 state.wantedRoute，之後每次 /api/analyze 都帶上。
+function bindRouteSetup() {
+  qs("#btn-record-route").addEventListener("click", toggleRouteRecording);
+
+  qs("#btn-set-route").addEventListener("click", () => {
+    const raw = qs("#route-input").value.trim();
+    if (!raw) {
+      setRouteStatus("請先輸入或說出路線號碼。", "error");
+      return;
+    }
+    qs("#route-input").value = "";
+    submitVoiceRoute({ text: raw });
+  });
+  qs("#route-input").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") qs("#btn-set-route").click();
+  });
+}
+
+async function toggleRouteRecording() {
+  const btn = qs("#btn-record-route");
+  if (routeRecorder && routeRecorder.state === "recording") {
+    // 第二次點擊＝結束錄音；auto-stop 逾時也會走同一條 onstop 路徑
+    btn.textContent = "🎤 辨識中...";
+    btn.disabled = true;
+    routeRecorder.stop();
+    return;
+  }
+
+  let stream;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  } catch {
+    setRouteStatus("無法使用麥克風，請改用下方文字輸入路線號碼。", "error");
+    return;
+  }
+
+  const chunks = [];
+  routeRecorder = new MediaRecorder(stream);
+  routeRecorder.ondataavailable = (e) => {
+    if (e.data.size) chunks.push(e.data);
+  };
+  routeRecorder.onstop = async () => {
+    stream.getTracks().forEach((t) => t.stop());
+    clearTimeout(routeRecorderTimer);
+    const mime = routeRecorder.mimeType || "audio/webm";
+    const blob = new Blob(chunks, { type: mime });
+    const audioBase64 = await blobToBase64(blob);
+    submitVoiceRoute({ audio_base64: audioBase64, audio_mime: mime });
+  };
+
+  routeRecorder.start();
+  btn.textContent = "🎤 錄音中，再按一次結束";
+  btn.classList.add("recording");
+  // 提示說完整句子：單唸數字（「307」）是語音辨識最難的場景，
+  // 「我要搭307路」有上下文，準確率高很多
+  setRouteStatus("請說完整句子，例如「我要搭307路」", "");
+  routeRecorderTimer = setTimeout(() => {
+    if (routeRecorder && routeRecorder.state === "recording") routeRecorder.stop();
+  }, MAX_ROUTE_RECORD_SECONDS * 1000);
+}
+
+async function submitVoiceRoute(payload) {
+  try {
+    const res = USE_MOCK
+      ? await MockAPI.voiceRoute(payload)
+      : await apiFetch(`/api/voice_route`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+    resetRecordButton();
+
+    if (res.status === "success" && res.route) {
+      setWantedRoute(res.route);
+      return;
+    }
+    setRouteStatus(res.message || "聽不清楚，請再說一次，或改用文字輸入。", "error");
+    speakRoutePrompt("沒有聽到路線號碼，請再說一次，或使用下方輸入框輸入");
+  } catch {
+    // 503 stt_unavailable / stt_failed 等：提示改走文字輸入
+    resetRecordButton();
+    setRouteStatus("語音辨識失敗，請改用下方文字輸入路線號碼。", "error");
+    qs("#route-input").focus();
+  }
+}
+
+function resetRecordButton() {
+  const btn = qs("#btn-record-route");
+  btn.textContent = "🎤 說出想搭的路線";
+  btn.disabled = false;
+  btn.classList.remove("recording");
+}
+
+function setWantedRoute(route) {
+  state.wantedRoute = route;
+  setRouteStatus(`已設定路線：${route}。拍照後會優先顯示這條路線。`, "success");
+  speakRoutePrompt(`已設定路線${route}，拍照後會優先顯示這條路線`);
+}
+
+function setRouteStatus(message, tone) {
+  const status = qs("#route-status");
+  status.textContent = message;
+  status.classList.toggle("success", tone === "success");
+  status.classList.toggle("error", tone === "error");
+}
+
+function speakRoutePrompt(text) {
+  if (!state.voiceEnabled || !("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = "zh-TW";
+  window.speechSynthesis.speak(utter);
+}
+
+function blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = String(reader.result || "");
+      resolve(result.split(",")[1] || "");
+    };
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(blob);
+  });
+}
+
 async function startScanning() {
   scanning = true;
   scanAttempts = 0;
@@ -231,6 +365,7 @@ async function captureAndSend() {
       formData.append("image", blob, "frame.jpg");
       formData.append("lat", pos.lat);
       formData.append("lng", pos.lng);
+      if (state.wantedRoute) formData.append("wanted_route", state.wantedRoute);
       data = await apiFetch(`/api/analyze`, { method: "POST", body: formData });
     }
   } catch (err) {
@@ -265,6 +400,21 @@ function renderResult(data) {
   qs("#result-route").textContent = main.route;
   qs("#result-eta").textContent = `${main.eta_minutes} 分鐘`;
   qs("#result-direction").textContent = main.direction;
+
+  // 想要的路線：有就醒目標記；說了但這站沒有，更要大聲講（視障使用者
+  // 不會自己掃清單找不存在的路線）
+  const wantedTag = qs("#result-wanted");
+  if (main.is_wanted) {
+    wantedTag.textContent = "✓ 你要搭的路線";
+    wantedTag.classList.remove("missing");
+    wantedTag.style.display = "block";
+  } else if (data.wanted_route) {
+    wantedTag.textContent = `⚠ 此站沒有${data.wanted_route}路`;
+    wantedTag.classList.add("missing");
+    wantedTag.style.display = "block";
+  } else {
+    wantedTag.style.display = "none";
+  }
 
   const others = data.buses.slice(1);
   const listEl = qs("#other-buses-list");

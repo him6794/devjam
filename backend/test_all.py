@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import base64
 import json
 import subprocess
 import time
@@ -137,6 +138,70 @@ if r and r.status_code == 200:
 # 11. /healthz
 print("\n[11] /healthz")
 test("健康檢查", "GET", "/healthz")
+
+# 12. /api/voice_route - 文字路徑（api.md §5）
+print("\n[12] /api/voice_route - 文字輸入")
+r = test("語音路線 - 文字輸入",
+    "POST", "/api/voice_route",
+    headers={"Content-Type": "application/json"},
+    json={"text": "我要搭307路"})
+if r and r.status_code == 200:
+    d = r.json()
+    print(f"   status: {d.get('status')} route: {d.get('route')!r} (應為 307)")
+    print(f"   transcript: {d.get('transcript')!r}")
+
+# 13. /api/voice_route - 聽不出路線
+print("\n[13] /api/voice_route - 無路線號碼")
+r = test("語音路線 - 無號碼",
+    "POST", "/api/voice_route",
+    headers={"Content-Type": "application/json"},
+    json={"text": "今天天氣真好"})
+if r and r.status_code == 200:
+    print(f"   status: {r.json().get('status')} (應為 no_route)")
+
+# 14. /api/voice_route - 真實語音迴路：有 TTS 可用時，把 analyze 的
+# voice_audio_url（Cloud TTS 合成音）餵回 voice_route 驗證 STT→路線擷取
+print("\n[14] /api/voice_route - 真實語音迴路（TTS 合成音 → STT 辨識）")
+try:
+    r0 = requests.post(f"{BASE}/api/analyze", timeout=10,
+        headers={"Content-Type": "application/json"},
+        json={"location": {"lat": 25.051717, "lng": 121.552853}})
+    audio_url = r0.json().get("voice_audio_url", "") if r0.status_code == 200 else ""
+except Exception:
+    audio_url = ""
+
+if audio_url.startswith("https://"):
+    audio = requests.get(audio_url, timeout=30).content
+    r = test("語音路線 - TTS合成音辨識",
+        "POST", "/api/voice_route",
+        headers={"Content-Type": "application/json"},
+        json={"audio_base64": base64.b64encode(audio).decode(), "audio_mime": "audio/mpeg"})
+    if r and r.status_code == 200:
+        d = r.json()
+        print(f"   status: {d.get('status')} route: {d.get('route')!r}")
+        print(f"   transcript: {d.get('transcript')!r}")
+else:
+    r = test("語音路線 - audio（無 TTS/憑證時應 503 stt_unavailable）",
+        "POST", "/api/voice_route",
+        headers={"Content-Type": "application/json"},
+        json={"audio_base64": "AAAA", "audio_mime": "audio/webm"})
+    if r:
+        print(f"   (HTTP {r.status_code}: {r.text[:80]})")
+
+# 15. /api/analyze + wanted_route（api.md §1）
+print("\n[15] /api/analyze - wanted_route=307")
+r = test("分析 + 想要路線",
+    "POST", "/api/analyze",
+    headers={"Content-Type": "application/json"},
+    json={"location": {"lat": 25.051717, "lng": 121.552853}, "wanted_route": "307"})
+if r and r.status_code == 200:
+    d = r.json()
+    buses = d.get("buses", [])
+    print(f"   wanted_route: {d.get('wanted_route')!r} found: {d.get('wanted_route_found')}")
+    if buses:
+        b0 = buses[0]
+        print(f"   buses[0]: route={b0.get('route')} is_wanted={b0.get('is_wanted')} urgency={b0.get('urgency')}")
+    print(f"   voice_summary: {d.get('voice_summary')!r}")
 
 print("\n" + "=" * 60)
 print("測試完成")

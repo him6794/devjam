@@ -1,5 +1,6 @@
 // Package httpapi exposes the gin handlers for the API contract in
-// api.md: POST /api/analyze, GET/POST /api/profile, POST /api/notify_driver.
+// api.md: POST /api/analyze, POST /api/voice_route, GET/POST /api/profile,
+// POST /api/notify_driver.
 package httpapi
 
 import (
@@ -12,9 +13,10 @@ import (
 )
 
 type Server struct {
-	Analyze  *AnalyzeHandler
-	Profile  *ProfileHandler
-	Registry *skill.Registry
+	Analyze    *AnalyzeHandler
+	Profile    *ProfileHandler
+	VoiceRoute *VoiceRouteHandler
+	Registry   *skill.Registry
 }
 
 func NewRouter(s *Server) *gin.Engine {
@@ -24,6 +26,7 @@ func NewRouter(s *Server) *gin.Engine {
 	r.GET("/healthz", func(c *gin.Context) { c.Status(http.StatusOK) })
 
 	r.POST("/api/analyze", s.Analyze.Handle)
+	r.POST("/api/voice_route", s.VoiceRoute.Handle)
 	r.GET("/api/profile", s.Profile.Get)
 	r.POST("/api/profile", s.Profile.Post)
 	r.POST("/api/notify_driver", newNotifyHandler(alerts))
