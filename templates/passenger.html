@@ -1,11 +1,10 @@
 {% extends "base.html" %}
-{% block title %}城市之眼 — 乘客端{% endblock %}
+{% block title %} ReVision City {% endblock %}
 
 {% block content %}
 
-<!-- ============ 校準 Step 1：選擇視野狀況 ============ -->
 <section id="screen-calib-1" class="screen active">
-  <h1 class="title-xl">你的視野狀況是？</h1>
+  <h1 class="title-lg">你的視覺狀況？</h1>
 
   <button class="choice-card" data-impairment="tunnel_vision">
     <span class="icon">
@@ -16,7 +15,7 @@
     </span>
     <span>
       <p class="label">隧道視野</p>
-      <p class="desc">視野範圍變窄，像用吸管看東西</p>
+      <p class="desc">視野範圍變窄</p>
     </span>
   </button>
 
@@ -29,7 +28,7 @@
     </span>
     <span>
       <p class="label">中心有缺損</p>
-      <p class="desc">畫面中央看不清楚，周邊視野正常</p>
+      <p class="desc">畫面中央看不清楚</p>
     </span>
   </button>
 
@@ -42,8 +41,8 @@
       </svg>
     </span>
     <span>
-      <p class="label">其他 / 尚不確定</p>
-      <p class="desc">先用預設設定，之後可以再調整</p>
+      <p class="label">其他</p>
+      <p class="desc">尚不確定</p>
     </span>
   </button>
 
@@ -56,9 +55,8 @@
   </div>
 </section>
 
-<!-- ============ 校準 Step 2：標記安全視野區 ============ -->
 <section id="screen-calib-2" class="screen">
-  <h1 class="title-lg">點一下你現在看得最清楚的地方</h1>
+  <h1 class="title-lg">點擊目前視野範圍</h1>
 
   <div id="calib-canvas" class="calib-canvas-wrap">
     <div id="safe-zone-marker" class="safe-zone-marker"></div>
@@ -66,7 +64,7 @@
 
   <p class="subtitle" style="text-align:center; margin-bottom:8px">拖曳滑桿調整範圍大小</p>
   <input id="safe-zone-size-slider" type="range" min="15" max="60" step="3" value="30">
-  <p class="subtitle" style="text-align:center">先點畫面標記位置，再用滑桿調整大小</p>
+  <p class="subtitle" style="text-align:center">先點擊標記位置，再用滑桿調整大小</p>
 
   <div class="btn-footer">
     <button id="btn-step2-next" class="btn btn-primary" disabled>下一步：實際看看</button>
@@ -77,9 +75,8 @@
   </div>
 </section>
 
-<!-- ============ 校準 Step 2.5：實際視野預覽確認 ============ -->
 <section id="screen-calib-preview" class="screen">
-  <h1 class="title-lg">這是你選的範圍實際看出去的樣子</h1>
+  <h1 class="title-lg">實際視野範圍</h1>
 
   <div id="calib-preview-wrap" class="calib-preview-wrap">
     <video id="preview-video" autoplay playsinline muted></video>
@@ -87,7 +84,7 @@
   </div>
 
   <p id="preview-status" class="status-msg"></p>
-  <p class="subtitle" style="text-align:center">把手機對著平常會看的方向，確認亮的範圍夠不夠</p>
+  <p class="subtitle" style="text-align:center">平舉手機，測試視野範圍</p>
 
   <div class="action-row" style="margin-top:8px">
     <button id="btn-preview-back" class="btn btn-secondary">重新調整</button>
@@ -99,7 +96,6 @@
   </div>
 </section>
 
-<!-- ============ 校準 Step 3：字級 + 語音 ============ -->
 <section id="screen-calib-3" class="screen">
   <h1 class="title-lg">調整成你看得舒服的大小</h1>
 
@@ -126,7 +122,6 @@
   </div>
 </section>
 
-<!-- ============ 拍照 / 掃描頁 ============ -->
 <section id="screen-camera" class="screen">
   <div class="top-bar">
     <button id="recalibrate-link" class="link-muted">重新校準</button>
@@ -150,7 +145,6 @@
   </div>
 </section>
 
-<!-- ============ 結果頁 ============ -->
 <section id="screen-result" class="screen">
   <div class="top-bar">
     <button class="link-muted" onclick="document.getElementById('recalibrate-link').click()">重新校準</button>
