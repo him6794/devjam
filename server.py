@@ -65,6 +65,13 @@ PASSENGER_HTML = """
       font-size: 0.9rem; font-weight: bold;
       box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     }
+    #confirmBoardBtn {
+      position: fixed; top: 138px; right: 10px; z-index: 20;
+      padding: 8px 14px; border-radius: 20px;
+      background: #00695c; color: #fff; border: none;
+      font-size: 0.9rem; font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
     #hint {
       position: fixed; bottom: 40%; left: 0; right: 0; z-index: 10;
       text-align: center; font-size: 1.2rem; color: rgba(255,255,255,0.85);
@@ -206,6 +213,7 @@ PASSENGER_HTML = """
   <button id="settingsBtn" title="調整設定">⚙ 調整視野／字體</button>
   <button id="tripBar" title="設定要搭的公車路線與站牌">點擊設定要搭的公車路線與站牌</button>
   <button id="rateStopBtn" title="幫這個站評無障礙度">★ 評分本站</button>
+  <button id="confirmBoardBtn" title="上車後拍車內顯示幕確認">🚌 確認上車</button>
 
   <div id="resultScreen">
     <div id="resultText"></div>
@@ -495,18 +503,21 @@ PASSENGER_HTML = """
       }
     }
 
+    let boardingConfirmMode = false;
+
     async function captureAndAnalyze() {
       if (busy) return;
       if (resultScreen.style.display === 'flex') {
         resultScreen.style.display = 'none';
         notifyBtn.style.display = 'none';
         feedbackBar.style.display = 'none';
+        boardingConfirmMode = false;
         return;
       }
       busy = true;
       if (navigator.vibrate) navigator.vibrate(80);
       hintEl.style.display = 'none';
-      statusEl.innerText = '分析中...';
+      statusEl.innerText = boardingConfirmMode ? '確認上車中...' : '分析中...';
 
       // 縮小到最長邊 1024px 再上傳，加快上傳與 Gemini 分析速度（辨識文字不需要原始解析度）
       const MAX_DIM = 1024;
@@ -522,6 +533,7 @@ PASSENGER_HTML = """
           formData.append('user_id', userId);
           if (tripRoute) formData.append('route', tripRoute);
           if (tripStop) formData.append('stop_name', tripStop);
+          if (boardingConfirmMode) formData.append('confirm_boarding', 'true');
           const res = await fetch('/api/analyze', { method: 'POST', body: formData });
           const data = await res.json();
 
@@ -534,12 +546,17 @@ PASSENGER_HTML = """
               player.src = data.audio_url;
               player.play();
             }
-            lastRoute = data.route;
-            lastEventId = data.event_id;
-            feedbackBar.style.display = 'flex';
-            if (lastRoute) {
-              notifyBtn.style.display = 'block';
-              notifyBtn.innerText = '通知司機：' + lastRoute + ' 號公車有視障乘客等車';
+            if (boardingConfirmMode) {
+              // 上車確認模式：不用顯示通知司機／回饋按鈕，那些是給站牌掃描用的
+              boardingConfirmMode = false;
+            } else {
+              lastRoute = data.route;
+              lastEventId = data.event_id;
+              feedbackBar.style.display = 'flex';
+              if (lastRoute) {
+                notifyBtn.style.display = 'block';
+                notifyBtn.innerText = '通知司機：' + lastRoute + ' 號公車有視障乘客等車';
+              }
             }
           }
         } catch (err) {
@@ -600,6 +617,18 @@ PASSENGER_HTML = """
       });
       statusEl.innerText = '感謝你幫「' + stopName + '」評分！';
       if (navigator.vibrate) navigator.vibrate(60);
+    });
+
+    // 使用者反饋 2e：上車後拍車內顯示幕，確認是否上對車
+    document.getElementById('confirmBoardBtn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!tripRoute) {
+        statusEl.innerText = '請先在左上角設定要搭的路線';
+        return;
+      }
+      boardingConfirmMode = true;
+      statusEl.innerText = '請拍車內顯示幕或車頭跑馬燈';
+      captureAndAnalyze();
     });
 
     tapLayer.addEventListener('click', captureAndAnalyze);
@@ -724,6 +753,7 @@ def api_analyze():
     user_id = request.form.get("user_id")
     trip_route = request.form.get("route")
     trip_stop = request.form.get("stop_name")
+    confirm_boarding = request.form.get("confirm_boarding") == "true"
 
     job_id = str(uuid.uuid4())[:8]
     image_path = os.path.join(UPLOAD_DIR, f"{job_id}.jpg")
@@ -734,7 +764,10 @@ def api_analyze():
     # 模組 3：用 TDX 即時到站資料縮小 AI Vision 的候選範圍（失敗不影響主流程）
     tdx_hint = None
     tdx_eta_minutes = None
-    if trip_route and trip_stop:
+    if confirm_boarding and trip_route:
+        # 上車確認模式：重點是「目標路線是什麼」，不需要（也不一定查得到）即時到站時間
+        tdx_hint = f"使用者原本要搭的目標路線是 {trip_route} 號。"
+    elif trip_route and trip_stop:
         try:
             candidates = tdx_client.get_eta_candidates("Taipei", trip_route, trip_stop)
             tdx_hint = tdx_client.build_vision_hint(candidates, trip_route)
@@ -751,7 +784,7 @@ def api_analyze():
 
     start_time = time.time()
     try:
-        result = run_pipeline(image_path, audio_path, tdx_hint=tdx_hint)
+        result = run_pipeline(image_path, audio_path, tdx_hint=tdx_hint, confirm_boarding=confirm_boarding)
     except Exception as e:
         if consent:
             db.log_recognition_event(
