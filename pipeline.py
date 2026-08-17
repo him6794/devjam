@@ -1,24 +1,26 @@
 """
-核心流程：拍照 -> Gemini 多模態理解 -> Gemini 原生 TTS 語音摘要
+核心流程：拍照 -> Gemini 多模態理解 -> Cloud Text-to-Speech 語音摘要
 給隧道視野（視野狹窄）患者用的城市資訊助理 Demo。
 
-全程只用一把 API 金鑰（Google AI Studio 拿到的 key），不需要 service account / IAM。
+圖片理解：Gemini API 金鑰驗證。
+語音合成：Cloud Text-to-Speech，用 IAM(ADC) 驗證（跟 Firestore 同一套，
+Cloud Run 上用內建服務身分，本機用 gcloud 登入）——比 Gemini 原生 TTS快約 3 倍。
 """
 import os
-import wave
 
 from google import genai
 from google.genai import types
+from google.cloud import texttospeech
 
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 if not GEMINI_API_KEY:
     from local_config import GEMINI_API_KEY  # 本機開發用，Cloud Run 上用環境變數
 
 _client = genai.Client(api_key=GEMINI_API_KEY)
+_tts_client = texttospeech.TextToSpeechClient()
 
 TEXT_MODEL = "gemini-flash-lite-latest"
-TTS_MODEL = "gemini-2.5-flash-preview-tts"
-TTS_VOICE = "Kore"
+TTS_VOICE_NAME = "cmn-TW-Wavenet-A"
 
 PROMPT = """你是一個協助「隧道視野（視野狹窄）」患者的城市資訊助理。
 使用者剛拍下一張照片，內容可能是路況看板、告示牌、路口、周遭環境或人群。
@@ -27,6 +29,7 @@ PROMPT = """你是一個協助「隧道視野（視野狹窄）」患者的城�
 1. 如果畫面中有文字/告示，直接講出重點內容（例如列車時刻、封閉路段），不要唸出無關的排版符號。
 2. 如果有潛在危險（施工、來車、階梯、人群擁擠），用方位詞明確指出方向（例如：「你的右前方有機車經過」）。
 3. 全部輸出控制在 3 句話以內，語氣自然，像在跟朋友說話，不要加任何 Markdown 或標籤符號。
+4. 數字（公車路線號碼、時間、樓層等）一律用阿拉伯數字（0-9）標示，不要寫成中文數字大寫（例如寫 262，不要寫兩百六十二）。
 """
 
 
@@ -48,27 +51,19 @@ def describe_image(image_path: str) -> str:
 
 
 def synthesize_speech(text: str, output_path: str) -> str:
-    """把文字轉成中文語音 wav，存到 output_path。用 Gemini 原生 TTS 模型（同一把 API 金鑰）。"""
-    response = _client.models.generate_content(
-        model=TTS_MODEL,
-        contents=text,
-        config=types.GenerateContentConfig(
-            response_modalities=["AUDIO"],
-            speech_config=types.SpeechConfig(
-                voice_config=types.VoiceConfig(
-                    prebuilt_voice_config=types.PrebuiltVoiceConfig(voice_name=TTS_VOICE)
-                )
-            ),
+    """把文字轉成中文語音 mp3，存到 output_path。用 Cloud Text-to-Speech。"""
+    response = _tts_client.synthesize_speech(
+        input=texttospeech.SynthesisInput(text=text),
+        voice=texttospeech.VoiceSelectionParams(
+            language_code="cmn-TW",
+            name=TTS_VOICE_NAME,
+            ssml_gender=texttospeech.SsmlVoiceGender.FEMALE,
         ),
+        audio_config=texttospeech.AudioConfig(audio_encoding=texttospeech.AudioEncoding.MP3),
     )
-    pcm_data = response.candidates[0].content.parts[0].inline_data.data
-
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    with wave.open(output_path, "wb") as wf:
-        wf.setnchannels(1)
-        wf.setsampwidth(2)
-        wf.setframerate(24000)
-        wf.writeframes(pcm_data)
+    with open(output_path, "wb") as out:
+        out.write(response.audio_content)
     return output_path
 
 
@@ -83,6 +78,6 @@ if __name__ == "__main__":
     import sys
 
     image_path = sys.argv[1] if len(sys.argv) > 1 else "test.jpg"
-    result = run_pipeline(image_path, "output/demo.wav")
+    result = run_pipeline(image_path, "output/demo.mp3")
     print("摘要：", result["summary"])
     print("語音檔：", result["audio_path"])

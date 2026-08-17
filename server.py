@@ -484,7 +484,7 @@ def api_analyze():
     image_path = os.path.join(UPLOAD_DIR, f"{job_id}.jpg")
     file.save(image_path)
 
-    audio_path = os.path.join(AUDIO_DIR, f"{job_id}.wav")
+    audio_path = os.path.join(AUDIO_DIR, f"{job_id}.mp3")
 
     try:
         result = run_pipeline(image_path, audio_path)
@@ -497,7 +497,7 @@ def api_analyze():
     return jsonify({
         "status": "success",
         "summary": result["summary"],
-        "audio_url": f"/audio/{job_id}.wav",
+        "audio_url": f"/audio/{job_id}.mp3",
         "route": route,
     })
 
