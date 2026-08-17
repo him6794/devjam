@@ -122,6 +122,25 @@
       </svg>
     </button>
   </div>
+
+  <div class="manual-upload">
+    <input id="manual-photo-input" class="visually-hidden" type="file" accept="image/*" tabindex="-1" aria-label="選擇要上傳的公車站照片">
+    <button id="manual-upload-btn" class="btn btn-secondary manual-upload-btn" type="button" aria-describedby="manual-upload-status">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M12 16V4m0 0L8 8m4-4 4 4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" stroke-linecap="round"/>
+      </svg>
+      <span>手動上傳照片</span>
+    </button>
+    <label class="manual-test-location">
+      <input id="manual-test-location" type="checkbox" checked>
+      <span id="manual-test-location-copy" class="manual-test-location-copy">
+        <strong>使用測試站點 GPS</strong>
+        <small>新益里・25.062218, 121.566257</small>
+      </span>
+    </label>
+    <p id="manual-upload-status" class="status-msg manual-upload-status" aria-live="polite"></p>
+  </div>
 </section>
 
 <section id="screen-result" class="screen">
@@ -153,4 +172,5 @@
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/passenger.js') }}"></script>
+<script src="{{ url_for('static', filename='js/manual-upload.js') }}"></script>
 {% endblock %}

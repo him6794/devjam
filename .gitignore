@@ -3,3 +3,8 @@ __pycache__/
 *.pyc
 uploads/
 output/
+
+node_modules/
+test-results/
+playwright-report/
+*.png

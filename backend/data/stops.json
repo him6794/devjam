@@ -1,0 +1,5461 @@
+{
+  "generated_at": "2026-08-17T07:08:14.410577Z",
+  "stations": [
+    {
+      "slid": 1503,
+      "name": "新益里",
+      "lat": 25.062218,
+      "lon": 121.566257
+    },
+    {
+      "slid": 1557,
+      "name": "南松山(南京)",
+      "lat": 25.0511625,
+      "lon": 121.5694755
+    },
+    {
+      "slid": 3080,
+      "name": "中和國稅局",
+      "lat": 24.998459,
+      "lon": 121.4952935
+    },
+    {
+      "slid": 2538,
+      "name": "興隆國小",
+      "lat": 25.00102,
+      "lon": 121.554232
+    },
+    {
+      "slid": 10404,
+      "name": "三民路",
+      "lat": 25.058863,
+      "lon": 121.563768
+    },
+    {
+      "slid": 3443,
+      "name": "重安街口(集美街)",
+      "lat": 25.0554645,
+      "lon": 121.4933235
+    },
+    {
+      "slid": 1000221,
+      "name": "南松山(塔悠)",
+      "lat": 25.051938,
+      "lon": 121.570195
+    },
+    {
+      "slid": 16029,
+      "name": "南京寧安街口",
+      "lat": 25.051653,
+      "lon": 121.557268
+    },
+    {
+      "slid": 9615,
+      "name": "捷運景安站",
+      "lat": 24.993997,
+      "lon": 121.505072
+    },
+    {
+      "slid": 1165604851,
+      "name": "瑞湖街口",
+      "lat": 25.066753,
+      "lon": 121.576517
+    },
+    {
+      "slid": 2013,
+      "name": "華山文創園區",
+      "lat": 25.043108,
+      "lon": 121.52930599999999
+    },
+    {
+      "slid": 4638,
+      "name": "萬大路",
+      "lat": 25.031038,
+      "lon": 121.500628
+    },
+    {
+      "slid": 2898,
+      "name": "永平里",
+      "lat": 24.9816525,
+      "lon": 121.51769250000001
+    },
+    {
+      "slid": 3932,
+      "name": "頂好市場",
+      "lat": 25.04171,
+      "lon": 121.546663
+    },
+    {
+      "slid": 1546,
+      "name": "南京建國路口",
+      "lat": 25.052059,
+      "lon": 121.53741450000001
+    },
+    {
+      "slid": 1592,
+      "name": "臺北市區監理所",
+      "lat": 25.048618,
+      "lon": 121.562603
+    },
+    {
+      "slid": 4639,
+      "name": "西藏路口",
+      "lat": 25.02907,
+      "lon": 121.50055
+    },
+    {
+      "slid": 2199,
+      "name": "臺大綜合體育館",
+      "lat": 25.019362,
+      "lon": 121.53379
+    },
+    {
+      "slid": 1000243,
+      "name": "華中橋",
+      "lat": 25.002935,
+      "lon": 121.496735
+    },
+    {
+      "slid": 372,
+      "name": "捷運忠孝敦化站",
+      "lat": 25.0415965,
+      "lon": 121.549477
+    },
+    {
+      "slid": 4108,
+      "name": "捷運徐匯中學站",
+      "lat": 25.080822,
+      "lon": 121.479345
+    },
+    {
+      "slid": 1830,
+      "name": "德昌街口",
+      "lat": 25.025148,
+      "lon": 121.500531
+    },
+    {
+      "slid": 3935,
+      "name": "忠孝國小",
+      "lat": 25.042942500000002,
+      "lon": 121.531071
+    },
+    {
+      "slid": 1000079,
+      "name": "捷運西門站",
+      "lat": 25.04266,
+      "lon": 121.50844
+    },
+    {
+      "slid": 6686,
+      "name": "衡陽路口",
+      "lat": 25.042315,
+      "lon": 121.511873
+    },
+    {
+      "slid": 1994,
+      "name": "捷運台大醫院站",
+      "lat": 25.041600000000003,
+      "lon": 121.51624799999999
+    },
+    {
+      "slid": 20363,
+      "name": "長安復興路口",
+      "lat": 25.048205,
+      "lon": 121.542133
+    },
+    {
+      "slid": 1165603291,
+      "name": "積穗",
+      "lat": 25.005833,
+      "lon": 121.4803
+    },
+    {
+      "slid": 2673,
+      "name": "新北板橋公車站",
+      "lat": 25.014088,
+      "lon": 121.461752
+    },
+    {
+      "slid": 16006,
+      "name": "南京寧安街口",
+      "lat": 25.051717,
+      "lon": 121.552853
+    },
+    {
+      "slid": 2282,
+      "name": "捷運大安站(信義)",
+      "lat": 25.033397,
+      "lon": 121.543912
+    },
+    {
+      "slid": 1743,
+      "name": "中華南海路口",
+      "lat": 25.027085,
+      "lon": 121.506792
+    },
+    {
+      "slid": 1165604764,
+      "name": "捷運萬芳醫院站",
+      "lat": 24.999122,
+      "lon": 121.557763
+    },
+    {
+      "slid": 2027,
+      "name": "寶慶路",
+      "lat": 25.041318,
+      "lon": 121.511232
+    },
+    {
+      "slid": 2125,
+      "name": "信義杭州路口",
+      "lat": 25.035615999999997,
+      "lon": 121.5240625
+    },
+    {
+      "slid": 10005,
+      "name": "台貿一村",
+      "lat": 24.997622,
+      "lon": 121.494213
+    },
+    {
+      "slid": 1214,
+      "name": "臺安醫院",
+      "lat": 25.0483595,
+      "lon": 121.5455485
+    },
+    {
+      "slid": 2700,
+      "name": "新北市政府(新府路)",
+      "lat": 25.011785,
+      "lon": 121.46455
+    },
+    {
+      "slid": 1000779,
+      "name": "永春高中",
+      "lat": 25.033585,
+      "lon": 121.579438
+    },
+    {
+      "slid": 15067,
+      "name": "蘆洲總站",
+      "lat": 25.088410000000003,
+      "lon": 121.4644615
+    },
+    {
+      "slid": 1829,
+      "name": "德昌街口",
+      "lat": 25.025978,
+      "lon": 121.500353
+    },
+    {
+      "slid": 1810,
+      "name": "萬大國小",
+      "lat": 25.021897,
+      "lon": 121.49895
+    },
+    {
+      "slid": 6192,
+      "name": "港尾福德宮",
+      "lat": 25.020063,
+      "lon": 121.455078
+    },
+    {
+      "slid": 4606,
+      "name": "大埔街",
+      "lat": 25.032087,
+      "lon": 121.504502
+    },
+    {
+      "slid": 1165604697,
+      "name": "臺北客運板橋前站(藝文)",
+      "lat": 25.02245,
+      "lon": 121.451868
+    },
+    {
+      "slid": 16012,
+      "name": "南京吉林路口",
+      "lat": 25.052063,
+      "lon": 121.530385
+    },
+    {
+      "slid": 10628,
+      "name": "長元西街口",
+      "lat": 25.065882,
+      "lon": 121.497058
+    },
+    {
+      "slid": 50818,
+      "name": "華中橋",
+      "lat": 25.003092,
+      "lon": 121.49669
+    },
+    {
+      "slid": 1525,
+      "name": "八德東寧路口",
+      "lat": 25.048612,
+      "lon": 121.5656
+    },
+    {
+      "slid": 1165604845,
+      "name": "聯合醫院和平院區",
+      "lat": 25.03584,
+      "lon": 121.506597
+    },
+    {
+      "slid": 1000150,
+      "name": "正義重新路口",
+      "lat": 25.064313,
+      "lon": 121.497348
+    },
+    {
+      "slid": 2624,
+      "name": "板橋國中(435藝文特區)",
+      "lat": 25.023433,
+      "lon": 121.4543
+    },
+    {
+      "slid": 15106,
+      "name": "永吉國中",
+      "lat": 25.04616,
+      "lon": 121.5709
+    },
+    {
+      "slid": 1000426,
+      "name": "松隆路口",
+      "lat": 25.04477,
+      "lon": 121.569145
+    },
+    {
+      "slid": 1165603382,
+      "name": "博物館(襄陽)",
+      "lat": 25.0434075,
+      "lon": 121.5167755
+    },
+    {
+      "slid": 1000810,
+      "name": "莊敬里",
+      "lat": 25.067798,
+      "lon": 121.567125
+    },
+    {
+      "slid": 8621,
+      "name": "公館山",
+      "lat": 25.073422,
+      "lon": 121.579618
+    },
+    {
+      "slid": 1798,
+      "name": "莒光派出所",
+      "lat": 25.031199,
+      "lon": 121.5007435
+    },
+    {
+      "slid": 2096,
+      "name": "松山商職(福德)",
+      "lat": 25.036239000000002,
+      "lon": 121.5790125
+    },
+    {
+      "slid": 1000035,
+      "name": "興隆國小",
+      "lat": 25.001489999999997,
+      "lon": 121.5528975
+    },
+    {
+      "slid": 2122,
+      "name": "信義松仁路口(松仁)",
+      "lat": 25.033775,
+      "lon": 121.568463
+    },
+    {
+      "slid": 6186,
+      "name": "國泰街口",
+      "lat": 25.006752,
+      "lon": 121.470665
+    },
+    {
+      "slid": 2491,
+      "name": "萬芳社區",
+      "lat": 25.001948,
+      "lon": 121.570038
+    },
+    {
+      "slid": 3916,
+      "name": "捷運市政府站",
+      "lat": 25.041008,
+      "lon": 121.567782
+    },
+    {
+      "slid": 1165605282,
+      "name": "捷運中和站",
+      "lat": 25.001946,
+      "lon": 121.4967625
+    },
+    {
+      "slid": 1548,
+      "name": "南京敦化路口(小巨蛋)",
+      "lat": 25.051818,
+      "lon": 121.549578
+    },
+    {
+      "slid": 1000056,
+      "name": "捷運大安森林公園站",
+      "lat": 25.033583,
+      "lon": 121.536155
+    },
+    {
+      "slid": 1882,
+      "name": "臺北車站(忠孝)",
+      "lat": 25.066712,
+      "lon": 121.576903
+    },
+    {
+      "slid": 70716,
+      "name": "新北板橋公車站",
+      "lat": 25.0130385,
+      "lon": 121.46276900000001
+    },
+    {
+      "slid": 2613,
+      "name": "捷運府中站(府中路)",
+      "lat": 25.011105,
+      "lon": 121.461623
+    },
+    {
+      "slid": 1000651,
+      "name": "捷運菜寮站",
+      "lat": 25.05942,
+      "lon": 121.490652
+    },
+    {
+      "slid": 16030,
+      "name": "南京三民路口",
+      "lat": 25.051537,
+      "lon": 121.560485
+    },
+    {
+      "slid": 3134,
+      "name": "連城景平路(暫時裁撤)",
+      "lat": 25.000493,
+      "lon": 121.496902
+    },
+    {
+      "slid": 2650,
+      "name": "萬坪公園",
+      "lat": 25.013928999999997,
+      "lon": 121.461275
+    },
+    {
+      "slid": 20304,
+      "name": "捷運象山站",
+      "lat": 25.0330295,
+      "lon": 121.5687615
+    },
+    {
+      "slid": 15118,
+      "name": "松山商職(松山)",
+      "lat": 25.05876,
+      "lon": 121.606085
+    },
+    {
+      "slid": 10054,
+      "name": "環球購物中心",
+      "lat": 25.006441000000002,
+      "lon": 121.47306850000001
+    },
+    {
+      "slid": 15113,
+      "name": "松山車站(松山)",
+      "lat": 25.047617,
+      "lon": 121.57776
+    }
+  ],
+  "stops": [
+    {
+      "sid": 36110,
+      "slid": 4127,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "三和國中"
+    },
+    {
+      "sid": 15232,
+      "slid": 4640,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "萬大國小"
+    },
+    {
+      "sid": 43111,
+      "slid": 1000037,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "興隆市場"
+    },
+    {
+      "sid": 43139,
+      "slid": 2536,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "興隆市場"
+    },
+    {
+      "sid": 43140,
+      "slid": 2542,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "興德國小"
+    },
+    {
+      "sid": 36032,
+      "slid": 3441,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "建和新村"
+    },
+    {
+      "sid": 36060,
+      "slid": 2234,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "正義郵局"
+    },
+    {
+      "sid": 36112,
+      "slid": 10430,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "幸福市場"
+    },
+    {
+      "sid": 15383,
+      "slid": 2681,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "電信訓練所"
+    },
+    {
+      "sid": 153798,
+      "slid": 2699,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "新北市政府(新府路)"
+    },
+    {
+      "sid": 192123,
+      "slid": 4608,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "捷運西門站"
+    },
+    {
+      "sid": 170486,
+      "slid": 1000779,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "永春高中"
+    },
+    {
+      "sid": 36114,
+      "slid": 15087,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "民和公寓"
+    },
+    {
+      "sid": 15388,
+      "slid": 6190,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "社后"
+    },
+    {
+      "sid": 19122,
+      "slid": 1499,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "臺視"
+    },
+    {
+      "sid": 22783,
+      "slid": 980,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "三總內湖站"
+    },
+    {
+      "sid": 22841,
+      "slid": 1588,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "新東街口"
+    },
+    {
+      "sid": 15198,
+      "slid": 2624,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "板橋國中(435藝文特區)"
+    },
+    {
+      "sid": 19157,
+      "slid": 4606,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "大埔街"
+    },
+    {
+      "sid": 19165,
+      "slid": 3048,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "一江新村"
+    },
+    {
+      "sid": 22779,
+      "slid": 4083,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "捷運文德站(碧湖公園)"
+    },
+    {
+      "sid": 43149,
+      "slid": 2493,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "萬芳活動中心"
+    },
+    {
+      "sid": 199232,
+      "slid": 4643,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "中正新城"
+    },
+    {
+      "sid": 11650,
+      "slid": 6685,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "衡陽路口"
+    },
+    {
+      "sid": 143294,
+      "slid": 1000504,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "及人中學"
+    },
+    {
+      "sid": 19142,
+      "slid": 4006,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "美仁里"
+    },
+    {
+      "sid": 19156,
+      "slid": 1926,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "聯合醫院和平院區"
+    },
+    {
+      "sid": 19166,
+      "slid": 3062,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "中和廟口"
+    },
+    {
+      "sid": 22772,
+      "slid": 1000367,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "瑞湖街口"
+    },
+    {
+      "sid": 22827,
+      "slid": 1000109,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "捷運大安站(信義)"
+    },
+    {
+      "sid": 192136,
+      "slid": 4603,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "中華南海路口"
+    },
+    {
+      "sid": 15260,
+      "slid": 1272,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "林森北路一"
+    },
+    {
+      "sid": 22822,
+      "slid": 6940,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "捷運東門站"
+    },
+    {
+      "sid": 22832,
+      "slid": 1499,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "臺視"
+    },
+    {
+      "sid": 22835,
+      "slid": 1551,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "南京新村"
+    },
+    {
+      "sid": 43147,
+      "slid": 2322,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "捷運萬芳社區站"
+    },
+    {
+      "sid": 11620,
+      "slid": 2113,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "信義大安路口"
+    },
+    {
+      "sid": 11666,
+      "slid": 1000057,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "捷運大安森林公園站"
+    },
+    {
+      "sid": 36068,
+      "slid": 2348,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "聯合報"
+    },
+    {
+      "sid": 15321,
+      "slid": 1798,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "莒光派出所"
+    },
+    {
+      "sid": 19094,
+      "slid": 3171,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "雙和里"
+    },
+    {
+      "sid": 43117,
+      "slid": 1990,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "捷運公館站"
+    },
+    {
+      "sid": 36104,
+      "slid": 3388,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "三安里"
+    },
+    {
+      "sid": 199229,
+      "slid": 20406,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "青年公園(馬場町)"
+    },
+    {
+      "sid": 192142,
+      "slid": 50040,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "捷運西門站"
+    },
+    {
+      "sid": 22777,
+      "slid": 1041,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "西湖圖書館(湖光教會)"
+    },
+    {
+      "sid": 22817,
+      "slid": 2001,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "博物館(館前)"
+    },
+    {
+      "sid": 36100,
+      "slid": 3387,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "大同路口"
+    },
+    {
+      "sid": 194687,
+      "slid": 1165604697,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "臺北客運板橋前站(藝文)"
+    },
+    {
+      "sid": 15248,
+      "slid": 1744,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "中華路北站"
+    },
+    {
+      "sid": 15268,
+      "slid": 50002,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "南京龍江路口"
+    },
+    {
+      "sid": 143296,
+      "slid": 1000506,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "輕軌陽光運動公園站"
+    },
+    {
+      "sid": 143303,
+      "slid": 2916,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "輕軌陽光運動公園站"
+    },
+    {
+      "sid": 143298,
+      "slid": 1000512,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "安和路二段"
+    },
+    {
+      "sid": 19105,
+      "slid": 1797,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "莒光派出所"
+    },
+    {
+      "sid": 22784,
+      "slid": 1080,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "國防醫學中心"
+    },
+    {
+      "sid": 22849,
+      "slid": 8677,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "三總內湖站"
+    },
+    {
+      "sid": 11684,
+      "slid": 2069,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "市政府(松壽)"
+    },
+    {
+      "sid": 36031,
+      "slid": 3427,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "幸福市場"
+    },
+    {
+      "sid": 15299,
+      "slid": 1587,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "新東里"
+    },
+    {
+      "sid": 15330,
+      "slid": 3084,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "台貿一村"
+    },
+    {
+      "sid": 15209,
+      "slid": 14235,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "電信訓練所"
+    },
+    {
+      "sid": 15309,
+      "slid": 1546,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "南京建國路口"
+    },
+    {
+      "sid": 15392,
+      "slid": 1000801,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "板橋國中(435藝文特區)"
+    },
+    {
+      "sid": 19109,
+      "slid": 1793,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "捷運西門站"
+    },
+    {
+      "sid": 19172,
+      "slid": 3138,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "景新街"
+    },
+    {
+      "sid": 22836,
+      "slid": 1563,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "三軍總醫院松山分院"
+    },
+    {
+      "sid": 36054,
+      "slid": 3443,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "重安街口(集美街)"
+    },
+    {
+      "sid": 15278,
+      "slid": 1165603387,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "南京公寓(捷運南京三民)"
+    },
+    {
+      "sid": 187027,
+      "slid": 2321,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "捷運國父紀念館站(光復)"
+    },
+    {
+      "sid": 22776,
+      "slid": 8612,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "內湖運動中心"
+    },
+    {
+      "sid": 22819,
+      "slid": 1994,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "捷運台大醫院站"
+    },
+    {
+      "sid": 36058,
+      "slid": 1930,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "忠孝國小"
+    },
+    {
+      "sid": 36094,
+      "slid": 13211,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "重安街口(集美街)"
+    },
+    {
+      "sid": 19147,
+      "slid": 1000255,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "中山女高"
+    },
+    {
+      "sid": 19151,
+      "slid": 1998,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "捷運善導寺站"
+    },
+    {
+      "sid": 192138,
+      "slid": 4605,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "廈安里"
+    },
+    {
+      "sid": 36047,
+      "slid": 3473,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "過圳街"
+    },
+    {
+      "sid": 19150,
+      "slid": 2015,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "華山文創園區"
+    },
+    {
+      "sid": 19113,
+      "slid": 1284,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "長安東路一段"
+    },
+    {
+      "sid": 22795,
+      "slid": 1000020,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "長壽公園"
+    },
+    {
+      "sid": 19098,
+      "slid": 10048,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "一江新村"
+    },
+    {
+      "sid": 19153,
+      "slid": 1000078,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "中華路北站"
+    },
+    {
+      "sid": 22848,
+      "slid": 339,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "國防醫學中心"
+    },
+    {
+      "sid": 43107,
+      "slid": 2449,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "捷運萬芳醫院站"
+    },
+    {
+      "sid": 170768,
+      "slid": 20304,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "捷運象山站"
+    },
+    {
+      "sid": 15317,
+      "slid": 1000079,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "捷運西門站"
+    },
+    {
+      "sid": 187026,
+      "slid": 389,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "捷運國父紀念館站(忠孝)"
+    },
+    {
+      "sid": 43119,
+      "slid": 2197,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "臺大綜合體育館"
+    },
+    {
+      "sid": 36050,
+      "slid": 1000081,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "菜寮(重陽路)"
+    },
+    {
+      "sid": 19160,
+      "slid": 1759,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "西藏路口"
+    },
+    {
+      "sid": 22773,
+      "slid": 8603,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "麗寶大樓"
+    },
+    {
+      "sid": 22806,
+      "slid": 2113,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "信義大安路口"
+    },
+    {
+      "sid": 22858,
+      "slid": 1006,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "公館山"
+    },
+    {
+      "sid": 11612,
+      "slid": 2046,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "世貿中心(基隆路)"
+    },
+    {
+      "sid": 36084,
+      "slid": 3931,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "阿波羅大廈"
+    },
+    {
+      "sid": 15390,
+      "slid": 6192,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "港尾福德宮"
+    },
+    {
+      "sid": 19175,
+      "slid": 2918,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "輕軌新和國小站(水工大樓)"
+    },
+    {
+      "sid": 11606,
+      "slid": 2122,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "信義松仁路口(松仁)"
+    },
+    {
+      "sid": 192124,
+      "slid": 1975,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "小南門"
+    },
+    {
+      "sid": 11660,
+      "slid": 6940,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "捷運東門站"
+    },
+    {
+      "sid": 15204,
+      "slid": 60094,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "北門街(黃石市場)"
+    },
+    {
+      "sid": 15272,
+      "slid": 50001,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "南京敦化路口(小巨蛋)"
+    },
+    {
+      "sid": 43133,
+      "slid": 1991,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "捷運公館站"
+    },
+    {
+      "sid": 43137,
+      "slid": 1000232,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "憲光公寓"
+    },
+    {
+      "sid": 36091,
+      "slid": 2015,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "華山文創園區"
+    },
+    {
+      "sid": 15270,
+      "slid": 50004,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "捷運南京復興站"
+    },
+    {
+      "sid": 15316,
+      "slid": 1000078,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "中華路北站"
+    },
+    {
+      "sid": 22801,
+      "slid": 1165609725,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "臺視"
+    },
+    {
+      "sid": 22805,
+      "slid": 1165604826,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "信義敦化路口"
+    },
+    {
+      "sid": 192125,
+      "slid": 1926,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "聯合醫院和平院區"
+    },
+    {
+      "sid": 36113,
+      "slid": 10431,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "捷運徐匯中學站"
+    },
+    {
+      "sid": 15334,
+      "slid": 3069,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "中和高中(員山路)"
+    },
+    {
+      "sid": 19170,
+      "slid": 9615,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "捷運景安站"
+    },
+    {
+      "sid": 11624,
+      "slid": 2281,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "師大附中"
+    },
+    {
+      "sid": 192141,
+      "slid": 50691,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "小南門"
+    },
+    {
+      "sid": 36085,
+      "slid": 372,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "捷運忠孝敦化站"
+    },
+    {
+      "sid": 15306,
+      "slid": 1548,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "南京敦化路口(小巨蛋)"
+    },
+    {
+      "sid": 19128,
+      "slid": 2095,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "松山高中(基隆路)"
+    },
+    {
+      "sid": 19162,
+      "slid": 1810,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "萬大國小"
+    },
+    {
+      "sid": 43125,
+      "slid": 6678,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "捷運東門站(金山)"
+    },
+    {
+      "sid": 153799,
+      "slid": 2700,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "新北市政府(新府路)"
+    },
+    {
+      "sid": 15282,
+      "slid": 1000216,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "南松山(塔悠)"
+    },
+    {
+      "sid": 22820,
+      "slid": 1946,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "中正紀念堂"
+    },
+    {
+      "sid": 43110,
+      "slid": 1000858,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "興德國小"
+    },
+    {
+      "sid": 36069,
+      "slid": 3916,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "捷運市政府站"
+    },
+    {
+      "sid": 19090,
+      "slid": 50846,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "三介廟"
+    },
+    {
+      "sid": 22824,
+      "slid": 2133,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "信義新生路口"
+    },
+    {
+      "sid": 192131,
+      "slid": 1748,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "古亭國中"
+    },
+    {
+      "sid": 199231,
+      "slid": 4644,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "青年路"
+    },
+    {
+      "sid": 36088,
+      "slid": 3934,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "正義郵局"
+    },
+    {
+      "sid": 15228,
+      "slid": 50818,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "華中橋"
+    },
+    {
+      "sid": 15242,
+      "slid": 1737,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "大埔街"
+    },
+    {
+      "sid": 15290,
+      "slid": 1000026,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "民生國中"
+    },
+    {
+      "sid": 19121,
+      "slid": 1214,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "臺安醫院"
+    },
+    {
+      "sid": 22774,
+      "slid": 8621,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "公館山"
+    },
+    {
+      "sid": 43113,
+      "slid": 2533,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "憲光公寓"
+    },
+    {
+      "sid": 43131,
+      "slid": 2199,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "臺大綜合體育館"
+    },
+    {
+      "sid": 36028,
+      "slid": 3684,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "溪墘"
+    },
+    {
+      "sid": 19089,
+      "slid": 1000309,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "新和國小"
+    },
+    {
+      "sid": 36053,
+      "slid": 3392,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "三重中學"
+    },
+    {
+      "sid": 36119,
+      "slid": 15069,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "中原公寓"
+    },
+    {
+      "sid": 15292,
+      "slid": 1504,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "新益里"
+    },
+    {
+      "sid": 15329,
+      "slid": 10004,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "中和國稅局"
+    },
+    {
+      "sid": 43100,
+      "slid": 2491,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "萬芳社區"
+    },
+    {
+      "sid": 15326,
+      "slid": 1766,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "果菜市場"
+    },
+    {
+      "sid": 15338,
+      "slid": 1165603291,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "積穗"
+    },
+    {
+      "sid": 15385,
+      "slid": 2673,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "新北板橋公車站"
+    },
+    {
+      "sid": 22826,
+      "slid": 2127,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "信義建國路口"
+    },
+    {
+      "sid": 11654,
+      "slid": 1994,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "捷運台大醫院站"
+    },
+    {
+      "sid": 170484,
+      "slid": 2142,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "國稅局宿舍"
+    },
+    {
+      "sid": 36025,
+      "slid": 3695,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "蘆洲國小"
+    },
+    {
+      "sid": 36045,
+      "slid": 1000149,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "大同路口"
+    },
+    {
+      "sid": 19097,
+      "slid": 9603,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "中和廟口"
+    },
+    {
+      "sid": 152186,
+      "slid": 1000056,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "捷運大安森林公園站"
+    },
+    {
+      "sid": 197403,
+      "slid": 1165604748,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "萬芳6號公園"
+    },
+    {
+      "sid": 43135,
+      "slid": 2413,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "武功國小(興隆)"
+    },
+    {
+      "sid": 36079,
+      "slid": 1000426,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "松隆路口"
+    },
+    {
+      "sid": 15310,
+      "slid": 16011,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "捷運松江南京站"
+    },
+    {
+      "sid": 19154,
+      "slid": 1000079,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "捷運西門站"
+    },
+    {
+      "sid": 59008,
+      "slid": 4657,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "港墘派出所"
+    },
+    {
+      "sid": 36106,
+      "slid": 10423,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "德林寺(三和路)"
+    },
+    {
+      "sid": 15320,
+      "slid": 4606,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "大埔街"
+    },
+    {
+      "sid": 19103,
+      "slid": 4639,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "西藏路口"
+    },
+    {
+      "sid": 19143,
+      "slid": 134,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "臺視"
+    },
+    {
+      "sid": 19158,
+      "slid": 1798,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "莒光派出所"
+    },
+    {
+      "sid": 15303,
+      "slid": 1165603388,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "南京公寓(捷運南京三民)"
+    },
+    {
+      "sid": 22846,
+      "slid": 966,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "三民國中"
+    },
+    {
+      "sid": 11636,
+      "slid": 2126,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "信義杭州路口"
+    },
+    {
+      "sid": 11670,
+      "slid": 1000109,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "捷運大安站(信義)"
+    },
+    {
+      "sid": 15340,
+      "slid": 10054,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "環球購物中心"
+    },
+    {
+      "sid": 15391,
+      "slid": 6193,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "港尾"
+    },
+    {
+      "sid": 43124,
+      "slid": 6676,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "公企中心"
+    },
+    {
+      "sid": 199234,
+      "slid": 4641,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "青年公園(青年)"
+    },
+    {
+      "sid": 11688,
+      "slid": 2121,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "信義松仁路口(松仁)"
+    },
+    {
+      "sid": 36102,
+      "slid": 10628,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "長元西街口"
+    },
+    {
+      "sid": 15280,
+      "slid": 1557,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "南松山(南京)"
+    },
+    {
+      "sid": 22855,
+      "slid": 1165604812,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "西湖圖書館(湖光教會)"
+    },
+    {
+      "sid": 11610,
+      "slid": 2067,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "市政府(松壽)"
+    },
+    {
+      "sid": 36030,
+      "slid": 3449,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "徐匯中學"
+    },
+    {
+      "sid": 15312,
+      "slid": 16013,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "南京林森路口"
+    },
+    {
+      "sid": 19171,
+      "slid": 50844,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "中和教會"
+    },
+    {
+      "sid": 22794,
+      "slid": 1000019,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "健康新城"
+    },
+    {
+      "sid": 153801,
+      "slid": 1884,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "臺北車站(公園)"
+    },
+    {
+      "sid": 36061,
+      "slid": 2350,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "懷生國中"
+    },
+    {
+      "sid": 217836,
+      "slid": 2897,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "永平里"
+    },
+    {
+      "sid": 22782,
+      "slid": 50501,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "將軍嶺"
+    },
+    {
+      "sid": 22815,
+      "slid": 1947,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "中正紀念堂"
+    },
+    {
+      "sid": 163203,
+      "slid": 20305,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "捷運象山站"
+    },
+    {
+      "sid": 36086,
+      "slid": 3932,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "頂好市場"
+    },
+    {
+      "sid": 11686,
+      "slid": 2105,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "松壽路口"
+    },
+    {
+      "sid": 15262,
+      "slid": 16023,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "南京吉林路口"
+    },
+    {
+      "sid": 15252,
+      "slid": 1000498,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "行政院"
+    },
+    {
+      "sid": 43121,
+      "slid": 2292,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "師大綜合大樓"
+    },
+    {
+      "sid": 36051,
+      "slid": 3463,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "集美國小"
+    },
+    {
+      "sid": 15212,
+      "slid": 3106,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "板橋監理站"
+    },
+    {
+      "sid": 15217,
+      "slid": 3070,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "中和高中(員山路)"
+    },
+    {
+      "sid": 143297,
+      "slid": 1000510,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "石頭厝"
+    },
+    {
+      "sid": 19159,
+      "slid": 1811,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "萬大路"
+    },
+    {
+      "sid": 59007,
+      "slid": 1001465,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "港墘派出所"
+    },
+    {
+      "sid": 22831,
+      "slid": 13104,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "市民大道口"
+    },
+    {
+      "sid": 43109,
+      "slid": 1000035,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "興隆國小"
+    },
+    {
+      "sid": 15286,
+      "slid": 1000218,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "新東里"
+    },
+    {
+      "sid": 22842,
+      "slid": 1000026,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "民生國中"
+    },
+    {
+      "sid": 36055,
+      "slid": 1886,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "臺北車站(忠孝)"
+    },
+    {
+      "sid": 15301,
+      "slid": 1000221,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "南松山(塔悠)"
+    },
+    {
+      "sid": 19125,
+      "slid": 1592,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "臺北市區監理所"
+    },
+    {
+      "sid": 15222,
+      "slid": 10005,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "台貿一村"
+    },
+    {
+      "sid": 15311,
+      "slid": 16012,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "南京吉林路口"
+    },
+    {
+      "sid": 19101,
+      "slid": 4640,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "萬大國小"
+    },
+    {
+      "sid": 43114,
+      "slid": 2457,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "景明街口"
+    },
+    {
+      "sid": 11664,
+      "slid": 2133,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "信義新生路口"
+    },
+    {
+      "sid": 19091,
+      "slid": 9619,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "景新街"
+    },
+    {
+      "sid": 36075,
+      "slid": 15113,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "松山車站(松山)"
+    },
+    {
+      "sid": 15213,
+      "slid": 3163,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "積穗"
+    },
+    {
+      "sid": 22851,
+      "slid": 3996,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "方濟中學"
+    },
+    {
+      "sid": 19092,
+      "slid": 3074,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "中和教會"
+    },
+    {
+      "sid": 59582,
+      "slid": 50835,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "景新街口"
+    },
+    {
+      "sid": 19112,
+      "slid": 1919,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "行政院"
+    },
+    {
+      "sid": 15230,
+      "slid": 4622,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "果菜市場"
+    },
+    {
+      "sid": 15318,
+      "slid": 1000080,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "小南門"
+    },
+    {
+      "sid": 19141,
+      "slid": 4005,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "光復路口"
+    },
+    {
+      "sid": 22850,
+      "slid": 50500,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "將軍嶺"
+    },
+    {
+      "sid": 11668,
+      "slid": 2127,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "信義建國路口"
+    },
+    {
+      "sid": 11680,
+      "slid": 2118,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "信義光復路口"
+    },
+    {
+      "sid": 36120,
+      "slid": 3671,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "空中大學(中正路)"
+    },
+    {
+      "sid": 170943,
+      "slid": 20244,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "靜心高中"
+    },
+    {
+      "sid": 43141,
+      "slid": 2538,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "興隆國小"
+    },
+    {
+      "sid": 11616,
+      "slid": 2132,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "信義通化街口"
+    },
+    {
+      "sid": 15200,
+      "slid": 2604,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "港尾福德宮"
+    },
+    {
+      "sid": 36041,
+      "slid": 1000148,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "長壽西街口"
+    },
+    {
+      "sid": 36108,
+      "slid": 10422,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "厚德派出所"
+    },
+    {
+      "sid": 19118,
+      "slid": 1000164,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "中山女高"
+    },
+    {
+      "sid": 11618,
+      "slid": 2329,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "信義敦化路口"
+    },
+    {
+      "sid": 11646,
+      "slid": 2020,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "衡陽路"
+    },
+    {
+      "sid": 36027,
+      "slid": 3693,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "蘆洲派出所"
+    },
+    {
+      "sid": 36065,
+      "slid": 2272,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "阿波羅大廈"
+    },
+    {
+      "sid": 36121,
+      "slid": 15068,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "王爺廟口"
+    },
+    {
+      "sid": 22790,
+      "slid": 1507,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "民生國中"
+    },
+    {
+      "sid": 36057,
+      "slid": 2013,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "華山文創園區"
+    },
+    {
+      "sid": 36099,
+      "slid": 13204,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "捷運菜寮站"
+    },
+    {
+      "sid": 15256,
+      "slid": 7604,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "北平林森路口"
+    },
+    {
+      "sid": 15300,
+      "slid": 1583,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "發電所(西松高中)"
+    },
+    {
+      "sid": 19120,
+      "slid": 20363,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "長安復興路口"
+    },
+    {
+      "sid": 56126,
+      "slid": 2546,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "靜心高中"
+    },
+    {
+      "sid": 199233,
+      "slid": 4642,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "青年社區"
+    },
+    {
+      "sid": 36093,
+      "slid": 1165604589,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "臺北車站(忠孝)"
+    },
+    {
+      "sid": 57946,
+      "slid": 9613,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "安和路口"
+    },
+    {
+      "sid": 19164,
+      "slid": 1165605318,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "華中橋"
+    },
+    {
+      "sid": 22854,
+      "slid": 8415,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "湖光國宅"
+    },
+    {
+      "sid": 36044,
+      "slid": 3452,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "天台廣場"
+    },
+    {
+      "sid": 36074,
+      "slid": 15114,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "永吉松山路口"
+    },
+    {
+      "sid": 194159,
+      "slid": 72246,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "光華街口"
+    },
+    {
+      "sid": 36059,
+      "slid": 1900,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "臺北科技大學(忠孝)"
+    },
+    {
+      "sid": 36109,
+      "slid": 10429,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "格致中學(三和路)"
+    },
+    {
+      "sid": 15387,
+      "slid": 6189,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "板橋戶政事務所"
+    },
+    {
+      "sid": 22845,
+      "slid": 1077,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "時報廣場"
+    },
+    {
+      "sid": 11644,
+      "slid": 6686,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "衡陽路口"
+    },
+    {
+      "sid": 192140,
+      "slid": 1165604845,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "聯合醫院和平院區"
+    },
+    {
+      "sid": 36033,
+      "slid": 4126,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "三和國中"
+    },
+    {
+      "sid": 36039,
+      "slid": 10608,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "龍門路口"
+    },
+    {
+      "sid": 143300,
+      "slid": 2944,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "陽光運動公園(新店花市)"
+    },
+    {
+      "sid": 15313,
+      "slid": 1000064,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "中山市場"
+    },
+    {
+      "sid": 15325,
+      "slid": 1810,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "萬大國小"
+    },
+    {
+      "sid": 15240,
+      "slid": 1797,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "莒光派出所"
+    },
+    {
+      "sid": 11682,
+      "slid": 15120,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "世貿中心(基隆路)"
+    },
+    {
+      "sid": 36092,
+      "slid": 1998,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "捷運善導寺站"
+    },
+    {
+      "sid": 15264,
+      "slid": 16024,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "捷運松江南京站"
+    },
+    {
+      "sid": 36095,
+      "slid": 13216,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "三重中學"
+    },
+    {
+      "sid": 36098,
+      "slid": 3456,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "菜寮(重新路)"
+    },
+    {
+      "sid": 36115,
+      "slid": 3683,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "溪墘"
+    },
+    {
+      "sid": 36117,
+      "slid": 3697,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "蘆洲監理站(中正路)"
+    },
+    {
+      "sid": 19148,
+      "slid": 2228,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "臺北科技大學(忠孝)"
+    },
+    {
+      "sid": 22800,
+      "slid": 4006,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "美仁里"
+    },
+    {
+      "sid": 22818,
+      "slid": 1882,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "臺北車站(忠孝)"
+    },
+    {
+      "sid": 22840,
+      "slid": 10404,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "三民路"
+    },
+    {
+      "sid": 11674,
+      "slid": 2286,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "信義敦化路口"
+    },
+    {
+      "sid": 15254,
+      "slid": 1937,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "青島林森路口"
+    },
+    {
+      "sid": 22809,
+      "slid": 2128,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "信義建國路口"
+    },
+    {
+      "sid": 43115,
+      "slid": 3980,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "武功國小(興隆)"
+    },
+    {
+      "sid": 170483,
+      "slid": 2143,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "國稅局宿舍"
+    },
+    {
+      "sid": 11622,
+      "slid": 2282,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "捷運大安站(信義)"
+    },
+    {
+      "sid": 11642,
+      "slid": 6687,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "博物館(襄陽)"
+    },
+    {
+      "sid": 36101,
+      "slid": 1000150,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "正義重新路口"
+    },
+    {
+      "sid": 15210,
+      "slid": 6186,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "國泰街口"
+    },
+    {
+      "sid": 15294,
+      "slid": 1000632,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "莊敬里"
+    },
+    {
+      "sid": 59444,
+      "slid": 6187,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "萬坪公園"
+    },
+    {
+      "sid": 36116,
+      "slid": 1000394,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "蘆洲派出所"
+    },
+    {
+      "sid": 15333,
+      "slid": 1165608666,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "連城路"
+    },
+    {
+      "sid": 192126,
+      "slid": 4606,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "大埔街"
+    },
+    {
+      "sid": 15332,
+      "slid": 10007,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "連城中正路口"
+    },
+    {
+      "sid": 19116,
+      "slid": 1289,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "長安國小(長安)"
+    },
+    {
+      "sid": 22853,
+      "slid": 1109,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "捷運文德站(碧湖公園)"
+    },
+    {
+      "sid": 43118,
+      "slid": 6667,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "臺大"
+    },
+    {
+      "sid": 43122,
+      "slid": 6025,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "師大"
+    },
+    {
+      "sid": 11640,
+      "slid": 1993,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "捷運台大醫院站"
+    },
+    {
+      "sid": 199228,
+      "slid": 20405,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "青年公園(交通教學區)"
+    },
+    {
+      "sid": 192134,
+      "slid": 1790,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "國興路口一"
+    },
+    {
+      "sid": 19110,
+      "slid": 1744,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "中華路北站"
+    },
+    {
+      "sid": 43143,
+      "slid": 1000770,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "臺灣警察專科學校"
+    },
+    {
+      "sid": 11614,
+      "slid": 2117,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "信義光復路口"
+    },
+    {
+      "sid": 36089,
+      "slid": 2228,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "臺北科技大學(忠孝)"
+    },
+    {
+      "sid": 187025,
+      "slid": 3929,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "聯合報"
+    },
+    {
+      "sid": 143301,
+      "slid": 2899,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "安和路二段"
+    },
+    {
+      "sid": 22821,
+      "slid": 2125,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "信義杭州路口"
+    },
+    {
+      "sid": 22857,
+      "slid": 1132,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "瑞光路"
+    },
+    {
+      "sid": 43129,
+      "slid": 2256,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "和平新生路口"
+    },
+    {
+      "sid": 170480,
+      "slid": 2071,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "永春高中"
+    },
+    {
+      "sid": 36082,
+      "slid": 389,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "捷運國父紀念館站(忠孝)"
+    },
+    {
+      "sid": 170482,
+      "slid": 3947,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "國業里"
+    },
+    {
+      "sid": 36034,
+      "slid": 3450,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "格致中學(三和路)"
+    },
+    {
+      "sid": 15266,
+      "slid": 50005,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "南京建國路口"
+    },
+    {
+      "sid": 15304,
+      "slid": 16005,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "南京三民路口"
+    },
+    {
+      "sid": 15323,
+      "slid": 1759,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "西藏路口"
+    },
+    {
+      "sid": 19144,
+      "slid": 1215,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "臺安醫院"
+    },
+    {
+      "sid": 19168,
+      "slid": 3107,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "南山高中"
+    },
+    {
+      "sid": 22792,
+      "slid": 1492,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "三民路"
+    },
+    {
+      "sid": 43123,
+      "slid": 6621,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "金山潮州街口"
+    },
+    {
+      "sid": 36036,
+      "slid": 3438,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "厚德派出所"
+    },
+    {
+      "sid": 143299,
+      "slid": 1000974,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "陽光運動公園(新店花市)"
+    },
+    {
+      "sid": 15201,
+      "slid": 2556,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "大庭新村"
+    },
+    {
+      "sid": 15215,
+      "slid": 3164,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "積穗國中"
+    },
+    {
+      "sid": 217837,
+      "slid": 2898,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "永平里"
+    },
+    {
+      "sid": 22786,
+      "slid": 8666,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "三民國中"
+    },
+    {
+      "sid": 152187,
+      "slid": 1000057,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "捷運大安森林公園站"
+    },
+    {
+      "sid": 11628,
+      "slid": 1000056,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "捷運大安森林公園站"
+    },
+    {
+      "sid": 192139,
+      "slid": 1737,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "大埔街"
+    },
+    {
+      "sid": 201702,
+      "slid": 1165605281,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "捷運中和站"
+    },
+    {
+      "sid": 15238,
+      "slid": 4638,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "萬大路"
+    },
+    {
+      "sid": 22814,
+      "slid": 2126,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "信義杭州路口"
+    },
+    {
+      "sid": 36052,
+      "slid": 13206,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "三重國民運動中心"
+    },
+    {
+      "sid": 36122,
+      "slid": 15067,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "蘆洲總站"
+    },
+    {
+      "sid": 22803,
+      "slid": 2262,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "忠孝敦化路口"
+    },
+    {
+      "sid": 11672,
+      "slid": 2112,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "信義大安路口"
+    },
+    {
+      "sid": 19115,
+      "slid": 1231,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "正守公園"
+    },
+    {
+      "sid": 148842,
+      "slid": 2116,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "信義永康街口(捷運東門站)"
+    },
+    {
+      "sid": 15308,
+      "slid": 1556,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "南京龍江路口"
+    },
+    {
+      "sid": 19111,
+      "slid": 1886,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "臺北車站(忠孝)"
+    },
+    {
+      "sid": 57947,
+      "slid": 3097,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "安和路口"
+    },
+    {
+      "sid": 192127,
+      "slid": 4145,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "廈安里"
+    },
+    {
+      "sid": 36118,
+      "slid": 15070,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "蘆洲國小"
+    },
+    {
+      "sid": 15216,
+      "slid": 3123,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "員山派出所"
+    },
+    {
+      "sid": 15305,
+      "slid": 16006,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "南京寧安街口"
+    },
+    {
+      "sid": 15324,
+      "slid": 1829,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "德昌街口"
+    },
+    {
+      "sid": 19149,
+      "slid": 3935,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "忠孝國小"
+    },
+    {
+      "sid": 22798,
+      "slid": 1578,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "博仁醫院"
+    },
+    {
+      "sid": 19107,
+      "slid": 1165604845,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "聯合醫院和平院區"
+    },
+    {
+      "sid": 192130,
+      "slid": 1788,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "國興路口"
+    },
+    {
+      "sid": 170485,
+      "slid": 2096,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "松山商職(福德)"
+    },
+    {
+      "sid": 36078,
+      "slid": 15106,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "永吉國中"
+    },
+    {
+      "sid": 15296,
+      "slid": 1503,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "新益里"
+    },
+    {
+      "sid": 19167,
+      "slid": 3063,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "中和派出所"
+    },
+    {
+      "sid": 43134,
+      "slid": 2430,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "師大分部"
+    },
+    {
+      "sid": 192137,
+      "slid": 4604,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "南機場公寓"
+    },
+    {
+      "sid": 36046,
+      "slid": 1000083,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "中山藝術公園"
+    },
+    {
+      "sid": 218023,
+      "slid": 1000651,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "捷運菜寮站"
+    },
+    {
+      "sid": 36066,
+      "slid": 2361,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "交通部觀光署"
+    },
+    {
+      "sid": 36071,
+      "slid": 2153,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "捷運永春站(忠孝)"
+    },
+    {
+      "sid": 15339,
+      "slid": 10053,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "板橋監理站"
+    },
+    {
+      "sid": 143305,
+      "slid": 2882,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "及人中學"
+    },
+    {
+      "sid": 22837,
+      "slid": 1522,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "長壽公園"
+    },
+    {
+      "sid": 199230,
+      "slid": 1165604787,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "青年社宅"
+    },
+    {
+      "sid": 199235,
+      "slid": 4620,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "青年公園(國興)"
+    },
+    {
+      "sid": 36043,
+      "slid": 3435,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "正義重新路口"
+    },
+    {
+      "sid": 36087,
+      "slid": 3933,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "捷運忠孝復興站"
+    },
+    {
+      "sid": 36103,
+      "slid": 3437,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "長壽西街口"
+    },
+    {
+      "sid": 15307,
+      "slid": 1547,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "捷運南京復興站"
+    },
+    {
+      "sid": 15219,
+      "slid": 3124,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "連城中正路口"
+    },
+    {
+      "sid": 43136,
+      "slid": 2458,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "景明街口"
+    },
+    {
+      "sid": 170481,
+      "slid": 15118,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "松山商職(松山)"
+    },
+    {
+      "sid": 36022,
+      "slid": 3655,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "王爺廟口"
+    },
+    {
+      "sid": 36073,
+      "slid": 15115,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "雙永國小"
+    },
+    {
+      "sid": 15276,
+      "slid": 16030,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "南京三民路口"
+    },
+    {
+      "sid": 22797,
+      "slid": 60135,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "南京新村"
+    },
+    {
+      "sid": 43106,
+      "slid": 1000764,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "臺灣警察專科學校"
+    },
+    {
+      "sid": 43128,
+      "slid": 1942,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "金華新生路口"
+    },
+    {
+      "sid": 197404,
+      "slid": 1165604749,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "萬芳6號公園"
+    },
+    {
+      "sid": 11632,
+      "slid": 2115,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "信義永康街口"
+    },
+    {
+      "sid": 22804,
+      "slid": 13111,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "仁愛敦化路口"
+    },
+    {
+      "sid": 22843,
+      "slid": 1504,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "新益里"
+    },
+    {
+      "sid": 11626,
+      "slid": 2128,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "信義建國路口"
+    },
+    {
+      "sid": 129828,
+      "slid": 3391,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "捷運三和國中站"
+    },
+    {
+      "sid": 19096,
+      "slid": 3064,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "中和派出所"
+    },
+    {
+      "sid": 150576,
+      "slid": 1000107,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "捷運信義安和站(信義)"
+    },
+    {
+      "sid": 15208,
+      "slid": 2573,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "民族區運路口"
+    },
+    {
+      "sid": 15298,
+      "slid": 1507,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "民生國中"
+    },
+    {
+      "sid": 59104,
+      "slid": 3077,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "中和農會(中和路)"
+    },
+    {
+      "sid": 11648,
+      "slid": 2027,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "寶慶路"
+    },
+    {
+      "sid": 36042,
+      "slid": 3395,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "長元西街口"
+    },
+    {
+      "sid": 15214,
+      "slid": 3122,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "員山公園"
+    },
+    {
+      "sid": 15335,
+      "slid": 10009,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "員山派出所"
+    },
+    {
+      "sid": 202721,
+      "slid": 1165605328,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "南勢角(景平路)"
+    },
+    {
+      "sid": 19173,
+      "slid": 50845,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "三介廟"
+    },
+    {
+      "sid": 22829,
+      "slid": 2211,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "安和敦化路口"
+    },
+    {
+      "sid": 22838,
+      "slid": 1562,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "健康新城"
+    },
+    {
+      "sid": 36026,
+      "slid": 3696,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "蘆洲監理站"
+    },
+    {
+      "sid": 36096,
+      "slid": 3417,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "三重國民運動中心"
+    },
+    {
+      "sid": 15244,
+      "slid": 1165604845,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "聯合醫院和平院區"
+    },
+    {
+      "sid": 22844,
+      "slid": 1017,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "民權大橋"
+    },
+    {
+      "sid": 22852,
+      "slid": 8523,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "內湖高中"
+    },
+    {
+      "sid": 11678,
+      "slid": 2131,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "信義通化街口"
+    },
+    {
+      "sid": 36081,
+      "slid": 3929,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "聯合報"
+    },
+    {
+      "sid": 15322,
+      "slid": 1811,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "萬大路"
+    },
+    {
+      "sid": 15258,
+      "slid": 7614,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "華山公園(中山教會)"
+    },
+    {
+      "sid": 194689,
+      "slid": 1165604697,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "臺北客運板橋前站(藝文)"
+    },
+    {
+      "sid": 22781,
+      "slid": 1012,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "方濟中學"
+    },
+    {
+      "sid": 22811,
+      "slid": 2134,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "信義新生路口"
+    },
+    {
+      "sid": 22847,
+      "slid": 991,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "內湖行政大樓"
+    },
+    {
+      "sid": 43120,
+      "slid": 6024,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "溫州街口"
+    },
+    {
+      "sid": 43150,
+      "slid": 2490,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "萬芳社區"
+    },
+    {
+      "sid": 15206,
+      "slid": 2650,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "萬坪公園"
+    },
+    {
+      "sid": 15327,
+      "slid": 1000243,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "華中橋"
+    },
+    {
+      "sid": 15331,
+      "slid": 10006,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "連城錦和路口(暫時裁撤)"
+    },
+    {
+      "sid": 19146,
+      "slid": 1292,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "長安龍江路口"
+    },
+    {
+      "sid": 19155,
+      "slid": 1000080,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "小南門"
+    },
+    {
+      "sid": 22796,
+      "slid": 1000021,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "三軍總醫院松山分院"
+    },
+    {
+      "sid": 150555,
+      "slid": 2281,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "師大附中"
+    },
+    {
+      "sid": 36048,
+      "slid": 3393,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "三重區公所(過圳街)"
+    },
+    {
+      "sid": 194688,
+      "slid": 1165603914,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "新月橋"
+    },
+    {
+      "sid": 153797,
+      "slid": 14208,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "深丘里(板橋放送所)"
+    },
+    {
+      "sid": 19126,
+      "slid": 1525,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "八德東寧路口"
+    },
+    {
+      "sid": 36029,
+      "slid": 4108,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "捷運徐匯中學站"
+    },
+    {
+      "sid": 15337,
+      "slid": 10011,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "員山公園"
+    },
+    {
+      "sid": 22787,
+      "slid": 8601,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "時報廣場"
+    },
+    {
+      "sid": 136195,
+      "slid": 2112,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "信義大安路口"
+    },
+    {
+      "sid": 43105,
+      "slid": 1000857,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "文山運動中心(萬芳)"
+    },
+    {
+      "sid": 36023,
+      "slid": 3670,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "空中大學(中正路)"
+    },
+    {
+      "sid": 15234,
+      "slid": 1830,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "德昌街口"
+    },
+    {
+      "sid": 19100,
+      "slid": 4622,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "果菜市場"
+    },
+    {
+      "sid": 36072,
+      "slid": 15116,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "捷運永春站(松山)"
+    },
+    {
+      "sid": 19174,
+      "slid": 2941,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "新和國小"
+    },
+    {
+      "sid": 15226,
+      "slid": 3134,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "連城景平路(暫時裁撤)"
+    },
+    {
+      "sid": 15302,
+      "slid": 1000206,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "南松山(南京)"
+    },
+    {
+      "sid": 19095,
+      "slid": 3110,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "南山高中"
+    },
+    {
+      "sid": 36105,
+      "slid": 10626,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "龍門路口"
+    },
+    {
+      "sid": 15207,
+      "slid": 70716,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "新北板橋公車站"
+    },
+    {
+      "sid": 15218,
+      "slid": 3135,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "連城路"
+    },
+    {
+      "sid": 19123,
+      "slid": 1560,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "美仁里"
+    },
+    {
+      "sid": 11656,
+      "slid": 1946,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "中正紀念堂"
+    },
+    {
+      "sid": 148803,
+      "slid": 2116,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "信義永康街口(捷運東門站)"
+    },
+    {
+      "sid": 22859,
+      "slid": 1156,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "麗寶大樓"
+    },
+    {
+      "sid": 192132,
+      "slid": 1817,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "萬華醫院"
+    },
+    {
+      "sid": 36067,
+      "slid": 388,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "捷運國父紀念館站(忠孝)"
+    },
+    {
+      "sid": 19124,
+      "slid": 1516,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "光復路口"
+    },
+    {
+      "sid": 43102,
+      "slid": 2494,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "萬芳國小"
+    },
+    {
+      "sid": 36111,
+      "slid": 10427,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "建和新村"
+    },
+    {
+      "sid": 15250,
+      "slid": 1882,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "臺北車站(忠孝)"
+    },
+    {
+      "sid": 19106,
+      "slid": 1737,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "大埔街"
+    },
+    {
+      "sid": 19117,
+      "slid": 1285,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "長安東路二段"
+    },
+    {
+      "sid": 19169,
+      "slid": 9610,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "雙和里"
+    },
+    {
+      "sid": 11658,
+      "slid": 2125,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "信義杭州路口"
+    },
+    {
+      "sid": 36040,
+      "slid": 10601,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "三安里"
+    },
+    {
+      "sid": 19161,
+      "slid": 1829,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "德昌街口"
+    },
+    {
+      "sid": 22802,
+      "slid": 13109,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "市民敦化路口"
+    },
+    {
+      "sid": 148798,
+      "slid": 2116,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "信義永康街口(捷運東門站)"
+    },
+    {
+      "sid": 43148,
+      "slid": 50053,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "萬芳國小"
+    },
+    {
+      "sid": 15288,
+      "slid": 1000810,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "莊敬里"
+    },
+    {
+      "sid": 143295,
+      "slid": 1000505,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "十四份"
+    },
+    {
+      "sid": 19093,
+      "slid": 9616,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "捷運景安站"
+    },
+    {
+      "sid": 22780,
+      "slid": 998,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "內湖高中"
+    },
+    {
+      "sid": 22791,
+      "slid": 60133,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "新東街口"
+    },
+    {
+      "sid": 36064,
+      "slid": 2318,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "捷運忠孝敦化站"
+    },
+    {
+      "sid": 15202,
+      "slid": 2599,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "社后"
+    },
+    {
+      "sid": 15224,
+      "slid": 3080,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "中和國稅局"
+    },
+    {
+      "sid": 15382,
+      "slid": 2688,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "國泰街口"
+    },
+    {
+      "sid": 43103,
+      "slid": 2489,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "萬利街口"
+    },
+    {
+      "sid": 43146,
+      "slid": 1000041,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "萬利街口"
+    },
+    {
+      "sid": 15199,
+      "slid": 20349,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "港尾"
+    },
+    {
+      "sid": 15315,
+      "slid": 1000082,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "臺北車站(忠孝)"
+    },
+    {
+      "sid": 15394,
+      "slid": 2588,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "名來新城(中正路)"
+    },
+    {
+      "sid": 152136,
+      "slid": 1165604851,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "瑞湖街口"
+    },
+    {
+      "sid": 43145,
+      "slid": 2475,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "棕櫚泉社區"
+    },
+    {
+      "sid": 221716,
+      "slid": 1165610351,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "新月一街"
+    },
+    {
+      "sid": 15284,
+      "slid": 1000217,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "發電所(西松高中)"
+    },
+    {
+      "sid": 36070,
+      "slid": 2055,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "市立工農"
+    },
+    {
+      "sid": 19163,
+      "slid": 1766,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "果菜市場"
+    },
+    {
+      "sid": 15274,
+      "slid": 16029,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "南京寧安街口"
+    },
+    {
+      "sid": 19152,
+      "slid": 1000082,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "臺北車站(忠孝)"
+    },
+    {
+      "sid": 143302,
+      "slid": 2894,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "石頭厝"
+    },
+    {
+      "sid": 136196,
+      "slid": 2286,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "信義敦化路口"
+    },
+    {
+      "sid": 22833,
+      "slid": 1560,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "美仁里"
+    },
+    {
+      "sid": 194158,
+      "slid": 72245,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "光華街口"
+    },
+    {
+      "sid": 19114,
+      "slid": 1282,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "長安林森路口"
+    },
+    {
+      "sid": 43130,
+      "slid": 2344,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "龍安國小(公務人力發展學院)"
+    },
+    {
+      "sid": 15328,
+      "slid": 10003,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "連城景平路(暫時裁撤)"
+    },
+    {
+      "sid": 22775,
+      "slid": 1000897,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "瑞光路"
+    },
+    {
+      "sid": 22813,
+      "slid": 6939,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "捷運東門站"
+    },
+    {
+      "sid": 43132,
+      "slid": 2224,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "臺大"
+    },
+    {
+      "sid": 15319,
+      "slid": 1926,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "聯合醫院和平院區"
+    },
+    {
+      "sid": 11630,
+      "slid": 2134,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "信義新生路口"
+    },
+    {
+      "sid": 143304,
+      "slid": 2850,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "十四份"
+    },
+    {
+      "sid": 22778,
+      "slid": 1104,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "湖光國宅"
+    },
+    {
+      "sid": 22799,
+      "slid": 4005,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "光復路口"
+    },
+    {
+      "sid": 36083,
+      "slid": 3930,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "交通部觀光署"
+    },
+    {
+      "sid": 22788,
+      "slid": 8602,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "民權大橋"
+    },
+    {
+      "sid": 43116,
+      "slid": 1000036,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "師大分部"
+    },
+    {
+      "sid": 11652,
+      "slid": 1165603382,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "博物館(襄陽)"
+    },
+    {
+      "sid": 36097,
+      "slid": 1000365,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "集美國小"
+    },
+    {
+      "sid": 15220,
+      "slid": 3052,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "連城錦和路口(暫時裁撤)"
+    },
+    {
+      "sid": 15389,
+      "slid": 6191,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "大庭新村"
+    },
+    {
+      "sid": 19088,
+      "slid": 1000308,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "輕軌新和國小站(水工大樓)"
+    },
+    {
+      "sid": 22830,
+      "slid": 2259,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "捷運忠孝敦化站"
+    },
+    {
+      "sid": 36038,
+      "slid": 10424,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "德林寺(三和路)"
+    },
+    {
+      "sid": 36049,
+      "slid": 3455,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "三重稅捐分處"
+    },
+    {
+      "sid": 19127,
+      "slid": 1540,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "東興路"
+    },
+    {
+      "sid": 43144,
+      "slid": 1000452,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "文山運動中心(萬芳)"
+    },
+    {
+      "sid": 22793,
+      "slid": 1489,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "三民健康路口(西松高中)"
+    },
+    {
+      "sid": 22834,
+      "slid": 1590,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "榮民服務處"
+    },
+    {
+      "sid": 36056,
+      "slid": 1997,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "捷運善導寺站"
+    },
+    {
+      "sid": 36080,
+      "slid": 15111,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "松山高中(松隆)"
+    },
+    {
+      "sid": 22785,
+      "slid": 8667,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "內湖行政大樓"
+    },
+    {
+      "sid": 22816,
+      "slid": 1993,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "捷運台大醫院站"
+    },
+    {
+      "sid": 22828,
+      "slid": 4170,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "仁愛國中(外交學院)"
+    },
+    {
+      "sid": 56960,
+      "slid": 13215,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "中山藝術公園"
+    },
+    {
+      "sid": 19102,
+      "slid": 1830,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "德昌街口"
+    },
+    {
+      "sid": 22812,
+      "slid": 2115,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "信義永康街口"
+    },
+    {
+      "sid": 11608,
+      "slid": 2070,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "松壽路口"
+    },
+    {
+      "sid": 11634,
+      "slid": 6939,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "捷運東門站"
+    },
+    {
+      "sid": 15211,
+      "slid": 3169,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "環球購物中心"
+    },
+    {
+      "sid": 19145,
+      "slid": 1203,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "長安復興路口"
+    },
+    {
+      "sid": 22808,
+      "slid": 2282,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "捷運大安站(信義)"
+    },
+    {
+      "sid": 43101,
+      "slid": 1000032,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "萬芳活動中心"
+    },
+    {
+      "sid": 192129,
+      "slid": 1743,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "中華南海路口"
+    },
+    {
+      "sid": 192135,
+      "slid": 4602,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "國興路口"
+    },
+    {
+      "sid": 59583,
+      "slid": 50834,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "景新街口"
+    },
+    {
+      "sid": 43104,
+      "slid": 2473,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "棕櫚泉社區"
+    },
+    {
+      "sid": 192128,
+      "slid": 1777,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "南機場公寓"
+    },
+    {
+      "sid": 11676,
+      "slid": 2119,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "back",
+      "direction_label": "往永春高中",
+      "stop_name": "捷運信義安和站(信義)"
+    },
+    {
+      "sid": 15203,
+      "slid": 2614,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "板橋戶政事務所"
+    },
+    {
+      "sid": 15384,
+      "slid": 4013,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "民族區運路口"
+    },
+    {
+      "sid": 15386,
+      "slid": 60093,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "北門街(黃石市場)"
+    },
+    {
+      "sid": 19099,
+      "slid": 50818,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "華中橋"
+    },
+    {
+      "sid": 19119,
+      "slid": 20364,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "長安龍江路口"
+    },
+    {
+      "sid": 22789,
+      "slid": 1503,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "go",
+      "direction_label": "往臺北車站",
+      "stop_name": "新益里"
+    },
+    {
+      "sid": 22839,
+      "slid": 50006,
+      "route_id": "10841",
+      "route_name": "0東",
+      "direction": "back",
+      "direction_label": "往內湖",
+      "stop_name": "三民健康路口(西松高中)"
+    },
+    {
+      "sid": 43108,
+      "slid": 2375,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "go",
+      "direction_label": "往捷運東門站",
+      "stop_name": "中國科技大學(興隆)"
+    },
+    {
+      "sid": 199119,
+      "slid": 1165604779,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "積穗派出所"
+    },
+    {
+      "sid": 19104,
+      "slid": 4638,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "go",
+      "direction_label": "往國父紀念館",
+      "stop_name": "萬大路"
+    },
+    {
+      "sid": 59105,
+      "slid": 3078,
+      "route_id": "15111",
+      "route_name": "202",
+      "direction": "back",
+      "direction_label": "往新店",
+      "stop_name": "中和農會(中和路)"
+    },
+    {
+      "sid": 11638,
+      "slid": 1947,
+      "route_id": "10873",
+      "route_name": "20",
+      "direction": "go",
+      "direction_label": "往青年公園",
+      "stop_name": "中正紀念堂"
+    },
+    {
+      "sid": 36024,
+      "slid": 77,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "中原公寓"
+    },
+    {
+      "sid": 36077,
+      "slid": 50125,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "虎林街口"
+    },
+    {
+      "sid": 129829,
+      "slid": 10428,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "捷運三和國中站"
+    },
+    {
+      "sid": 15246,
+      "slid": 1793,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "捷運西門站"
+    },
+    {
+      "sid": 36063,
+      "slid": 3915,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "頂好市場"
+    },
+    {
+      "sid": 15336,
+      "slid": 10010,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "積穗國中"
+    },
+    {
+      "sid": 36090,
+      "slid": 3935,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "back",
+      "direction_label": "往蘆洲",
+      "stop_name": "忠孝國小"
+    },
+    {
+      "sid": 15236,
+      "slid": 4639,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "西藏路口"
+    },
+    {
+      "sid": 15314,
+      "slid": 50688,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "行政院"
+    },
+    {
+      "sid": 201703,
+      "slid": 1165605282,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "back",
+      "direction_label": "往板橋",
+      "stop_name": "捷運中和站"
+    },
+    {
+      "sid": 15205,
+      "slid": 2613,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "捷運府中站(府中路)"
+    },
+    {
+      "sid": 153800,
+      "slid": 14209,
+      "route_id": "16111",
+      "route_name": "307",
+      "direction": "go",
+      "direction_label": "往撫遠街",
+      "stop_name": "深丘里(板橋放送所)"
+    },
+    {
+      "sid": 43142,
+      "slid": 1165604764,
+      "route_id": "11811",
+      "route_name": "0南",
+      "direction": "back",
+      "direction_label": "往萬芳社區",
+      "stop_name": "捷運萬芳醫院站"
+    },
+    {
+      "sid": 36021,
+      "slid": 3698,
+      "route_id": "10417",
+      "route_name": "忠孝幹線(公車雙向轉乘優惠)",
+      "direction": "go",
+      "direction_label": "往松山車站",
+      "stop_name": "蘆洲總站"
+    }
+  ]
+}

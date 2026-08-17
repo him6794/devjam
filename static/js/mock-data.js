@@ -35,6 +35,7 @@ const MockAPI = {
     this._analyzeAttempts = 0;
     return {
       status: "success",
+      station_name: "捷運公館站",
       buses: [
         { route: "307", eta_minutes: 3, direction: "往台北車站", urgency: "high" },
         { route: "202", eta_minutes: 8, direction: "往公館", urgency: "medium" },
@@ -42,6 +43,7 @@ const MockAPI = {
       ],
       display: { safe_zone_position: "top", font_scale: 1.5 },
       voice_summary: "307路線3分鐘後到站，往台北車站方向",
+      voice_audio_url: "",
     };
   },
 

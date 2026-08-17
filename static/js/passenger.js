@@ -5,8 +5,9 @@ const state = {
   voiceEnabled: true,
   currentBuses: [],
   currentVoiceSummary: "",
+  currentVoiceAudioUrl: "",
   currentRoute: null,
-  currentStationName: "捷運公館站",
+  currentStationName: "",
 };
 
 let scanning = false;
@@ -15,6 +16,7 @@ let scanAttempts = 0;
 const MAX_SCAN_ATTEMPTS = 6;
 const SCAN_INTERVAL_MS = 2000;
 let mediaStream = null;
+let voiceAudio = null;
 
 document.addEventListener("DOMContentLoaded", init);
 
@@ -215,15 +217,20 @@ async function captureAndSend() {
     if (USE_MOCK) {
       data = await MockAPI.analyze(getUserId(), null, null, null);
     } else {
+      const pos = await getGpsSafe();
+      if (!pos) {
+        stopScanning();
+        qs("#camera-status").textContent = "無法取得定位，請允許位置權限後再試";
+        qs("#camera-status").classList.add("error");
+        return;
+      }
+
       const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.85));
       const formData = new FormData();
       formData.append("user_id", getUserId());
       formData.append("image", blob, "frame.jpg");
-      const pos = await getGpsSafe();
-      if (pos) {
-        formData.append("lat", pos.lat);
-        formData.append("lng", pos.lng);
-      }
+      formData.append("lat", pos.lat);
+      formData.append("lng", pos.lng);
       data = await apiFetch(`/api/analyze`, { method: "POST", body: formData });
     }
   } catch (err) {
@@ -233,7 +240,7 @@ async function captureAndSend() {
     return;
   }
 
-  if (data.status === "success") {
+  if (data.status === "success" && data.buses && data.buses.length > 0) {
     stopScanning();
     renderResult(data);
     showScreen("screen-result");
@@ -247,7 +254,9 @@ async function captureAndSend() {
 function renderResult(data) {
   state.currentBuses = data.buses;
   state.currentVoiceSummary = data.voice_summary;
+  state.currentVoiceAudioUrl = data.voice_audio_url || "";
   state.currentRoute = data.buses[0]?.route;
+  state.currentStationName = data.station_name || state.currentStationName;
 
   applyFontScale(data.display.font_scale || state.fontScale);
   applySafeZonePosition(qs("#safe-zone-window"), data.display.safe_zone_position);
@@ -289,12 +298,23 @@ function renderResult(data) {
   }
 }
 
+// Device TTS is the primary path so the rider hears bus updates at their
+// own already-configured screen-reader rate/voice, per plan.md §9 — a
+// fixed-rate server audio clip would override that. The Cloud TTS file is
+// only a fallback for browsers without speechSynthesis support.
 function playVoiceSummary() {
-  if (!state.currentVoiceSummary || !("speechSynthesis" in window)) return;
-  window.speechSynthesis.cancel();
-  const utter = new SpeechSynthesisUtterance(state.currentVoiceSummary);
-  utter.lang = "zh-TW";
-  window.speechSynthesis.speak(utter);
+  if ("speechSynthesis" in window && state.currentVoiceSummary) {
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(state.currentVoiceSummary);
+    utter.lang = "zh-TW";
+    window.speechSynthesis.speak(utter);
+    return;
+  }
+  if (state.currentVoiceAudioUrl) {
+    if (voiceAudio) voiceAudio.pause();
+    voiceAudio = new Audio(state.currentVoiceAudioUrl);
+    voiceAudio.play().catch(() => {});
+  }
 }
 
 async function notifyDriver() {

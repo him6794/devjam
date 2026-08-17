@@ -5,12 +5,11 @@
 <section class="driver-screen">
   <h1 class="title-lg">選擇監控路線</h1>
 
-  <div id="route-select-bar" class="route-select-bar">
-    <button class="route-btn" data-route="307">307</button>
-    <button class="route-btn" data-route="202">202</button>
-    <button class="route-btn" data-route="88">88</button>
-    <button class="route-btn" data-route="235">235</button>
-  </div>
+  <form id="route-select-bar" class="route-select-bar">
+    <input id="route-input" class="route-input" type="text" inputmode="numeric"
+           placeholder="輸入路線號碼，例如 307" aria-label="監控路線號碼" autocomplete="off">
+    <button id="route-select-btn" type="submit" class="btn btn-primary route-select-btn">開始監控</button>
+  </form>
 
   <p id="monitoring-label" class="monitoring-label">尚未選擇路線</p>
 

@@ -1,0 +1,37 @@
+services:
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      PORT: "8080"
+      GIN_MODE: release
+      STOPS_INDEX_PATH: /data/stops.json
+      GCP_PROJECT: ${GCP_PROJECT:-devjam26aug17tpe-1280}
+      GCP_LOCATION: ${GCP_LOCATION:-us-central1}
+      TTS_BUCKET: ${TTS_BUCKET:-devjam26aug17tpe-1280-tts-audio}
+    expose:
+      - "8080"
+    ports:
+      - "${API_PORT:-8081}:8080"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend.Dockerfile
+    environment:
+      PORT: "5000"
+    expose:
+      - "5000"
+    depends_on:
+      - api
+
+  gateway:
+    image: nginx:1.27-alpine
+    depends_on:
+      - api
+      - frontend
+    ports:
+      - "${APP_PORT:-8080}:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro

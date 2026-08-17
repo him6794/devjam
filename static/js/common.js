@@ -1,5 +1,5 @@
 // 是否使用假資料開發
-const USE_MOCK = true;
+const USE_MOCK = false;
 const API_BASE = ""; 
 
 /**
@@ -60,6 +60,7 @@ function qsa(selector, root = document) {
 function showScreen(id) {
   qsa(".screen").forEach((s) => s.classList.remove("active"));
   qs("#" + id).classList.add("active");
+  window.scrollTo(0, 0);
 }
 
 function getGpsSafe() {

@@ -8,15 +8,14 @@ let pollTimer = null;
 const POLL_INTERVAL_MS = 3000;
 
 document.addEventListener("DOMContentLoaded", () => {
-  qsa(".route-btn").forEach((btn) => {
-    btn.addEventListener("click", () => selectRoute(btn.dataset.route, btn));
+  qs("#route-select-bar").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const route = qs("#route-input").value.trim();
+    if (route) selectRoute(route);
   });
 });
 
-function selectRoute(route, btnEl) {
-  qsa(".route-btn").forEach((b) => b.classList.remove("selected"));
-  btnEl.classList.add("selected");
-
+function selectRoute(route) {
   driverState.route = route;
   driverState.knownAlertIds.clear();
   driverState.acknowledgedIds.clear();
