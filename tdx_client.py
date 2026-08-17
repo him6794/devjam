@@ -76,14 +76,16 @@ def get_eta_candidates(city: str, route_name: str, stop_name_query: str = "") ->
 
 
 def build_vision_hint(candidates: list[dict], route_name: str) -> str | None:
-    """把 TDX 查到的資料轉成給 Gemini Vision 的提示文字，縮小辨識範圍。"""
+    """把 TDX 查到的資料轉成給 Gemini Vision 的提示文字，縮小辨識範圍，
+    並明確指定使用者要搭的目標路線，供多車同時進站時的方位導引使用。"""
     if not candidates:
         return None
     top = candidates[0]
     if top["eta_minutes"] is None:
         return None
     return (
-        f"根據臺北市公車即時動態資料（TDX），{route_name} 路公車預計約 "
-        f"{top['eta_minutes']} 分鐘後到達使用者所在站牌。請特別確認畫面中出現的公車是否為 "
-        f"{route_name} 號，並留意站牌上可能同時出現其他路線的公車。"
+        f"使用者現在要搭的目標路線是 {route_name} 號。根據臺北市公車即時動態資料（TDX），"
+        f"{route_name} 路公車預計約 {top['eta_minutes']} 分鐘後到達使用者所在站牌。"
+        f"如果畫面中同時出現多台公車，請逐一辨識每台車的號碼與方位，並明確指出 {route_name} 號"
+        f"在畫面中的哪個方位（左/中/右）；如果畫面中沒有 {route_name} 號，直接說明目前看到的都不是。"
     )
