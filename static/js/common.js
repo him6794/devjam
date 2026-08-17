@@ -31,14 +31,6 @@ function applyFontScale(scale) {
 }
 
 /**
- * 把安全視野窗容器依 safe_zone_position 定位
- * position: "top" | "center" | "bottom"
- */
-function applySafeZonePosition(el, position) {
-  el.style.order = position === "top" ? "-1" : position === "bottom" ? "1" : "0";
-}
-
-/**
  * 統一的 fetch 包裝，之後接真實後端只要把 USE_MOCK 關掉
  */
 async function apiFetch(path, options = {}) {

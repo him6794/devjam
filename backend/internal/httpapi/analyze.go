@@ -95,26 +95,31 @@ func (h *AnalyzeHandler) Handle(c *gin.Context) {
 
 	buses := make([]gin.H, 0, len(bb.Buses))
 	for _, b := range bb.Buses {
-		entry := gin.H{
-			"route":     b.Route,
-			"urgency":   urgencyFor(b, bb.Profile, bb.WantedRoute),
-			"is_wanted": routeMatchesWanted(b.Route, bb.WantedRoute),
+		// direction/eta_minutes are always concrete, never JSON null: a
+		// missing value is real, recurring data from pda5284 itself (no
+		// scheduled trip right now, or this project's demo-scale index —
+		// see plan.md §2.1/§10 — hasn't indexed that route's metadata yet),
+		// so callers need a value they can render without a null-check,
+		// plus has_eta to tell "genuinely 0 minutes" apart from "no data"
+		// (eta_minutes alone can't: 0 is a valid real ETA, so the sentinel
+		// is -1, matching pda5284's own "-1 = no upcoming bus" convention
+		// from plan.md §1.2, never a value a real ETA could take).
+		direction := b.Direction
+		if direction == "" {
+			direction = "方向資訊暫缺"
 		}
-		// direction/eta_minutes are always present as keys, null when
-		// pda5284 (or this project's 6-route demo index, see plan.md §2.1)
-		// has no data for that row — a caller can then tell "no data" (null)
-		// apart from "field doesn't exist" without extra guards.
-		if b.Direction != "" {
-			entry["direction"] = b.Direction
-		} else {
-			entry["direction"] = nil
-		}
+		etaMinutes := -1
 		if b.HasETA {
-			entry["eta_minutes"] = b.ETAMinutes
-		} else {
-			entry["eta_minutes"] = nil
+			etaMinutes = b.ETAMinutes
 		}
-		buses = append(buses, entry)
+		buses = append(buses, gin.H{
+			"route":       b.Route,
+			"urgency":     urgencyFor(b, bb.Profile, bb.WantedRoute),
+			"is_wanted":   routeMatchesWanted(b.Route, bb.WantedRoute),
+			"direction":   direction,
+			"eta_minutes": etaMinutes,
+			"has_eta":     b.HasETA,
+		})
 	}
 
 	c.JSON(http.StatusOK, gin.H{
@@ -259,6 +264,8 @@ func voiceSummary(buses []agent.BusReport, wanted string) string {
 	return fmt.Sprintf("%s路目前無即時資訊，%s", first.Route, first.Direction)
 }
 
+// etaPhrase is the ETA half of a summary line, reused when the lead-in
+// sentence differs (wanted route missing from this station).
 // etaPhrase is the ETA half of a summary line, reused when the lead-in
 // sentence differs (wanted route missing from this station).
 func etaPhrase(b agent.BusReport) string {

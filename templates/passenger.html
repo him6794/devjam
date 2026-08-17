@@ -65,6 +65,7 @@
   <p class="subtitle" style="text-align:center; margin-bottom:8px">拖曳滑桿調整範圍大小</p>
   <input id="safe-zone-size-slider" type="range" min="24" max="140" step="4" value="60">
   <p class="subtitle" style="text-align:center">先點畫面標記位置，再用滑桿調整大小</p>
+  <p class="subtitle" style="text-align:center">塗色（明亮）的圓圈＝你看得清楚的地方，圈外遮暗＝看不清楚</p>
 
   <div class="btn-footer">
     <button id="btn-step2-next" class="btn btn-primary" disabled>下一步</button>
@@ -113,6 +114,23 @@
 
   <p class="camera-hint">將鏡頭對準站牌</p>
   <p id="camera-status" class="status-msg"></p>
+
+  <!-- Live Guide 即時狀態面板（開發除錯用，點右上角圓點展開/收合）-->
+  <div id="live-guide-panel" class="live-guide-panel collapsed">
+    <button id="live-guide-toggle" class="live-guide-toggle" aria-label="展開 Live Guide 狀態">
+      <span id="live-guide-dot" class="live-guide-dot"></span>
+    </button>
+    <div class="live-guide-body">
+      <p class="live-guide-title">🛰 Live Guide 狀態</p>
+      <table class="live-guide-table">
+        <tr><td>連線</td><td id="lg-status">未啟動</td></tr>
+        <tr><td>已送幀數</td><td id="lg-frames">0</td></tr>
+        <tr><td>伺服器回覆</td><td id="lg-replies">0</td></tr>
+        <tr><td>最新判斷</td><td id="lg-last-reply">—</td></tr>
+        <tr><td>重連次數</td><td id="lg-reconnects">0</td></tr>
+      </table>
+    </div>
+  </div>
 
   <div class="route-setup">
     <button id="btn-record-route" class="btn btn-secondary route-record-btn" type="button">🎤 說出想搭的路線</button>
@@ -163,10 +181,9 @@
     <p id="result-eta" class="eta">3 分鐘</p>
     <p id="result-direction" class="direction">往台北車站</p>
     <p id="result-wanted" class="wanted-tag" style="display:none"></p>
+    <button id="other-buses-toggle" class="other-buses-toggle">還有2班車 ▾</button>
+    <div id="other-buses-list" class="other-buses-list"></div>
   </div>
-
-  <button id="other-buses-toggle" class="other-buses-toggle">還有2班車 ▾</button>
-  <div id="other-buses-list" class="other-buses-list"></div>
 
   <div class="action-row">
     <button id="btn-voice-replay" class="btn btn-secondary">🔊 語音複誦</button>

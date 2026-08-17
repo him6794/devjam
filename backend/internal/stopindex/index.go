@@ -13,6 +13,7 @@ import (
 	"math"
 	"os"
 	"sort"
+	"strings"
 	"time"
 )
 
@@ -25,14 +26,13 @@ type Station struct {
 	Lon  float64 `json:"lon"`
 }
 
-// Stop is one physical stop pole for one route in one direction — the
-// metadata needed to turn a live (sid, rid) ETA row into a rider-facing
-// route name and destination label.
+// Stop struct adds RouteName to prefer the short, rider-facing code
+// (e.g. "307") over the internal RouteID (e.g. "10443") when available.
 type Stop struct {
 	SID            int    `json:"sid"`
 	SlID           int    `json:"slid"`
-	RouteID        string `json:"route_id"`
-	RouteName      string `json:"route_name"`     // rider-facing code, e.g. "307"
+	RouteID        string `json:"route_id"`       // fallback
+	RouteName      string `json:"route_name"`     // preferred (short code, e.g. "307")
 	Direction      string `json:"direction"`       // "go" | "back"
 	DirectionLabel string `json:"direction_label"` // e.g. "往台北車站"
 	StopName       string `json:"stop_name"`
@@ -53,6 +53,7 @@ type Index struct {
 	stations         []Station
 	metaBySID        map[int]Stop
 	directionsBySlID map[int][]string // deduped DirectionLabel values serving each station
+	routesBySlID     map[int][]Stop   // every Stop record (route+direction) serving each station, for RoutesAt
 }
 
 func Load(path string) (*Index, error) {
@@ -72,10 +73,20 @@ func newIndex(f File) *Index {
 		stations:         f.Stations,
 		metaBySID:        make(map[int]Stop, len(f.Stops)),
 		directionsBySlID: make(map[int][]string),
+		routesBySlID:     make(map[int][]Stop),
 	}
 	seen := make(map[int]map[string]bool)
+	seenRoute := make(map[int]map[string]bool) // slid -> routeName+direction, so a multi-stop route isn't listed twice
 	for _, s := range f.Stops {
 		idx.metaBySID[s.SID] = s
+		if seenRoute[s.SlID] == nil {
+			seenRoute[s.SlID] = map[string]bool{}
+		}
+		routeKey := s.RouteName + "|" + s.Direction
+		if !seenRoute[s.SlID][routeKey] {
+			seenRoute[s.SlID][routeKey] = true
+			idx.routesBySlID[s.SlID] = append(idx.routesBySlID[s.SlID], s)
+		}
 		if s.DirectionLabel == "" {
 			continue
 		}
@@ -123,7 +134,56 @@ func (idx *Index) LookupStop(sid int) (Stop, bool) {
 	return s, ok
 }
 
+// RoutesAt returns every route+direction known to serve one station (slid),
+// deduped. Used by the navigate skill to find a route connecting two
+// stations without a live pda5284 call — this is static index data, same
+// justification as Nearest (see package doc).
+func (idx *Index) RoutesAt(slid int) []Stop {
+	return idx.routesBySlID[slid]
+}
+
+// StationByID returns a station's static record (name + coordinate) by its
+// slid, used by the navigate skill to resolve a destination station name
+// back to a station it can compute a distance to.
+func (idx *Index) StationByID(slid int) (Station, bool) {
+	for _, st := range idx.stations {
+		if st.SlID == slid {
+			return st, true
+		}
+	}
+	return Station{}, false
+}
+
+// FindStationByName does a substring search over station names (both
+// directions, matching stationNameMatches' semantics in httpapi) — used to
+// resolve a rider- or Gemini-stated destination name to a known station
+// when the caller doesn't have a slid yet.
+func (idx *Index) FindStationByName(name string) (Station, bool) {
+	name = strings.TrimSpace(name)
+	if name == "" {
+		return Station{}, false
+	}
+	for _, st := range idx.stations {
+		if strings.Contains(st.Name, name) || strings.Contains(name, st.Name) {
+			return st, true
+		}
+	}
+	return Station{}, false
+}
+
 func (idx *Index) Len() int { return len(idx.stations) }
+
+// StationNames returns every known station's name, for the navigate skill
+// to give Gemini a closed candidate list when resolving a free-text
+// destination (grounding it against real stations instead of letting it
+// invent a plausible-sounding name that isn't actually indexed).
+func (idx *Index) StationNames() []string {
+	names := make([]string, len(idx.stations))
+	for i, st := range idx.stations {
+		names[i] = st.Name
+	}
+	return names
+}
 
 const earthRadiusM = 6371000
 

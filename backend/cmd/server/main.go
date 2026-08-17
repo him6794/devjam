@@ -64,6 +64,32 @@ func main() {
 	routeExtract = skill.NewRouteExtract(genaiClient) // nil client → regex-only fallback
 	registry.Register(routeExtract)
 
+	// Navigate works without genaiClient too (exact/substring station-name
+	// match only, no fuzzy resolution) — see skill.Navigate.resolveDestination.
+	navigate := skill.NewNavigate(index, genaiClient)
+	registry.Register(navigate)
+
+	// LiveGuide needs its own Vertex AI client pinned to "global": verified
+	// directly against this project (client.Live.Connect against
+	// gemini-live-2.5-flash) that us-central1/us-east4/europe-west4 all
+	// reject the Live/BidiGenerateContent websocket handshake with "model
+	// was not found" for this publisher model, while global connects
+	// successfully — same region quirk as Speech-to-Text v2's synchronous
+	// Recognize above, just for a different API family.
+	var liveGuide *skill.LiveGuide
+	liveClient, liveErr := genai.NewClient(context.Background(), &genai.ClientConfig{
+		Project:  envOr("GCP_PROJECT", "devjam26aug17tpe-1280"),
+		Location: "global",
+		Backend:  genai.BackendVertexAI,
+	})
+	if liveErr != nil {
+		log.Printf("server: Vertex AI Live client unavailable, live_guide disabled: %v", liveErr)
+		liveGuide = skill.NewLiveGuide(nil)
+	} else {
+		liveGuide = skill.NewLiveGuide(liveClient)
+		log.Printf("server: live_guide enabled via Vertex AI Gemini Live (global)")
+	}
+
 	// TTS is likewise optional: without it, voice_audio_url in the response
 	// just comes back as "" instead of a playable URL (see
 	// httpapi.AnalyzeHandler.synthesizeVoiceAudioURL).
@@ -98,6 +124,8 @@ func main() {
 		Analyze:    httpapi.NewAnalyzeHandler(agent.NewOrchestrator(), nearestStops, stopETA, visionSign, ttsSkill, profiles),
 		Profile:    httpapi.NewProfileHandler(profiles),
 		VoiceRoute: httpapi.NewVoiceRouteHandler(sttSkill, routeExtract),
+		Navigate:   httpapi.NewNavigateHandler(navigate),
+		LiveGuide:  httpapi.NewLiveGuideHandler(liveGuide),
 		Registry:   registry,
 	}
 
