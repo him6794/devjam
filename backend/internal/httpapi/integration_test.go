@@ -16,7 +16,7 @@ import (
 )
 
 func Test_ParseAnalyzeRequest_accepts_multipart_form(t *testing.T) {
-	// Given
+	
 	var body bytes.Buffer
 	form := multipart.NewWriter(&body)
 	if err := form.WriteField("user_id", "rider-1"); err != nil {
@@ -44,10 +44,10 @@ func Test_ParseAnalyzeRequest_accepts_multipart_form(t *testing.T) {
 	ctx, _ := gin.CreateTestContext(httptest.NewRecorder())
 	ctx.Request = req
 
-	// When
+	
 	got, err := parseAnalyzeRequest(ctx)
 
-	// Then
+	
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -60,7 +60,7 @@ func Test_ParseAnalyzeRequest_accepts_multipart_form(t *testing.T) {
 }
 
 func Test_ProfilePost_persists_body_user_id_for_get(t *testing.T) {
-	// Given
+	
 	handler := NewProfileHandler(profile.NewStore())
 	router := gin.New()
 	router.POST("/api/profile", handler.Post)
@@ -76,10 +76,10 @@ func Test_ProfilePost_persists_body_user_id_for_get(t *testing.T) {
 	post.Header.Set("Content-Type", "application/json")
 	postResponse := httptest.NewRecorder()
 
-	// When
+	
 	router.ServeHTTP(postResponse, post)
 
-	// Then
+	
 	if postResponse.Code != http.StatusOK {
 		t.Fatalf("POST /api/profile status = %d", postResponse.Code)
 	}
@@ -105,7 +105,7 @@ func Test_ProfilePost_persists_body_user_id_for_get(t *testing.T) {
 }
 
 func Test_AlertHandlers_create_and_list_by_route(t *testing.T) {
-	// Given
+	
 	now := time.Date(2026, time.August, 17, 12, 0, 0, 0, time.UTC)
 	store := newAlertStore(func() time.Time { return now })
 	router := gin.New()
@@ -120,10 +120,10 @@ func Test_AlertHandlers_create_and_list_by_route(t *testing.T) {
 	request.Header.Set("Content-Type", "application/json")
 	response := httptest.NewRecorder()
 
-	// When
+	
 	router.ServeHTTP(response, request)
 
-	// Then
+	
 	if response.Code != http.StatusOK {
 		t.Fatalf("POST /api/notify_driver status = %d", response.Code)
 	}

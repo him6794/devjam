@@ -34,14 +34,14 @@ func decodeDynaEnvelope(body []byte) (*dynaEnvelope, error) {
 	return &env, nil
 }
 
-// parseDynaRow decodes one "N1,sid,rid,..." row, e.g.:
-//
-//	N1,19111,15111,222240644,19105,187026,0,716,5,0,2,260817142228,...
-//	    sid   rid   vehicle    prev   ?     ?  eta remaining status
-//	                id/HH:MM   stop            sec stops
-//
-// It returns ok=false for anything that doesn't match instead of erroring:
-// the feed has no documented schema and has been observed to omit fields.
+
+
+
+
+
+
+
+
 func parseDynaRow(raw string) (StopETA, bool) {
 	f := strings.Split(raw, ",")
 	if len(f) < 10 || f[0] != "N1" {
@@ -65,10 +65,10 @@ func parseDynaRow(raw string) (StopETA, bool) {
 	return row, true
 }
 
-// parseBusA1 decodes a Bus[].a1 row, e.g.:
-//
-//	A1,410,222238075,1,0,104170,1,121.556790,25.041457,40,271,...
-//	                                lon        lat       kmh azimuth
+
+
+
+
 func parseBusA1(raw string) (lon, lat float64, speedKmh int, ok bool) {
 	f := strings.Split(raw, ",")
 	if len(f) < 10 {
@@ -84,10 +84,10 @@ func parseBusA1(raw string) (lon, lat float64, speedKmh int, ok bool) {
 	return lon, lat, speedKmh, true
 }
 
-// parseBusA2StopID decodes a Bus[].a2 row's associated stop id, e.g.:
-//
-//	A2,410,222238075,1,0,104170,1,36083,1,142339,2,...
-//	                                     sid
+
+
+
+
 func parseBusA2StopID(raw string) (int, bool) {
 	f := strings.Split(raw, ",")
 	if len(f) < 8 {

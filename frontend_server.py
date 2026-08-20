@@ -1,4 +1,3 @@
-"""Render the passenger and driver web pages for the Compose gateway."""
 
 import os
 

@@ -18,9 +18,9 @@ type NearestStopsOut struct {
 	Matches []stopindex.Match `json:"matches"`
 }
 
-// NearestStops finds known bus stations near a GPS coordinate. It is pure,
-// in-memory computation — no network call — which is why it is safe to run
-// on every /api/analyze request instead of only in the async agent path.
+
+
+
 type NearestStops struct {
 	index *stopindex.Index
 }

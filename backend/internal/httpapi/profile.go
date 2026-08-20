@@ -16,9 +16,9 @@ func NewProfileHandler(store *profile.Store) *ProfileHandler {
 	return &ProfileHandler{store: store}
 }
 
-// userID reads the caller's id from a header, matching api.md's "使用者ID
-// (header之類)" for /api/profile. /api/analyze reuses the same header so a
-// bus query can be scored against the right profile.
+
+
+
 func userID(c *gin.Context) string {
 	if id := c.GetHeader("X-User-Id"); id != "" {
 		return id

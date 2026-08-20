@@ -1,11 +1,3 @@
-"""
-核心流程：拍照 -> Gemini 多模態理解 -> Cloud Text-to-Speech 語音摘要
-給隧道視野（視野狹窄）患者用的城市資訊助理 Demo。
-
-圖片理解：Gemini API 金鑰驗證。
-語音合成：Cloud Text-to-Speech，用 IAM(ADC) 驗證（跟 Firestore 同一套，
-Cloud Run 上用內建服務身分，本機用 gcloud 登入）——比 Gemini 原生 TTS快約 3 倍。
-"""
 import os
 
 from google import genai
@@ -14,7 +6,7 @@ from google.cloud import texttospeech
 
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 if not GEMINI_API_KEY:
-    from local_config import GEMINI_API_KEY  # 本機開發用，Cloud Run 上用環境變數
+    from local_config import GEMINI_API_KEY  
 
 _client = genai.Client(api_key=GEMINI_API_KEY)
 _tts_client = texttospeech.TextToSpeechClient()
@@ -34,7 +26,6 @@ PROMPT = """你是一個協助「隧道視野（視野狹窄）」患者的城�
 
 
 def describe_image(image_path: str) -> str:
-    """把照片丟給 Gemini 多模態模型，回傳語音友善的摘要文字。"""
     with open(image_path, "rb") as f:
         image_bytes = f.read()
 
@@ -51,7 +42,6 @@ def describe_image(image_path: str) -> str:
 
 
 def synthesize_speech(text: str, output_path: str) -> str:
-    """把文字轉成中文語音 mp3，存到 output_path。用 Cloud Text-to-Speech。"""
     response = _tts_client.synthesize_speech(
         input=texttospeech.SynthesisInput(text=text),
         voice=texttospeech.VoiceSelectionParams(
@@ -73,7 +63,7 @@ def run_pipeline(image_path: str, output_audio_path: str) -> dict:
     return {"summary": summary, "audio_path": audio_path}
 
 
-# ✅ 本機單測：python pipeline.py test.jpg
+
 if __name__ == "__main__":
     import sys
 

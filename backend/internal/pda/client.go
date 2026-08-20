@@ -11,14 +11,14 @@ import (
 
 const baseURL = "https://pda5284.gov.taipei/MQS/"
 
-// Client is rate-limited to be a polite scraper of a public, unauthenticated
-// government site with no published quota.
+
+
 type Client struct {
 	http   *http.Client
 	ticker *time.Ticker
 }
 
-// NewClient builds a client that self-limits to ~2 requests/second.
+
 func NewClient() *Client {
 	return &Client{
 		http:   &http.Client{Timeout: 10 * time.Second},
@@ -26,9 +26,9 @@ func NewClient() *Client {
 	}
 }
 
-// get fetches path and returns the final response body, following
-// redirects (net/http's default client does this automatically — used by
-// ResolveStopLocation, which depends on stop.jsp's 302).
+
+
+
 func (c *Client) get(ctx context.Context, path string) ([]byte, error) {
 	select {
 	case <-c.ticker.C:
@@ -58,8 +58,8 @@ func (c *Client) get(ctx context.Context, path string) ([]byte, error) {
 	return body, nil
 }
 
-// StopLocationDyna fetches every route's live ETA at one aggregated station
-// (slid). This is the endpoint the fast /api/analyze path calls.
+
+
 func (c *Client) StopLocationDyna(ctx context.Context, slid int) (*StopLocationResult, error) {
 	body, err := c.get(ctx, fmt.Sprintf("StopLocationDyna?stoplocationid=%d", slid))
 	if err != nil {
@@ -78,10 +78,10 @@ func (c *Client) StopLocationDyna(ctx context.Context, slid int) (*StopLocationR
 	return res, nil
 }
 
-// RouteDyna fetches live ETAs and vehicle GPS fixes for one entire route.
-// cmd/indexer uses the vehicle fixes to infer station coordinates (see
-// internal/stopindex), since pda5284 never publishes stop coordinates
-// directly.
+
+
+
+
 func (c *Client) RouteDyna(ctx context.Context, routeID string) (*RouteDynaResult, error) {
 	body, err := c.get(ctx, fmt.Sprintf("RouteDyna?routeid=%s", routeID))
 	if err != nil {

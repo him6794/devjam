@@ -19,10 +19,10 @@ type RouteExtractOut struct {
 	Route string `json:"route"`
 }
 
-// routeExtractPrompt asks Gemini for the one route code a rider said.
-// It must be told to strip filler words ("路", "號", "公車") because the
-// transcripts it gets are raw STT output like "我要搭307路" or "幫我查三零七",
-// and the wanted-route match against stopindex route names is exact.
+
+
+
+
 const routeExtractPrompt = `使用者正在說出想搭乘的公車路線編號，這是語音辨識轉錄的文字。
 請提取路線編號本身：
 1. route：路線編號，例如「307」或「棕7」，只保留編號，去掉「路」「號」「公車」等字；
@@ -38,17 +38,17 @@ var routeExtractSchema = &genai.Schema{
 	Required: []string{"found", "route"},
 }
 
-// routeDigitsRe is the deterministic fallback when Gemini isn't configured
-// (or its call fails): the first run of digits in a transcript like
-// "我要搭307" or "307" is the route number for the numeric routes v1
-// targets.
+
+
+
+
 var routeDigitsRe = regexp.MustCompile(`\d+`)
 
-// RouteExtract resolves what route a rider wants from a speech transcript —
-// the second half of Journey Agent v1 (STT turns audio into text; this
-// turns text into a route code). Gemini handles spoken Chinese numerals
-// ("三零七" → "307") and alphanumeric routes; the regex fallback keeps the
-// numeric-route path working with no Vertex AI credentials at all.
+
+
+
+
+
 type RouteExtract struct {
 	client *genai.Client
 	model  string
@@ -95,9 +95,9 @@ func (s *RouteExtract) Do(ctx context.Context, in RouteExtractIn) (RouteExtractO
 			if unmarshalErr := json.Unmarshal([]byte(resp.Text()), &out); unmarshalErr == nil && out.Found && out.Route != "" {
 				return out, nil
 			}
-			// Any Gemini hiccup (network, bad schema, found=false on a
-			// digit transcript) falls through to the regex — the caller
-			// should still get a route when one is plainly in the text.
+			
+			
+			
 		}
 	}
 

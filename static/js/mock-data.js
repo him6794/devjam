@@ -1,12 +1,7 @@
-/* ============================================
-   假資料 — 模擬後端四支 API
-   USE_MOCK = true 時，passenger.js / driver.js 會呼叫這裡而不是真的打網路
-   後端串好後，把 common.js 裡的 USE_MOCK 改成 false 即可，
-   邏輯完全不用改，因為回傳格式已對齊真實 API 合約
-   ============================================ */
+
 
 const MockAPI = {
-  // 模擬 GET /api/profile
+  
   async getProfile(userId) {
     await delay(300);
     const local = getProfileLocal();
@@ -16,15 +11,15 @@ const MockAPI = {
     return { exists: false };
   },
 
-  // 模擬 POST /api/profile
+  
   async saveProfile(profile) {
     await delay(300);
     saveProfileLocal(profile);
     return { status: "success" };
   },
 
-  // 模擬 POST /api/analyze
-  // 前幾次呼叫故意回 not_found，模擬「持續掃描中」，第3次才成功
+  
+  
   _analyzeAttempts: 0,
   async analyze(userId, imageBlob, lat, lng) {
     await delay(700);
@@ -49,7 +44,7 @@ const MockAPI = {
     };
   },
 
-  // 模擬 POST /api/voice_route
+  
   async voiceRoute(payload) {
     await delay(400);
     const text = payload.text || "";
@@ -60,14 +55,14 @@ const MockAPI = {
     return { status: "no_route", message: "沒有聽到路線號碼，請說出例如「307」。" };
   },
 
-  // 模擬 POST /api/notify_driver
+  
   async notifyDriver(payload) {
     await delay(400);
     return { status: "success", alert_id: "alert_" + Date.now() };
   },
 
-  // 模擬 GET /api/driver_alerts?route=X
-  // 呼叫第2次以後才「生出」一筆新警示，模擬輪詢過程中收到新資料
+  
+  
   _alertPollCount: 0,
   _mockAlerts: [],
   async getDriverAlerts(route) {

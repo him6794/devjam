@@ -1,24 +1,24 @@
 :root {
-  /* 色彩系統 */
-  --color-bg: #F7F5F0;            /* 溫暖淺灰白，不用純白避免反光刺眼 */
-  --color-surface: #FFFFFF;        /* 卡片底色 */
-  --color-surface-muted: #ECE9E2;  /* 次要卡片底色 */
-  --color-text: #14181F;           /* 主文字，接近黑但非純黑 */
-  --color-text-muted: #5B6270;     /* 次要文字 */
-  --color-border: #D8D4CA;         /* 一般邊框 */
+  
+  --color-bg: #F7F5F0;            
+  --color-surface: #FFFFFF;        
+  --color-surface-muted: #ECE9E2;  
+  --color-text: #14181F;           
+  --color-text-muted: #5B6270;     
+  --color-border: #D8D4CA;         
 
-  --color-primary: #C8850C;        /* 主色：琥珀，用於強調/CTA */
-  --color-primary-text: #14181F;   /* 主色按鈕上的文字 */
-  --color-secondary: #1D5FB8;      /* 次要色：藍，用於次要動作 */
-  --color-danger: #C62828;         /* 錯誤/緊急 */
-  --color-success: #1E8E3E;        /* 成功/已確認 */
+  --color-primary: #C8850C;        
+  --color-primary-text: #14181F;   
+  --color-secondary: #1D5FB8;      
+  --color-danger: #C62828;         
+  --color-success: #1E8E3E;        
 
   --safe-zone-bg: rgba(200, 133, 12, 0.12);
   --safe-zone-border: #C8850C;
 
-  /* 字體系統 */
+  
   --font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "PingFang TC", sans-serif;
-  --font-scale: 1; /* 由使用者校準結果動態覆寫 */
+  --font-scale: 1; 
 
   --font-xl: calc(2rem * var(--font-scale));
   --font-lg: calc(1.5rem * var(--font-scale));
@@ -26,7 +26,7 @@
   --font-sm: calc(0.875rem * var(--font-scale));
   --font-xs: calc(0.75rem * var(--font-scale));
 
-  /* 間距系統 */
+  
   --space-1: 8px;
   --space-2: 16px;
   --space-3: 24px;
@@ -77,10 +77,7 @@ a:focus-visible,
   }
 }
 
-/* ============ 單一流程容器 ============
-   核心規則：同一時間只顯示一個 .screen，
-   絕不做 grid 並列多個功能區塊（dashboard 樣式）
-================================================ */
+
 
 .screen {
   flex: 1;
@@ -113,7 +110,7 @@ a:focus-visible,
   padding: var(--space-1);
 }
 
-/* ============ 標題 / 文字 ============ */
+
 
 .title-xl {
   font-size: var(--font-xl);
@@ -144,7 +141,7 @@ a:focus-visible,
   margin: 0 0 var(--space-3);
 }
 
-/* ============ 進度指示點 ============ */
+
 
 .progress-dots {
   display: flex;
@@ -166,7 +163,7 @@ a:focus-visible,
   background: var(--color-primary);
 }
 
-/* ============ 選擇卡片(校準 Step1) ============ */
+
 
 .choice-card {
   display: flex;
@@ -215,7 +212,7 @@ a:focus-visible,
   background: var(--safe-zone-bg);
 }
 
-/* ============ 校準畫布(Step2) ============ */
+
 
 .calib-canvas-wrap {
   position: relative;
@@ -235,8 +232,7 @@ a:focus-visible,
   border-radius: 50%;
   transform: translate(-50%, -50%);
   display: none;
-  /* 塗色：圈內保持明亮（看得清楚），圈外整片遮暗（看不清楚）。
-     box-shadow 只影響繪圖不影響點擊，且被 canvas 的 overflow:hidden 裁切。 */
+  
   background: rgba(200, 133, 12, 0.35);
   box-shadow: 0 0 0 100vmax rgba(20, 24, 31, 0.5);
 }
@@ -245,7 +241,7 @@ a:focus-visible,
   display: block;
 }
 
-/* ============ 字級預覽 + 滑桿 (Step3) ============ */
+
 
 .preview-card {
   background: var(--color-surface);
@@ -327,7 +323,7 @@ input[type="range"] {
   transform: translateX(22px);
 }
 
-/* ============ 按鈕 ============ */
+
 
 .btn {
   display: flex;
@@ -371,7 +367,7 @@ input[type="range"] {
   padding-top: var(--space-3);
 }
 
-/* ============ 校準 Step 2.5：實際視野預覽確認 ============ */
+
 
 .calib-preview-wrap {
   position: relative;
@@ -398,7 +394,7 @@ input[type="range"] {
   transition: background 0.05s linear;
 }
 
-/* ============ 拍照頁 ============ */
+
 
 .camera-wrap {
   position: relative;
@@ -556,12 +552,10 @@ input[type="range"] {
   50% { box-shadow: 0 0 0 18px var(--safe-zone-bg); }
 }
 
-/* ============ 結果頁 — 安全視野窗（產品簽名元素） ============ */
+
 
 .safe-zone-window {
-  /* 資訊顯示在校準時設定的視野範圍內：position: fixed + viewport 百分比，
-     與校準畫面用同一套座標（見 passenger.js applySafeZoneWindow）。
-     JS 設定 left/top/寬高，這裡負責外觀（圓形、塗色、依範圍縮放字級）。 */
+  
   position: fixed;
   transform: translate(-50%, -50%);
   border: 2px solid var(--safe-zone-border);
@@ -573,9 +567,9 @@ input[type="range"] {
   align-items: center;
   justify-content: center;
   text-align: center;
-  overflow: visible; /* 展開的班車清單要垂出圓形下方，不能裁掉 */
+  overflow: visible; 
   z-index: 5;
-  /* 塗色：圈外微暗，圈內是唯一明亮區域＝使用者看得清楚的地方 */
+  
   box-shadow: 0 0 0 100vmax rgba(20, 24, 31, 0.3);
 }
 
@@ -616,7 +610,7 @@ input[type="range"] {
   min-height: var(--touch-min);
 }
 
-/* 切換鈕與清單都收在視野窗內：文字資訊全部落在標記的區域 */
+
 .safe-zone-window .other-buses-toggle {
   width: auto;
   font-size: calc(var(--font-sm) * var(--zone-scale, 1));
@@ -678,7 +672,7 @@ input[type="range"] {
   flex: 1;
 }
 
-/* ============ 狀態訊息 ============ */
+
 
 .status-msg {
   text-align: center;
@@ -692,9 +686,7 @@ input[type="range"] {
   font-weight: 600;
 }
 
-/* ============================================
-   司機端 — 使用情境不同：一般視力、快速一瞥
-   ============================================ */
+
 
 .driver-screen {
   max-width: 560px;
@@ -736,7 +728,7 @@ input[type="range"] {
   padding: 0 var(--space-3);
 }
 
-/* 乘客端路線設定（語音/文字輸入想要搭的路線） */
+
 .route-setup {
   margin: var(--space-2) 0;
   display: flex;
@@ -882,7 +874,7 @@ input[type="range"] {
   100% { background: var(--color-surface); }
 }
 
-/* ===== Live Guide 狀態面板 ===== */
+
 .live-guide-panel {
   position: fixed;
   top: var(--space-1);

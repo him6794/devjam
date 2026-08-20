@@ -1,14 +1,10 @@
-/* ============================================
-   共用工具函式 — 乘客端/司機端都會用到
-   ============================================ */
 
-// 是否使用假資料開發（後端已串好，走同源 /api/*）
+
+
 const USE_MOCK = false;
-const API_BASE = ""; // 例如 "https://your-backend.a.run.app"，Flask同源部署可留空
+const API_BASE = ""; 
 
-/**
- * 取得裝置專屬使用者 ID，第一次進站自動產生並存起來
- */
+
 function getUserId() {
   let id = localStorage.getItem("user_id");
   if (!id) {
@@ -27,16 +23,12 @@ function getProfileLocal() {
   return raw ? JSON.parse(raw) : null;
 }
 
-/**
- * 把 font_scale 套用到全域 CSS 變數，所有字級會連動放大
- */
+
 function applyFontScale(scale) {
   document.documentElement.style.setProperty("--font-scale", scale);
 }
 
-/**
- * 統一的 fetch 包裝，之後接真實後端只要把 USE_MOCK 關掉
- */
+
 async function apiFetch(path, options = {}) {
   const res = await fetch(API_BASE + path, options);
   if (!res.ok) {

@@ -39,7 +39,7 @@ echo "============================================================"
 echo "全功能測試 (api.md § 1-4)"
 echo "============================================================"
 
-# 1. /api/analyze - 有效座標
+
 echo ""
 echo "[1] /api/analyze - 有效座標(台北市)"
 RESP=$(curl -s -X POST "$BASE/api/analyze" \
@@ -54,7 +54,7 @@ else
   echo "  回應: $RESP"
 fi
 
-# 2. /api/analyze - 無效座標(far away)
+
 echo ""
 echo "[2] /api/analyze - 偏遠座標"
 RESP=$(curl -s -X POST "$BASE/api/analyze" \
@@ -67,7 +67,7 @@ else
   fail "分析 - 預期 not_found"
 fi
 
-# 3. /api/analyze - 缺 location
+
 echo ""
 echo "[3] /api/analyze - 缺 location"
 HTTP=$(curl -s -w "%{http_code}" -o /dev/null -X POST "$BASE/api/analyze" \
@@ -79,7 +79,7 @@ else
   fail "分析 - 預期 400，得 $HTTP"
 fi
 
-# 4. /api/profile GET (新用戶)
+
 echo ""
 echo "[4] /api/profile - GET (未設定)"
 USER_ID="testuser_$(date +%s)"
@@ -91,7 +91,7 @@ else
   fail "個人偏好 GET - 預期 exists=false"
 fi
 
-# 5. /api/profile POST
+
 echo ""
 echo "[5] /api/profile - POST"
 RESP=$(curl -s -X POST "$BASE/api/profile" \
@@ -111,7 +111,7 @@ else
   fail "個人偏好 POST"
 fi
 
-# 6. /api/profile GET again
+
 echo ""
 echo "[6] /api/profile - GET (驗證已存)"
 RESP=$(curl -s -X GET "$BASE/api/profile" -H "X-User-Id: $USER_ID")
@@ -123,7 +123,7 @@ else
   fail "個人偏好 GET - 預期 exists=true font=1.8"
 fi
 
-# 7. /api/analyze 搭配個人偏好
+
 echo ""
 echo "[7] /api/analyze - 搭配個人偏好"
 RESP=$(curl -s -X POST "$BASE/api/analyze" \
@@ -138,7 +138,7 @@ else
   fail "分析 + 個人偏好 - safe_zone=$SAFE_ZONE(預期 top) font=$FONT(預期 1.8)"
 fi
 
-# 8. /api/notify_driver
+
 echo ""
 echo "[8] /api/notify_driver - 建立告警"
 HTTP=$(curl -s -w "%{http_code}" -o /dev/null -X POST "$BASE/api/notify_driver" \
@@ -150,7 +150,7 @@ else
   fail "通知司機 - 預期 200，得 $HTTP"
 fi
 
-# 9. /api/driver_alerts
+
 echo ""
 echo "[9] /api/driver_alerts - 查詢路線告警"
 RESP=$(curl -s -X GET "$BASE/api/driver_alerts?route=307")
@@ -161,7 +161,7 @@ else
   fail "司機告警查詢 - 預期至少 1 筆"
 fi
 
-# 10. /api/skills
+
 echo ""
 echo "[10] /api/skills"
 RESP=$(curl -s -X GET "$BASE/api/skills")
@@ -173,7 +173,7 @@ else
   fail "列舉 skill - 預期至少 1 筆"
 fi
 
-# 11. /healthz
+
 echo ""
 echo "[11] /healthz"
 HTTP=$(curl -s -w "%{http_code}" -o /dev/null -X GET "$BASE/healthz")

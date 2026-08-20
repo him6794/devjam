@@ -3,12 +3,12 @@ const { test, expect } = require("@playwright/test");
 
 const testImage = path.join(__dirname, "..", "test-assets", "bus-stop-test.png");
 
-// init() in passenger.js asynchronously fetches /api/profile on load and,
-// for a fresh test user (no saved profile), calls showScreen("screen-calib-1")
-// once that resolves. Forcing showScreen("screen-camera") before that
-// response lands races init()'s own call — whichever fires last wins, which
-// intermittently flips the screen back and hides the manual-upload controls
-// mid-test. Waiting for the response first makes the sequencing deterministic.
+
+
+
+
+
+
 async function gotoCameraScreen(page) {
   const profileResponse = page.waitForResponse((res) => res.url().endsWith("/api/profile"));
   await page.goto("http://localhost:8080/passenger");
@@ -68,8 +68,8 @@ test("manual upload keeps the GPS error path when test location is disabled", as
   await page.locator("#manual-test-location").uncheck();
   await page.locator("#manual-photo-input").setInputFiles(testImage);
 
-  // 接上 GCP 憑證後 analyze 會多一個 Gemini Vision 呼叫（與 geo 平行），
-  // 回應可能落在 5-8 秒，所以這裡與下面的 expect 都用 15 秒上限
+  
+  
   await expect(page.locator("#manual-upload-status")).toHaveText("無法取得定位，請允許位置權限後再試。", { timeout: 15000 });
   expect(await page.locator("#screen-result").getAttribute("class")).not.toContain("active");
   expect(await page.evaluate(() => window.__geoCalls)).toBe(1);

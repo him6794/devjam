@@ -25,9 +25,9 @@ type StopETAOut struct {
 	Buses      []BusETA `json:"buses"`
 }
 
-// StopETA fetches every route's live ETA at one station and enriches each
-// row with the rider-facing route code and destination label that
-// pda5284's live feed itself never includes (see stopindex.Stop).
+
+
+
 type StopETA struct {
 	pda   *pda.Client
 	index *stopindex.Index
@@ -64,7 +64,7 @@ func (s *StopETA) Do(ctx context.Context, in StopETAIn) (StopETAOut, error) {
 		}
 		bus := BusETA{Route: route, Direction: direction, HasETA: row.HasETA}
 		if row.HasETA {
-			bus.ETAMinutes = (row.ETASeconds + 59) / 60 // ceiling: 45s left should still read as "1 min", not "0"
+			bus.ETAMinutes = (row.ETASeconds + 59) / 60 
 		}
 		out.Buses = append(out.Buses, bus)
 	}

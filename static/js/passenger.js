@@ -1,10 +1,8 @@
-/* ============================================
-   乘客端主邏輯
-   ============================================ */
+
 
 const state = {
   impairmentType: null,
-  safeZone: { x: 50, y: 50, radiusPercent: 30 }, // x/y是畫面百分比位置，radiusPercent是佔畫面短邊的百分比
+  safeZone: { x: 50, y: 50, radiusPercent: 30 }, 
   fontScale: 1,
   voiceEnabled: true,
   currentBuses: [],
@@ -12,7 +10,7 @@ const state = {
   currentVoiceAudioUrl: "",
   currentRoute: null,
   currentStationName: "",
-  wantedRoute: "", // 使用者說出/輸入想搭的路線（api.md §5），空字串表示未設定
+  wantedRoute: "", 
 };
 
 let scanning = false;
@@ -26,24 +24,24 @@ let routeRecorder = null;
 let routeRecorderTimer = null;
 const MAX_ROUTE_RECORD_SECONDS = 4;
 
-// ===== Live Guide（Gemini Live 即時視覺協助）=====
-// 相機一開就跟著連線、持續送畫面；模型自己看畫面判斷有沒有危險／公車進站／
-// 車門位置需要提醒，多數畫面不會有回覆——這不是「等別的邏輯先判斷完才通知
-// Live API」，是 Live API 自己在看。連線跟相機同壽命：相機關閉/離開頁面時
-// 一起關掉，不留著背景連線耗費資源或觸發使用者沒預期的語音。
+
+
+
+
+
 let liveGuideSocket = null;
 let liveGuideTimer = null;
 let liveGuideGpsTimer = null;
 let liveGuideReconnectTimer = null;
-let liveGuideReconnectDelay = 1000; // exponential backoff: 1s → 2s → 4s → 8s (cap)
-// 每秒一幀：對環境變化（公車進站、車門開啟）的反應比 2 秒快一倍
+let liveGuideReconnectDelay = 1000; 
+
 const LIVE_GUIDE_FRAME_INTERVAL_MS = 1000;
 const LIVE_GUIDE_GPS_INTERVAL_MS = 10000;
 const LIVE_GUIDE_MAX_RECONNECT_DELAY = 8000;
 
-// ===== Live Guide 狀態追蹤（給面板用）=====
+
 const lgStats = {
-  state: "idle",       // idle | connecting | connected | reconnecting | disconnected
+  state: "idle",       
   frames: 0,
   replies: 0,
   reconnects: 0,
@@ -57,16 +55,16 @@ function updateLiveGuidePanel() {
   const elReplies = document.getElementById("lg-replies");
   const elLast = document.getElementById("lg-last-reply");
   const elReconnects = document.getElementById("lg-reconnects");
-  if (!dot) return; // 面板 DOM 還沒載入
+  if (!dot) return; 
 
   dot.setAttribute("data-state", lgStats.state);
 
   const stateLabels = {
     idle: "未啟動",
-    connecting: "🟡 連線中…",
-    connected: "🟢 已連線",
-    reconnecting: "🟠 重連中…",
-    disconnected: "🔴 已斷線",
+    connecting: "連線中…",
+    connected: "已連線",
+    reconnecting: "重連中…",
+    disconnected: "已斷線",
   };
   if (elStatus) elStatus.textContent = stateLabels[lgStats.state] || lgStats.state;
   if (elFrames) elFrames.textContent = lgStats.frames;
@@ -75,7 +73,7 @@ function updateLiveGuidePanel() {
   if (elReconnects) elReconnects.textContent = lgStats.reconnects;
 }
 
-// 面板展開/收合
+
 document.addEventListener("DOMContentLoaded", () => {
   const toggle = document.getElementById("live-guide-toggle");
   const panel = document.getElementById("live-guide-panel");
@@ -88,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function startLiveGuide() {
-  if (liveGuideSocket) return; // 已經連著了
+  if (liveGuideSocket) return; 
   clearTimeout(liveGuideReconnectTimer);
   liveGuideReconnectTimer = null;
 
@@ -100,7 +98,7 @@ function startLiveGuide() {
   liveGuideSocket.binaryType = "arraybuffer";
 
   liveGuideSocket.addEventListener("open", () => {
-    liveGuideReconnectDelay = 1000; // 連上後重設 backoff
+    liveGuideReconnectDelay = 1000; 
     lgStats.state = "connected";
     updateLiveGuidePanel();
     liveGuideTimer = setInterval(sendLiveGuideFrame, LIVE_GUIDE_FRAME_INTERVAL_MS);
@@ -110,14 +108,14 @@ function startLiveGuide() {
   });
 
   liveGuideSocket.addEventListener("message", (event) => {
-    // 伺服器只在模型判斷「這個畫面需要提醒」時才會送訊息——多數畫面完全
-    // 不會收到任何 message，這正是模型自己判斷、而非被動等通知的結果。
-    // 模型回覆是純文字，由裝置自己的 TTS 唸出（視障使用者已設好的語速與語音）。
+    
+    
+    
     let text = typeof event.data === "string" ? event.data : "";
     if (text) {
       if (text.includes("[FIND_STATION]")) {
         text = text.replace(/\[FIND_STATION\]/g, "").trim();
-        // 模型現在應改用 station_status 工具查詢；保留這個觸發當後備
+        
         if (!scanning) startScanning();
       }
       if (text) {
@@ -133,23 +131,23 @@ function startLiveGuide() {
   liveGuideSocket.addEventListener("error", () => stopLiveGuide(true));
 }
 
-// ===== Live Guide GPS 推送 =====
-// station_status 工具需要位置：前端定期把 GPS 送給後端存著，模型呼叫工具時
-// 後端自動代入，模型永遠不需要知道經緯度數字。
+
+
+
 async function sendLiveGuideGps() {
   if (!liveGuideSocket || liveGuideSocket.readyState !== WebSocket.OPEN) return;
   const pos = await getGpsSafe();
   if (!pos) return;
   const json = new TextEncoder().encode(JSON.stringify({ lat: pos.lat, lng: pos.lng }));
   const payload = new Uint8Array(1 + json.length);
-  payload[0] = 0x02; // GPS marker
+  payload[0] = 0x02; 
   payload.set(json, 1);
   liveGuideSocket.send(payload.buffer);
 }
 
-// shouldReconnect: true 表示非使用者主動關閉（連線斷掉、伺服器錯誤），
-// 只要相機還開著就應該自動重連；false 表示使用者主動離開（重新校準、
-// 離開頁面），不應重連。
+
+
+
 function stopLiveGuide(shouldReconnect) {
   clearInterval(liveGuideTimer);
   liveGuideTimer = null;
@@ -157,12 +155,12 @@ function stopLiveGuide(shouldReconnect) {
   liveGuideGpsTimer = null;
   if (liveGuideSocket) {
     const socket = liveGuideSocket;
-    liveGuideSocket = null; // 先清空，避免 close 事件的 stopLiveGuide 重入
+    liveGuideSocket = null; 
     socket.close();
   }
   if (shouldReconnect && mediaStream) {
-    // 相機還開著，代表使用者還在用——自動重連，exponential backoff 避免
-    // 伺服器持續拒絕時打滿連線。
+    
+    
     lgStats.state = "reconnecting";
     lgStats.reconnects++;
     updateLiveGuidePanel();
@@ -201,7 +199,7 @@ function sendLiveGuideFrame() {
       if (blob && liveGuideSocket && liveGuideSocket.readyState === WebSocket.OPEN) {
         blob.arrayBuffer().then((buf) => {
           const payload = new Uint8Array(1 + buf.byteLength);
-          payload[0] = 0x00; // Video marker
+          payload[0] = 0x00; 
           payload.set(new Uint8Array(buf), 1);
           liveGuideSocket.send(payload.buffer);
           lgStats.frames++;
@@ -214,7 +212,7 @@ function sendLiveGuideFrame() {
   );
 }
 
-// ===== Live Guide 語音輸入 =====
+
 let liveGuideAudioContext = null;
 let liveGuideAudioProcessor = null;
 let liveGuideMicStream = null;
@@ -235,7 +233,7 @@ async function startLiveGuideMic() {
         pcm16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
       }
       const payload = new Uint8Array(1 + pcm16.byteLength);
-      payload[0] = 0x01; // Audio marker
+      payload[0] = 0x01; 
       payload.set(new Uint8Array(pcm16.buffer), 1);
       liveGuideSocket.send(payload.buffer);
     };
@@ -261,8 +259,8 @@ function stopLiveGuideMic() {
   }
 }
 
-// 危險提醒優先權最高：直接打斷正在播放的路線複誦，因為「右前方有落差」
-// 比任何一句公車資訊都更急迫。
+
+
 function speakLiveGuideAlert(text) {
   if (!("speechSynthesis" in window)) return;
   window.speechSynthesis.cancel();
@@ -271,7 +269,7 @@ function speakLiveGuideAlert(text) {
   window.speechSynthesis.speak(utter);
 }
 
-// 校準 Step 2.5 的相機預覽串流（獨立於主相機）
+
 let previewStream = null;
 
 document.addEventListener("DOMContentLoaded", init);
@@ -293,8 +291,8 @@ async function init() {
 
   if (profileRes.exists) {
     state.impairmentType = profileRes.impairment_type;
-    // 後端存的是 {x, y, radius}（radius = 佔畫面短邊百分比），前端
-    // 內部用 radiusPercent 命名，讀回時做對映
+    
+    
     const z = profileRes.safe_zone;
     if (z) {
       state.safeZone = { x: z.x ?? 50, y: z.y ?? 50, radiusPercent: z.radius ?? 30 };
@@ -309,7 +307,7 @@ async function init() {
   }
 }
 
-/* ---------------- 校準 Step 1：選視野狀況 ---------------- */
+
 
 function bindOnboardingEvents() {
   qsa(".choice-card[data-impairment]").forEach((card) => {
@@ -355,7 +353,7 @@ function bindOnboardingEvents() {
   qs("#btn-step3-finish").addEventListener("click", finishCalibration);
 }
 
-/* ---------------- 校準 Step 2：標記安全視野區 ---------------- */
+
 
 function setupCalibCanvas() {
   const canvas = qs("#calib-canvas");
@@ -369,13 +367,13 @@ function setupCalibCanvas() {
     marker.style.height = radiusPx * 2 + "px";
   }
 
-  // 存的是「視窗(viewport)百分比」而不是 canvas 百分比：結果頁的
-  // 資訊窗用 position:fixed 直接對齊同一套座標，標記在哪、資訊就
-  // 出現在哪（之前用 canvas 百分比，兩邊基準不同所以會跑掉）。
+  
+  
+  
   function setMarkerPosition(xPercent, yPercent) {
     state.safeZone.x = xPercent;
     state.safeZone.y = yPercent;
-    // marker 留在 canvas 內跟手指同點：viewport 座標換算回 canvas px
+    
     const rect = canvas.getBoundingClientRect();
     marker.style.left = (xPercent / 100) * window.innerWidth - rect.left + "px";
     marker.style.top = (yPercent / 100) * window.innerHeight - rect.top + "px";
@@ -399,7 +397,7 @@ function setupCalibCanvas() {
   updateMarkerSize();
 }
 
-/* ---------------- 校準 Step 2.5：實際視野預覽確認 ---------------- */
+
 
 async function setupCalibPreview() {
   const video = qs("#preview-video");
@@ -420,7 +418,7 @@ async function setupCalibPreview() {
     }
   }
 
-  // 等畫面版面穩定後再量測容器尺寸，遮罩大小才會準
+  
   requestAnimationFrame(renderPreviewMask);
 }
 
@@ -448,14 +446,14 @@ window.addEventListener("resize", () => {
   }
 });
 
-/* ---------------- 校準 Step 3：字級 + 語音開關 ---------------- */
+
 
 async function finishCalibration() {
   const profile = {
     user_id: getUserId(),
     impairment_type: state.impairmentType,
-    // 後端 SafeZone 的欄位是 radius（佔畫面短邊百分比），前端內部
-    // 用 radiusPercent 命名，送出時轉成後端形狀
+    
+    
     safe_zone: {
       x: state.safeZone.x,
       y: state.safeZone.y,
@@ -480,10 +478,10 @@ async function finishCalibration() {
   startCamera();
 }
 
-/* ---------------- 拍照 / 掃描頁 ---------------- */
+
 
 async function startCamera() {
-  if (mediaStream) return; // 已經開過了，不要重複要求權限
+  if (mediaStream) return; 
   const video = qs("#camera-video");
   try {
     mediaStream = await navigator.mediaDevices.getUserMedia({
@@ -520,14 +518,14 @@ function bindResultEvents() {
     showScreen("screen-camera");
     qs("#camera-status").textContent = "";
     qs("#camera-status").classList.remove("error");
-    // 回到相機畫面時，如果 Live Guide 已斷線，重新連上
+    
     startLiveGuide();
   });
 }
 
-// ===== 路線選擇（Journey Agent v1，api.md §5）=====
-// 語音（MediaRecorder 錄音 → /api/voice_route）或文字輸入，
-// 成功後存進 state.wantedRoute，之後每次 /api/analyze 都帶上。
+
+
+
 function bindRouteSetup() {
   qs("#btn-record-route").addEventListener("click", toggleRouteRecording);
 
@@ -548,8 +546,8 @@ function bindRouteSetup() {
 async function toggleRouteRecording() {
   const btn = qs("#btn-record-route");
   if (routeRecorder && routeRecorder.state === "recording") {
-    // 第二次點擊＝結束錄音；auto-stop 逾時也會走同一條 onstop 路徑
-    btn.textContent = "🎤 辨識中...";
+    
+    btn.textContent = "辨識中...";
     btn.disabled = true;
     routeRecorder.stop();
     return;
@@ -578,10 +576,10 @@ async function toggleRouteRecording() {
   };
 
   routeRecorder.start();
-  btn.textContent = "🎤 錄音中，再按一次結束";
+  btn.textContent = "錄音中，再按一次結束";
   btn.classList.add("recording");
-  // 提示說完整句子：單唸數字（「307」）是語音辨識最難的場景，
-  // 「我要搭307路」有上下文，準確率高很多
+  
+  
   setRouteStatus("請說完整句子，例如「我要搭307路」", "");
   routeRecorderTimer = setTimeout(() => {
     if (routeRecorder && routeRecorder.state === "recording") routeRecorder.stop();
@@ -607,7 +605,7 @@ async function submitVoiceRoute(payload) {
     setRouteStatus(res.message || "聽不清楚，請再說一次，或改用文字輸入。", "error");
     speakRoutePrompt("沒有聽到路線號碼，請再說一次，或使用下方輸入框輸入");
   } catch {
-    // 503 stt_unavailable / stt_failed 等：提示改走文字輸入
+    
     resetRecordButton();
     setRouteStatus("語音辨識失敗，請改用下方文字輸入路線號碼。", "error");
     qs("#route-input").focus();
@@ -616,7 +614,7 @@ async function submitVoiceRoute(payload) {
 
 function resetRecordButton() {
   const btn = qs("#btn-record-route");
-  btn.textContent = "🎤 說出想搭的路線";
+  btn.textContent = "說出想搭的路線";
   btn.disabled = false;
   btn.classList.remove("recording");
 }
@@ -661,7 +659,7 @@ async function startScanning() {
   qs("#camera-status").textContent = "辨識中...";
   qs("#camera-status").classList.remove("error");
   scanTimer = setInterval(captureAndSend, SCAN_INTERVAL_MS);
-  captureAndSend(); // 立刻打第一次，不等第一個 interval
+  captureAndSend(); 
 }
 
 function stopScanning() {
@@ -721,10 +719,10 @@ async function captureAndSend() {
     qs("#camera-status").textContent = "找不到站牌，請調整角度或靠近一點";
     qs("#camera-status").classList.add("error");
   }
-  // 否則（not_found 且未達上限）什麼都不做，等下一輪 interval 繼續掃
+  
 }
 
-/* ---------------- 結果頁渲染 ---------------- */
+
 
 function renderResult(data) {
   if (!data || !data.buses || data.buses.length === 0) {
@@ -751,7 +749,7 @@ function renderResult(data) {
   qs("#result-eta").textContent = `${eta} 分鐘`;
   qs("#result-direction").textContent = main.direction || "";
 
-  // 想要的路線：有就醒目標記；說了但這站沒有，更要大聲講
+  
   const wantedTag = qs("#result-wanted");
   if (main.is_wanted) {
     wantedTag.textContent = "✓ 你要搭的路線";
@@ -800,7 +798,7 @@ function renderResult(data) {
   }
 
   const notifyBtn = qs("#btn-notify-driver");
-  notifyBtn.textContent = "📢 通知司機";
+  notifyBtn.textContent = "通知司機";
   notifyBtn.classList.remove("done");
   notifyBtn.disabled = false;
 
@@ -809,20 +807,20 @@ function renderResult(data) {
   }
 }
 
-// 把結果資訊窗放到校準時標記的「看得最清楚的地方」：x/y 是 viewport
-// 百分比，radiusPercent 是佔畫面短邊的百分比（與校準滑桿同源，
-// 見 setupCalibCanvas）。資訊窗用 position:fixed，所以 % 直接對齊
-// viewport，標記在哪就出現在哪；視窗大小跟著範圍走、字級依範圍
-// 縮放（--zone-scale，以 30% 為基準）。
+
+
+
+
+
 function applySafeZoneWindow(el, zone) {
   const pct = clampNum(zone?.radiusPercent ?? zone?.radius ?? 30, 15, 60);
   const x = clampNum(zone?.x ?? 50, 0, 100);
   const y = clampNum(zone?.y ?? 50, 0, 100);
   const radiusPx = (pct / 100) * Math.min(window.innerWidth, window.innerHeight);
-  const half = radiusPx; // 視窗 = 2 × 半徑
+  const half = radiusPx; 
 
   el.style.width = el.style.height = `${radiusPx * 2}px`;
-  // fixed 元素的 % 以 viewport 為基準；clamp() 讓視窗就算在邊緣也不會跑出螢幕
+  
   el.style.left = `clamp(${half}px, ${x}%, calc(100% - ${half}px))`;
   el.style.top = `clamp(${half}px, ${y}%, calc(100% - ${half}px))`;
   el.style.setProperty("--zone-scale", clampNum(pct / 30, 0.35, 2.5));
@@ -832,10 +830,10 @@ function clampNum(v, min, max) {
   return Math.min(Math.max(v, min), max);
 }
 
-// Device TTS is the primary path so the rider hears bus updates at their
-// own already-configured screen-reader rate/voice, per plan.md §9 — a
-// fixed-rate server audio clip would override that. The Cloud TTS file is
-// only a fallback for browsers without speechSynthesis support.
+
+
+
+
 function playVoiceSummary() {
   if ("speechSynthesis" in window && state.currentVoiceSummary) {
     window.speechSynthesis.cancel();

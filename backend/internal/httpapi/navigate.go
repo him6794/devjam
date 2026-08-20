@@ -8,9 +8,9 @@ import (
 	"devjam-backend/internal/skill"
 )
 
-// NavigateHandler exposes the navigate skill (api.md §6): given the
-// rider's GPS and a spoken/typed destination, it returns a step-by-step
-// boarding plan.
+
+
+
 type NavigateHandler struct {
 	navigate *skill.Navigate
 }

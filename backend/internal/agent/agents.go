@@ -9,13 +9,13 @@ import (
 
 const defaultSearchRadiusM = 150
 
-// GeoAgent turns a raw GPS fix into every known station within radius. It
-// is pure, in-memory computation (via the nearest_stops skill), so it
-// costs nothing to run on every request. It deliberately does not pick a
-// single "the" station — see Blackboard.Candidates — because with an
-// opposite-direction stop pair, distance alone can't tell them apart;
-// that needs VisionAgent's output too, and the two must stay independent
-// to run in the same wave.
+
+
+
+
+
+
+
 type GeoAgent struct {
 	nearestStops *skill.NearestStops
 }
@@ -39,12 +39,12 @@ func (a *GeoAgent) Run(ctx context.Context, bb Blackboard) Contribution {
 	}
 }
 
-// VisionAgent reads a bus-stop sign photo, when one was submitted, via
-// Gemini. Its output is only ever used to pick among GeoAgent's
-// candidates (see httpapi.pickStation) — it never introduces a station
-// GeoAgent didn't already find within radius, so a misread photo can
-// change *which* nearby stop gets picked but can't make the system report
-// a stop that isn't actually there.
+
+
+
+
+
+
 type VisionAgent struct {
 	visionSign *skill.VisionReadSign
 }
@@ -71,10 +71,10 @@ func (a *VisionAgent) Run(ctx context.Context, bb Blackboard) Contribution {
 	}
 }
 
-// ProfileAgent loads the caller's accessibility preferences. It runs
-// concurrently with GeoAgent: the two are fully independent (one reads the
-// profile store, the other does GPS math), so there is no reason to make
-// the request wait on them sequentially.
+
+
+
+
 type ProfileAgent struct {
 	store  *profile.Store
 	userID string
@@ -105,9 +105,9 @@ func (a *ProfileAgent) Run(ctx context.Context, bb Blackboard) Contribution {
 	}
 }
 
-// TransitAgent fetches live ETAs for the station Geo locked onto. It only
-// does anything once NearestFound is true, so it belongs in the wave
-// after Geo, not alongside it.
+
+
+
 type TransitAgent struct {
 	stopETA *skill.StopETA
 }

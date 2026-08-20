@@ -10,10 +10,10 @@ services:
       GCP_PROJECT: ${GCP_PROJECT:-devjam26aug17tpe-1280}
       GCP_LOCATION: ${GCP_LOCATION:-us-central1}
       TTS_BUCKET: ${TTS_BUCKET:-devjam26aug17tpe-1280-tts-audio}
-    # GCP 憑證怎麼掛（本機用哪個使用者的 ADC、正式站用哪把 key）因環境而
-    # 異，交給各自的 docker-compose.override.yml 處理，這份共用檔案不綁
-    # 死任何一邊（先前 Windows 專屬的 ${USERPROFILE} 寫死在這裡，導致部署
-    # 到 Linux 主機時路徑直接解析失敗）。
+    
+    
+    
+    
     expose:
       - "8080"
     ports:

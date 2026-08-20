@@ -12,43 +12,43 @@ import (
 	"devjam-backend/internal/stopindex"
 )
 
-// navigateSearchRadiusM matches agent.defaultSearchRadiusM (kept as its own
-// constant rather than importing internal/agent, which would create a
-// skill→agent import cycle since agent already imports skill).
+
+
+
 const navigateSearchRadiusM = 150
 
 type NavigateIn struct {
-	// OriginLat/OriginLon is the rider's current GPS fix.
+	
 	OriginLat float64 `json:"origin_lat"`
 	OriginLon float64 `json:"origin_lon"`
-	// Destination is free-text, spoken or typed ("台北車站", "去公館").
+	
 	Destination string `json:"destination"`
 }
 
-// NavigateStep is one instruction in the ordered walk from the rider's
-// current position to their destination.
+
+
 type NavigateStep struct {
-	Kind string `json:"kind"` // "walk" | "board" | "ride" | "alight" | "walk_final"
-	Text string `json:"text"` // rider-facing Traditional Chinese instruction
+	Kind string `json:"kind"` 
+	Text string `json:"text"` 
 }
 
 type NavigateOut struct {
 	Found bool `json:"found"`
-	// OriginStationName/DestinationStationName are the resolved station
-	// names the plan starts/ends at — surfaced so a caller (or the rider,
-	// via voice_summary) can confirm Gemini/geocoding resolved the right
-	// place before committing to the walk.
+	
+	
+	
+	
 	OriginStationName      string         `json:"origin_station_name"`
 	DestinationStationName string         `json:"destination_station_name"`
-	Route                  string         `json:"route,omitempty"`     // set when a single direct route connects them
-	Direction               string        `json:"direction,omitempty"` // that route's destination label, for matching against wanted_route
+	Route                  string         `json:"route,omitempty"`     
+	Direction               string        `json:"direction,omitempty"` 
 	Steps                  []NavigateStep `json:"steps"`
-	Message                string         `json:"message,omitempty"` // set when Found=false, explains why
+	Message                string         `json:"message,omitempty"` 
 }
 
-// destinationSchema is what Gemini returns when asked to resolve a
-// free-text destination into a station name it recognizes from the
-// candidate list — see resolveDestination.
+
+
+
 var destinationSchema = &genai.Schema{
 	Type: genai.TypeObject,
 	Properties: map[string]*genai.Schema{
@@ -67,16 +67,16 @@ const destinationPrompt = `使用者說出想去的目的地，請從下面「�
 
 使用者說的目的地：「%s」`
 
-// Navigate turns a spoken/typed destination plus the rider's GPS into a
-// step-by-step boarding plan, using only data this project already has —
-// stopindex (static station+route index) and pda5284 route metadata — so it
-// works without a Google Routes/Places API key (neither is provisioned for
-// this project; see plan.md §7.2's "to enable" list). It intentionally does
-// not attempt multi-transfer routing: v1 finds either the same physical
-// station (destination within a stop's own served-routes list) or a single
-// route serving both the rider's nearest station and the destination
-// station. Anything requiring a transfer degrades to Found=false with a
-// message, rather than guessing a plan the rider can't verify.
+
+
+
+
+
+
+
+
+
+
 type Navigate struct {
 	index  *stopindex.Index
 	genai  *genai.Client
@@ -143,9 +143,9 @@ func (s *Navigate) Do(ctx context.Context, in NavigateIn) (NavigateOut, error) {
 		}, nil
 	}
 
-	// direction (pda5284's DirectionLabel) already reads "往ＸＸＸ" — see
-	// stopindex.Stop — so it drops straight into "搭乘307路，OOO" without a
-	// second "往" prefix.
+	
+	
+	
 	steps := []NavigateStep{
 		{Kind: "walk", Text: fmt.Sprintf("請走到「%s」站牌", origin.Name)},
 		{Kind: "board", Text: fmt.Sprintf("上車前確認車頭或車身顯示「%s」，方向為「%s」", route, direction)},
@@ -162,12 +162,12 @@ func (s *Navigate) Do(ctx context.Context, in NavigateIn) (NavigateOut, error) {
 	}, nil
 }
 
-// resolveDestination turns free text into a known station. It first tries a
-// plain substring match (fast, no LLM call, handles the common case of the
-// rider naming a station almost verbatim); Gemini is the fallback for
-// looser phrasing ("車站" for "台北車站"), and is skipped entirely when the
-// server has no Vertex AI credentials — navigate still works for exact/
-// near-exact station names without it.
+
+
+
+
+
+
 func (s *Navigate) resolveDestination(ctx context.Context, dest string) (stopindex.Station, bool) {
 	if st, ok := s.index.FindStationByName(dest); ok {
 		return st, true
@@ -205,15 +205,15 @@ func (s *Navigate) resolveDestination(ctx context.Context, dest string) (stopind
 	return s.index.FindStationByName(out.StationName)
 }
 
-// findDirectRoute looks for one route serving both stations in a direction
-// that actually goes from origin toward destination — approximated here as
-// "the route's destination-label station is closer to destSlID's own
-// coordinate than origin's is", since pda5284 never gives an explicit
-// stop-sequence-position we could check directly. Good enough for v1's
-// single-route case; a wrong direction match degrades to a plan the rider
-// can still verify against the "往ＸＸＸ" text called out in the board
-// step, which is why that text is always included rather than assumed
-// correct silently.
+
+
+
+
+
+
+
+
+
 func (s *Navigate) findDirectRoute(originSlID, destSlID int) (route, direction string, ok bool) {
 	originRoutes := s.index.RoutesAt(originSlID)
 	destRoutes := s.index.RoutesAt(destSlID)

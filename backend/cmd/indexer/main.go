@@ -1,18 +1,18 @@
-// Command indexer builds the station/stop file cmd/server loads at
-// startup (see internal/stopindex). pda5284 never publishes stop
-// coordinates, so this scrapes route.jsp for each configured route to get
-// stop metadata, resolves each stop pole (sid) to its aggregated station
-// (slid) via stop.jsp's redirect, then polls RouteDyna for a while to
-// catch buses stationary at a stop and uses their GPS fix as that
-// station's coordinate sample (median-reduced in internal/stopindex).
-//
-// This is a one-shot batch job, not a persistent cron: each run collects
-// its own samples from scratch and overwrites the output file rather than
-// merging with a previous run. plan.md §2.1 designs the production version
-// as a daily Cloud Run Job; wiring that up only requires calling this
-// binary on a schedule and, if broader coverage than the demo route list
-// below is needed, accumulating samples across runs (not implemented
-// here — see the Builder doc comment in internal/stopindex/builder.go).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 package main
 
 import (
@@ -26,12 +26,12 @@ import (
 	"devjam-backend/internal/stopindex"
 )
 
-// defaultRoutes is a small, real demo set around central Taipei, including
-// routes 307 and 202 — the exact route numbers api.md's original mock
-// example used. rid values were resolved from pda5284's live route list on
-// 2026-08-17; see plan.md §1 for how to re-derive them if the site
-// renumbers routes.
-const defaultRoutes = "16111,15111,10841,11811,10873,10417" // 307, 202, 0東, 0南, 20, 忠孝幹線
+
+
+
+
+
+const defaultRoutes = "16111,15111,10841,11811,10873,10417" 
 
 func main() {
 	routesFlag := flag.String("routes", defaultRoutes, "comma-separated pda5284 route ids to index")
@@ -107,7 +107,7 @@ func main() {
 			samples := 0
 			for _, bus := range dyna.Buses {
 				if bus.SpeedKmh >= 5 || bus.CurrentStopID == 0 {
-					continue // only trust a position when the bus is actually stopped
+					continue 
 				}
 				if slid, ok := sidToSlid[bus.CurrentStopID]; ok {
 					builder.AddStationSample(slid, bus.Lat, bus.Lon)

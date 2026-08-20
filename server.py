@@ -1,9 +1,3 @@
-"""
-城市之眼 Demo 伺服器：
-- 拍照掃描 -> Gemini 摘要 -> TTS 語音
-- 使用者偏好（校準一次，Firestore 記住）
-- 通知司機（Firestore 寫入警示，司機端輪詢）
-"""
 import os
 import re
 import uuid
@@ -19,10 +13,10 @@ AUDIO_DIR = os.path.join(BASE_DIR, "output")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(AUDIO_DIR, exist_ok=True)
 
-# user_id 直接當 Firestore document ID，限制字元集避免 path
-# manipulation（"a/b" 會被 Firestore 當成巢狀路徑寫進別的地方）。
+
+
 VALID_USER_ID = re.compile(r"^[A-Za-z0-9_-]{1,64}$")
-# 台灣公車路線編號：數字或數字+中文前綴（如 307、棕7、紅12）
+
 VALID_ROUTE = re.compile(r"^[一-鿿A-Za-z0-9]{1,8}$")
 
 app = Flask(__name__)
@@ -152,7 +146,7 @@ PASSENGER_HTML = """
   <div id="status">城市之眼 — 點螢幕任意處掃描</div>
   <div id="hint">點一下畫面開始掃描</div>
   <div id="tapLayer"></div>
-  <button id="settingsBtn" title="調整設定">⚙ 調整視野／字體</button>
+  <button id="settingsBtn" title="調整設定">調整視野／字體</button>
 
   <div id="resultScreen">
     <div id="resultText"></div>
@@ -428,7 +422,7 @@ DRIVER_HTML = """
         return;
       }
       box.innerHTML = data.alerts.map(a =>
-        `<div class="alert">⚠️ ${a.route} 號路線有視障乘客等車（${a.impairment_type || '未知類型'}）</div>`
+        `<div class="alert">${a.route} 號路線有視障乘客等車（${a.impairment_type || '未知類型'}）</div>`
       ).join('');
     }
 
@@ -505,7 +499,7 @@ def api_analyze():
     try:
         result = run_pipeline(image_path, audio_path)
     except Exception:
-        # 不回傳 str(e)：內部錯誤訊息（檔案路徑、API 細節）不該洩漏給客戶端
+        
         print(f"[analyze] pipeline failed for job {job_id}", flush=True)
         import traceback
         traceback.print_exc()
@@ -561,5 +555,5 @@ def serve_audio(filename):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5001))
-    debug = os.environ.get("PORT") is None  # Cloud Run 上關掉 debug/reloader
+    debug = os.environ.get("PORT") is None  
     app.run(host="0.0.0.0", port=port, debug=debug)

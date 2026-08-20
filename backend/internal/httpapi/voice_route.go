@@ -13,15 +13,15 @@ import (
 
 const maxVoiceAudioBytes = 10 << 20
 
-// VoiceRouteHandler is the Journey Agent v1 entry point (api.md §5): a
-// rider speaks (or types) the route they want — "307" — and the response
-// echoes the normalized route code the frontend then sends back with
-// /api/analyze as wanted_route.
-//
-// Audio takes the Cloud Speech-to-Text path only when the server was
-// started with credentials; otherwise the handler answers 503 and the
-// frontend falls back to asking for the text input, so the wanted-route
-// pipeline stays usable without GCP.
+
+
+
+
+
+
+
+
+
 type VoiceRouteHandler struct {
 	stt     *skill.SpeechToText
 	extract *skill.RouteExtract
@@ -96,8 +96,8 @@ func (h *VoiceRouteHandler) Handle(c *gin.Context) {
 	})
 }
 
-// normalizeRouteCode strips the filler words STT transcripts often attach
-// ("307路" → "307") so the code matches stopindex route names exactly.
+
+
 func normalizeRouteCode(route string) string {
 	route = strings.TrimSpace(route)
 	for _, suffix := range []string{"路", "號", "公車"} {
@@ -106,8 +106,8 @@ func normalizeRouteCode(route string) string {
 	return strings.TrimSpace(route)
 }
 
-// decodeAudioBase64 accepts plain base64 or a data URI, mirroring
-// decodeImage's tolerance of both encodings.
+
+
 func decodeAudioBase64(s string) ([]byte, error) {
 	if strings.HasPrefix(s, "data:") {
 		if comma := strings.Index(s, ","); comma != -1 {

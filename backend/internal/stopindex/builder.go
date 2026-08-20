@@ -9,16 +9,16 @@ import (
 
 type latlon struct{ lat, lon float64 }
 
-// Builder accumulates route/stop metadata and coordinate samples gathered
-// during one cmd/indexer run, then reduces them into a File.
-//
-// Coordinate samples are reduced with a median rather than kept raw, so a
-// single stray GPS fix cannot skew a station's inferred position. Builder
-// does not persist samples between runs — see cmd/indexer's doc comment
-// for why that is an acceptable simplification for a hackathon-scale
-// index.
+
+
+
+
+
+
+
+
 type Builder struct {
-	stops          map[int]Stop // keyed by sid, last write wins (stable across route re-scrapes)
+	stops          map[int]Stop 
 	stationNames   map[int]string
 	stationSamples map[int][]latlon
 }
@@ -31,8 +31,8 @@ func NewBuilder() *Builder {
 	}
 }
 
-// AddStop records one route's stop-pole metadata, discovered while
-// scraping route.jsp.
+
+
 func (b *Builder) AddStop(s Stop) {
 	b.stops[s.SID] = s
 	if s.StopName != "" {
@@ -42,16 +42,16 @@ func (b *Builder) AddStop(s Stop) {
 	}
 }
 
-// AddStationSample records one inferred coordinate for a station (slid),
-// e.g. from a bus observed stationary near that stop.
+
+
 func (b *Builder) AddStationSample(slid int, lat, lon float64) {
 	b.stationSamples[slid] = append(b.stationSamples[slid], latlon{lat, lon})
 }
 
-// Build reduces accumulated data into a File. Stations that never received
-// a coordinate sample are omitted rather than written with a bogus (0,0)
-// location — such stops remain resolvable via LookupStop once a future run
-// samples them, they just won't be reachable by GPS proximity yet.
+
+
+
+
 func (b *Builder) Build() File {
 	f := File{GeneratedAt: time.Now().UTC()}
 	for _, s := range b.stops {

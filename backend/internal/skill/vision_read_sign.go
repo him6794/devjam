@@ -20,11 +20,11 @@ type VisionReadSignOut struct {
 	DestinationText string `json:"destination_text"`
 }
 
-// visionPrompt asks for exactly the two fields GeoAgent's candidates can be
-// cross-referenced against: the sign's station name, and any "往XXX"
-// destination text next to a route number. Traditional Chinese is
-// requested explicitly since that's what Taiwanese bus signs use and what
-// stopindex's scraped station names are in.
+
+
+
+
+
 const visionPrompt = `這是一張照片，可能拍到台灣的公車站牌。
 如果照片中清楚可見公車站牌，請提取：
 1. stop_name：站牌上的站名（繁體中文，如「捷運公館站」）
@@ -41,9 +41,9 @@ var visionResponseSchema = &genai.Schema{
 	Required: []string{"found", "stop_name", "destination_text"},
 }
 
-// VisionReadSign reads a bus-stop sign photo via Vertex AI Gemini and
-// extracts the text needed to disambiguate opposite-direction stops that
-// nearest_stops alone cannot tell apart (see agent.VisionAgent).
+
+
+
 type VisionReadSign struct {
 	client *genai.Client
 	model  string

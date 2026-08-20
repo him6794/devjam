@@ -3,8 +3,8 @@ const { test, expect } = require("@playwright/test");
 
 const testImage = path.join(__dirname, "..", "test-assets", "bus-stop-test.png");
 
-// 校準畫面點擊處必須存成 viewport 百分比（不是 canvas 百分比），
-// 結果頁的 fixed 資訊窗才對得到同一點。
+
+
 test("calibration stores the clicked point as viewport percentage", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 667 });
   await page.goto("http://localhost:8080/passenger");
@@ -24,7 +24,7 @@ test("calibration stores the clicked point as viewport percentage", async ({ pag
   expect(zone.x).toBeCloseTo((clickX / viewport.w) * 100, 1);
   expect(zone.y).toBeCloseTo((clickY / viewport.h) * 100, 1);
 
-  // marker 在 canvas 內跟點擊同點（px 換算）
+  
   const marker = await page.evaluate(() => ({
     left: parseFloat(document.querySelector("#safe-zone-marker").style.left),
     top: parseFloat(document.querySelector("#safe-zone-marker").style.top),
@@ -35,9 +35,9 @@ test("calibration stores the clicked point as viewport percentage", async ({ pag
   expect(marker.top).toBeCloseTo(clickY - box.y, 1);
 });
 
-// 驗證結果資訊窗顯示在校準設定的視野範圍內：視野區設在右上
-// (x=72, y=28, radius=95)，資訊窗的 left/top/寬高與字級縮放
-// (--zone-scale) 都必須對齊校準值——這是視障使用者「看得見資訊」的關鍵。
+
+
+
 test("safe zone display verify", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 667 });
   await page.goto("http://localhost:8080/passenger");
@@ -78,15 +78,15 @@ test("safe zone display verify", async ({ page }) => {
   });
   console.log("zone window style:", JSON.stringify(style, null, 2));
 
-  // fixed + viewport 百分比：與校準畫面的點擊座標同一套基準
+  
   expect(style.position).toBe("fixed");
-  // radius=95 → 視窗 190px；scale = 95/60 = 1.583（clamp 內）
+  
   expect(style.width).toBe("190px");
   expect(style.height).toBe("190px");
   expect(parseFloat(style.zoneScale)).toBeCloseTo(95 / 60, 5);
-  // left = clamp(95px, 72%, 100% - 95px)：375px 畫面 72% = 270px，上限 280px → 270px
+  
   expect(style.left).toBe("270px");
-  // top = clamp(95px, 28%, 100% - 95px)：667px 畫面 28% ≈ 186.76px
+  
   expect(parseFloat(style.top)).toBeCloseTo(186.76, 0);
-  expect(style.transform).toContain("matrix"); // translate(-50%,-50%) 已套用
+  expect(style.transform).toContain("matrix"); 
 });

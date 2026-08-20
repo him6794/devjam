@@ -13,11 +13,11 @@ import (
 	"devjam-backend/internal/skill"
 )
 
-// StationStatusIn is the argument shape of the station_status tool. lat/lon
-// are optional at the schema level: when the Live model calls it bare
-// (which the system prompt tells it to do — a rider never says a GPS
-// coordinate), liveToolset.Invoke fills them from the session's latest GPS
-// fix. A plain HTTP/registry caller must supply them itself.
+
+
+
+
+
 type StationStatusIn struct {
 	Lat float64 `json:"lat"`
 	Lon float64 `json:"lon"`
@@ -40,12 +40,12 @@ type stationStatusOut struct {
 	Buses      []skill.BusETA     `json:"buses,omitempty"`
 }
 
-// StationStatusSkill is the orchestrator integration behind the Live
-// guide's station_status tool: instead of the Live session calling the
-// geo/transit skills piecemeal, one call runs the same wave pipeline the
-// /api/analyze path uses — GeoAgent first, then TransitAgent once a station
-// is locked — so the live guide and the one-shot analyze flow can never
-// diverge on what "the nearest stop's ETAs" means.
+
+
+
+
+
+
 type StationStatusSkill struct {
 	orchestrator *agent.Orchestrator
 	nearestStops *skill.NearestStops
@@ -78,9 +78,9 @@ func (s *StationStatusSkill) Do(ctx context.Context, in StationStatusIn) (statio
 	}
 	bb := &agent.Blackboard{Lat: in.Lat, Lon: in.Lon}
 
-	// Wave 1: the same GeoAgent /api/analyze runs, including its distance
-	// gate (farAwayThresholdM) — a "nearest" station a block away is not
-	// the station the rider is standing at.
+	
+	
+	
 	s.orchestrator.RunWave(ctx, bb, agent.NewGeoAgent(s.nearestStops))
 	if len(bb.Candidates) == 0 || bb.Candidates[0].Distance > farAwayThresholdM {
 		return stationStatusOut{Found: false, Message: "附近150公尺內找不到任何已知站牌"}, nil
@@ -98,7 +98,7 @@ func (s *StationStatusSkill) Do(ctx context.Context, in StationStatusIn) (statio
 		})
 	}
 
-	// Wave 2: transit needs the station wave 1 locked onto.
+	
 	s.orchestrator.RunWave(ctx, bb, agent.NewTransitAgent(s.stopETA))
 
 	buses := make([]skill.BusETA, 0, len(bb.Buses))
@@ -132,10 +132,10 @@ func (s *StationStatusSkill) Invoke(ctx context.Context, raw json.RawMessage) (a
 	return s.Do(ctx, in)
 }
 
-// liveToolset implements skill.LiveToolset: the two functions a Live
-// session offers the model. station_status goes through the orchestrator
-// pipeline above; stop_eta is the plain registry skill, so the model can
-// drill into a specific candidate station it got back from station_status.
+
+
+
+
 type liveToolset struct {
 	stationStatus *StationStatusSkill
 	stopETA       *skill.StopETA
@@ -166,8 +166,8 @@ func (t *liveToolset) Invoke(ctx context.Context, name string, args map[string]a
 		if args == nil {
 			args = map[string]any{}
 		}
-		// The model is told to call bare; fill the coordinates from the
-		// session's GPS so it never has to invent a number.
+		
+		
 		if _, ok := args["lat"]; !ok {
 			if gps == nil {
 				return nil, errors.New("station_status: 尚無定位資訊，請稍後再試")

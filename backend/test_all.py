@@ -24,7 +24,7 @@ print("=" * 60)
 print("全功能測試 (api.md § 1-4)")
 print("=" * 60)
 
-# 1. /api/analyze - GPS 定位
+
 print("\n[1] /api/analyze - 有效座標(台北市)")
 r = test("分析 - 有效座標",
     "POST", "/api/analyze",
@@ -47,7 +47,7 @@ if r and r.status_code == 200:
         display = d.get('display', {})
         print(f"   display: safe_zone={display.get('safe_zone_position')} font={display.get('font_scale')}")
 
-# 2. /api/analyze - 無效座標
+
 print("\n[2] /api/analyze - 偏遠座標(南太平洋)")
 r = test("分析 - 偏遠座標(not_found)",
     "POST", "/api/analyze",
@@ -57,7 +57,7 @@ if r and r.status_code == 200:
     d = r.json()
     print(f"   status: {d.get('status')} (應為 not_found)")
 
-# 3. /api/analyze - 缺地點
+
 print("\n[3] /api/analyze - 缺少 location")
 r = test("分析 - 缺 location",
     "POST", "/api/analyze",
@@ -65,14 +65,14 @@ r = test("分析 - 缺 location",
     json={})
 print(f"   (應為 400: {r.status_code if r else 'N/A'})")
 
-# 4. /api/profile GET
+
 print("\n[4] /api/profile - GET")
 uid = f"testuser_{int(time.time())}"
 test(f"個人偏好 GET - 未設定",
     "GET", "/api/profile",
     headers={"X-User-Id": uid})
 
-# 5. /api/profile POST
+
 print("\n[5] /api/profile - POST")
 r = test(f"個人偏好 SET",
     "POST", "/api/profile",
@@ -88,7 +88,7 @@ if r and r.status_code == 200:
     print(f"   impairment: {d.get('impairment_type')}")
     print(f"   safe_zone: {d.get('safe_zone')}")
 
-# 6. /api/profile GET again
+
 print("\n[6] /api/profile - GET (驗證已存)")
 r = test(f"個人偏好 GET - 已設定",
     "GET", "/api/profile",
@@ -98,7 +98,7 @@ if r and r.status_code == 200:
     print(f"   exists: {d.get('exists')} (應為 true)")
     print(f"   font_scale: {d.get('font_scale')} (應為 1.8)")
 
-# 7. /api/analyze with profile
+
 print("\n[7] /api/analyze - 搭配個人偏好")
 r = test("分析 + 個人偏好(display 應用 font=1.8, safe_zone=top)",
     "POST", "/api/analyze",
@@ -109,7 +109,7 @@ if r and r.status_code == 200:
     display = d.get('display', {})
     print(f"   display: safe_zone={display.get('safe_zone_position')} (應為 top) font={display.get('font_scale')} (應為 1.8)")
 
-# 8. /api/notify_driver
+
 print("\n[8] /api/notify_driver - 建立告警")
 r = test("通知司機",
     "POST", "/api/notify_driver",
@@ -118,13 +118,13 @@ r = test("通知司機",
 if r and r.status_code == 200:
     print(f"   status: {r.json().get('status')} alert_id: {r.json().get('alert_id')}")
 
-# 9. /api/driver_alerts
+
 print("\n[9] /api/driver_alerts - 查詢路線告警")
 r = test("司機告警查詢", "GET", "/api/driver_alerts?route=307")
 if r and r.status_code == 200:
     print(f"   alerts: {len(r.json().get('alerts', []))} 筆")
 
-# 10. /api/skills
+
 print("\n[10] /api/skills - 列舉")
 r = test("列舉所有 skill",
     "GET", "/api/skills")
@@ -135,11 +135,11 @@ if r and r.status_code == 200:
     for s in skills:
         print(f"     - {s.get('name')}: {s.get('description')[:50]}")
 
-# 11. /healthz
+
 print("\n[11] /healthz")
 test("健康檢查", "GET", "/healthz")
 
-# 12. /api/voice_route - 文字路徑（api.md §5）
+
 print("\n[12] /api/voice_route - 文字輸入")
 r = test("語音路線 - 文字輸入",
     "POST", "/api/voice_route",
@@ -150,7 +150,7 @@ if r and r.status_code == 200:
     print(f"   status: {d.get('status')} route: {d.get('route')!r} (應為 307)")
     print(f"   transcript: {d.get('transcript')!r}")
 
-# 13. /api/voice_route - 聽不出路線
+
 print("\n[13] /api/voice_route - 無路線號碼")
 r = test("語音路線 - 無號碼",
     "POST", "/api/voice_route",
@@ -159,8 +159,8 @@ r = test("語音路線 - 無號碼",
 if r and r.status_code == 200:
     print(f"   status: {r.json().get('status')} (應為 no_route)")
 
-# 14. /api/voice_route - 真實語音迴路：有 TTS 可用時，把 analyze 的
-# voice_audio_url（Cloud TTS 合成音）餵回 voice_route 驗證 STT→路線擷取
+
+
 print("\n[14] /api/voice_route - 真實語音迴路（TTS 合成音 → STT 辨識）")
 try:
     r0 = requests.post(f"{BASE}/api/analyze", timeout=10,
@@ -188,7 +188,7 @@ else:
     if r:
         print(f"   (HTTP {r.status_code}: {r.text[:80]})")
 
-# 15. /api/analyze + wanted_route（api.md §1）
+
 print("\n[15] /api/analyze - wanted_route=307")
 r = test("分析 + 想要路線",
     "POST", "/api/analyze",

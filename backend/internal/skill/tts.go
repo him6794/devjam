@@ -21,17 +21,17 @@ type TTSOut struct {
 	AudioURL string `json:"audio_url"`
 }
 
-// TTS synthesizes voice_summary text into an MP3 via Cloud Text-to-Speech
-// and serves it back as a public Cloud Storage URL — api.md's
-// voice_summary field is a file, not text, so the audio itself is the
-// contract, not a summary of it.
-//
-// Objects are named by the SHA-256 of their text, so /api/analyze's
-// repeated polling (the same "3 分鐘進站" sentence, requested every 1-2s
-// while a rider waits) reuses one upload instead of re-synthesizing and
-// re-uploading identical audio on every call — checked both in-process
-// (cache) and against the bucket itself (objectExists), so the saving
-// holds across server restarts too.
+
+
+
+
+
+
+
+
+
+
+
 type TTS struct {
 	speech *texttospeech.Client
 	gcs    *storage.Client
@@ -39,7 +39,7 @@ type TTS struct {
 	voice  string
 
 	mu    sync.Mutex
-	cache map[string]string // text -> public URL
+	cache map[string]string 
 }
 
 func NewTTS(speech *texttospeech.Client, gcs *storage.Client, bucket string) *TTS {

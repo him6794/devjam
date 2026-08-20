@@ -23,8 +23,8 @@ type analyzeRequest struct {
 	UserID   string          `json:"user_id"`
 	Location analyzeLocation `json:"location"`
 	Image    string          `json:"image"`
-	// WantedRoute is the route code the rider stated via /api/voice_route
-	// ("307"); empty when they didn't state one. See api.md §1/§5.
+	
+	
 	WantedRoute string `json:"wanted_route"`
 }
 

@@ -20,12 +20,12 @@ type STTOut struct {
 	Transcript string `json:"transcript"`
 }
 
-// SpeechToText transcribes short spoken Traditional Chinese clips (the
-// MediaRecorder webm/opus frames the passenger page uploads for Journey
-// Agent v1, api.md §5) via Cloud Speech-to-Text. Like TTS and
-// VisionReadSign, a nil client is a legal configuration — Do returns an
-// error the caller degrades on (voice_route then asks the rider to type
-// the route instead).
+
+
+
+
+
+
 type SpeechToText struct {
 	client   *speech.Client
 	project  string
@@ -66,17 +66,17 @@ func (s *SpeechToText) Do(ctx context.Context, in STTIn) (STTOut, error) {
 	if location == "" {
 		location = "global"
 	}
-	// AutoDetectDecodingConfig sniffs the container (webm/opus from
-	// MediaRecorder, wav, flac, ...) so callers never have to declare a
-	// sample rate; the "_" recognizer is the per-project default.
+	
+	
+	
 	resp, err := s.client.Recognize(ctx, &speechpb.RecognizeRequest{
 		Recognizer: fmt.Sprintf("projects/%s/locations/%s/recognizers/_", s.project, location),
 		Config: &speechpb.RecognitionConfig{
 			DecodingConfig: &speechpb.RecognitionConfig_AutoDecodingConfig{
 				AutoDecodingConfig: &speechpb.AutoDetectDecodingConfig{},
 			},
-			// v2 的繁中代碼是 cmn-Hant-TW（BCP-47），不是 zh-TW —— 文件
-			// 明確要求只用支援表列出的代碼。
+			
+			
 			LanguageCodes: []string{"cmn-Hant-TW"},
 			Model:         s.model,
 		},

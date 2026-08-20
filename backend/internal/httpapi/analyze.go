@@ -20,8 +20,8 @@ type AnalyzeHandler struct {
 	orchestrator *agent.Orchestrator
 	nearestStops *skill.NearestStops
 	stopETA      *skill.StopETA
-	visionSign   *skill.VisionReadSign // nil when Gemini credentials aren't configured; analyze falls back to GPS-only
-	tts          *skill.TTS            // nil when TTS/Storage credentials aren't configured; voice_summary falls back to ""
+	visionSign   *skill.VisionReadSign 
+	tts          *skill.TTS            
 	profiles     *profile.Store
 }
 
@@ -29,9 +29,9 @@ func NewAnalyzeHandler(o *agent.Orchestrator, nearest *skill.NearestStops, eta *
 	return &AnalyzeHandler{orchestrator: o, nearestStops: nearest, stopETA: eta, visionSign: vision, tts: tts, profiles: profiles}
 }
 
-// farAwayThresholdM matches plan.md §4.1's distance gate: typical urban GPS
-// error is 10-30m, so 150m comfortably covers drift without matching the
-// user to a station block away.
+
+
+
 const farAwayThresholdM = 150
 
 func (h *AnalyzeHandler) Handle(c *gin.Context) {
@@ -53,12 +53,12 @@ func (h *AnalyzeHandler) Handle(c *gin.Context) {
 	bb := &agent.Blackboard{Lat: req.Location.Lat, Lon: req.Location.Lng, ImageData: imageData, ImageMIME: imageMIME, WantedRoute: req.WantedRoute}
 	ctx := c.Request.Context()
 
-	// Wave 1: geo lookup, profile lookup, and (if a photo was submitted
-	// and Gemini is configured) reading the sign are fully independent of
-	// each other, so they run concurrently — this is the "multiple
-	// agents working in parallel" requirement from plan.md §3, not a
-	// sequential fallback. Vision's output only feeds pickStation below;
-	// it never talks to Geo or vice versa.
+	
+	
+	
+	
+	
+	
 	wave1 := []agent.Agent{
 		agent.NewGeoAgent(h.nearestStops),
 		agent.NewProfileAgent(h.profiles, uid),
@@ -77,33 +77,33 @@ func (h *AnalyzeHandler) Handle(c *gin.Context) {
 		return
 	}
 
-	// Wave 2: Transit depends on the station Wave 1 picked, so it cannot
-	// start earlier.
+	
+	
 	h.orchestrator.RunWave(ctx, bb, agent.NewTransitAgent(h.stopETA))
 
 	sort.SliceStable(bb.Buses, func(i, j int) bool {
 		a, b := bb.Buses[i], bb.Buses[j]
 		aw, bw := routeMatchesWanted(a.Route, bb.WantedRoute), routeMatchesWanted(b.Route, bb.WantedRoute)
 		if aw != bw {
-			return aw // the wanted route always sorts first
+			return aw 
 		}
 		if a.HasETA != b.HasETA {
-			return a.HasETA // buses with a live ETA sort before "no data"
+			return a.HasETA 
 		}
 		return a.ETAMinutes < b.ETAMinutes
 	})
 
 	buses := make([]gin.H, 0, len(bb.Buses))
 	for _, b := range bb.Buses {
-		// direction/eta_minutes are always concrete, never JSON null: a
-		// missing value is real, recurring data from pda5284 itself (no
-		// scheduled trip right now, or this project's demo-scale index —
-		// see plan.md §2.1/§10 — hasn't indexed that route's metadata yet),
-		// so callers need a value they can render without a null-check,
-		// plus has_eta to tell "genuinely 0 minutes" apart from "no data"
-		// (eta_minutes alone can't: 0 is a valid real ETA, so the sentinel
-		// is -1, matching pda5284's own "-1 = no upcoming bus" convention
-		// from plan.md §1.2, never a value a real ETA could take).
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		direction := b.Direction
 		if direction == "" {
 			direction = "方向資訊暫缺"
@@ -125,10 +125,10 @@ func (h *AnalyzeHandler) Handle(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":       "success",
 		"station_name": bb.NearestName,
-		// wanted_route echoes the rider's stated route back; found=false
-		// tells the frontend this station doesn't serve it, so a
-		// vision-impaired rider learns that audibly instead of scanning
-		// the list for a route that isn't there.
+		
+		
+		
+		
 		"wanted_route":       bb.WantedRoute,
 		"wanted_route_found": wantedRouteFound(bb.Buses, bb.WantedRoute),
 		"buses":              buses,
@@ -136,20 +136,20 @@ func (h *AnalyzeHandler) Handle(c *gin.Context) {
 			"safe_zone_position": safeZonePosition(bb.Profile.SafeZone.Y),
 			"font_scale":         nonZeroOr(bb.Profile.FontScale, 1.0),
 		},
-		// voice_summary is text so the frontend can read it with the rider's
-		// own already-configured device screen-reader rate/voice (plan.md §9)
-		// instead of a fixed-rate server clip; voice_audio_url is an optional
-		// Cloud TTS fallback for browsers without speechSynthesis support.
+		
+		
+		
+		
 		"voice_summary":   voiceSummary(bb.Buses, bb.WantedRoute),
 		"voice_audio_url": h.synthesizeVoiceAudioURL(ctx, bb.Buses),
 	})
 }
 
-// synthesizeVoiceAudioURL turns the bus list into one spoken sentence and
-// returns a public URL to its MP3. Returns "" — never an error — when TTS
-// isn't configured or the synthesis call fails, so a Cloud TTS hiccup
-// degrades to "no audio fallback" rather than losing the bus data the rest
-// of the response already has.
+
+
+
+
+
 func (h *AnalyzeHandler) synthesizeVoiceAudioURL(ctx context.Context, buses []agent.BusReport) string {
 	if h.tts == nil {
 		return ""
@@ -162,10 +162,10 @@ func (h *AnalyzeHandler) synthesizeVoiceAudioURL(ctx context.Context, buses []ag
 	return out.AudioURL
 }
 
-// urgency folds a route's ETA against the caller's reaction-time buffer
-// (profile.Profile.ReactionBufferMinutes): the same 3-minute ETA is "high"
-// urgency for a rider who needs longer to reach the curb, but "medium" for
-// a rider with no stated impairment.
+
+
+
+
 func urgency(b agent.BusReport, p agent.ProfileView) string {
 	if !b.HasETA {
 		return "low"
@@ -184,10 +184,10 @@ func urgency(b agent.BusReport, p agent.ProfileView) string {
 	}
 }
 
-// urgencyFor is urgency() with wanted-route suppression: once the rider
-// has stated a route, unrelated routes are capped at "low" so the wanted
-// route's arrival is what stands out visually and audibly instead of every
-// bus competing for attention. No stated route → unchanged behavior.
+
+
+
+
 func urgencyFor(b agent.BusReport, p agent.ProfileView, wanted string) string {
 	u := urgency(b, p)
 	if wanted != "" && !routeMatchesWanted(b.Route, wanted) {
@@ -196,9 +196,9 @@ func urgencyFor(b agent.BusReport, p agent.ProfileView, wanted string) string {
 	return u
 }
 
-// routeMatchesWanted reports whether a route name is the one the rider
-// stated. Exact match after trimming: route codes are short identifiers
-// ("307", "棕12"), so substring matching would risk false positives.
+
+
+
 func routeMatchesWanted(route, wanted string) bool {
 	wanted = strings.TrimSpace(wanted)
 	if wanted == "" {
@@ -207,8 +207,8 @@ func routeMatchesWanted(route, wanted string) bool {
 	return strings.TrimSpace(route) == wanted
 }
 
-// wantedRouteFound reports whether the rider's stated route is served at
-// this station at all.
+
+
 func wantedRouteFound(buses []agent.BusReport, wanted string) bool {
 	for _, b := range buses {
 		if routeMatchesWanted(b.Route, wanted) {
@@ -218,13 +218,13 @@ func wantedRouteFound(buses []agent.BusReport, wanted string) bool {
 	return false
 }
 
-// safeZonePosition maps the profile's safe-zone Y coordinate (0-100, top to
-// bottom of frame) to the coarse position keyword the frontend's display
-// block expects.
+
+
+
 func safeZonePosition(y float64) string {
 	switch {
 	case y <= 0:
-		return "top" // no safe_zone on file
+		return "top" 
 	case y < 33:
 		return "top"
 	case y < 66:
@@ -253,9 +253,9 @@ func voiceSummary(buses []agent.BusReport, wanted string) string {
 		return fmt.Sprintf("你要搭的%s路目前無即時資訊，%s", first.Route, first.Direction)
 	}
 	if wanted != "" {
-		// The station doesn't serve the wanted route — say so up front
-		// instead of reading an unrelated route and letting the rider
-		// assume it's theirs.
+		
+		
+		
 		return fmt.Sprintf("此站牌沒有%s路，最近的是%s路，%s", wanted, first.Route, etaPhrase(first))
 	}
 	if first.HasETA {
@@ -264,10 +264,10 @@ func voiceSummary(buses []agent.BusReport, wanted string) string {
 	return fmt.Sprintf("%s路目前無即時資訊，%s", first.Route, first.Direction)
 }
 
-// etaPhrase is the ETA half of a summary line, reused when the lead-in
-// sentence differs (wanted route missing from this station).
-// etaPhrase is the ETA half of a summary line, reused when the lead-in
-// sentence differs (wanted route missing from this station).
+
+
+
+
 func etaPhrase(b agent.BusReport) string {
 	if b.HasETA {
 		return fmt.Sprintf("%d分鐘進站", b.ETAMinutes)
@@ -275,21 +275,21 @@ func etaPhrase(b agent.BusReport) string {
 	return "目前無即時資訊"
 }
 
-// pickStation decides which of GeoAgent's candidates to lock onto, folding
-// in VisionAgent's reading of the photo (if any). Vision can only ever
-// pick among candidates GPS already found within radius — see
-// agent.VisionAgent's doc comment for why that bound matters.
-//
-// Station name alone cannot break every tie: opposite-direction stops
-// commonly share the exact same name (this project's own index turned up
-// a real pair, "華中橋", 18m apart). For that case, direction label (e.g.
-// "往板橋" vs "往撫遠街") is the signal that actually differs — but it must
-// only be compared *within* the name-matched subset, not against every
-// candidate in radius: a live test against the real index found a third,
-// unrelated station 119m away that happened to share the "往板橋" label,
-// which caused a false match when direction was checked pool-wide. Ambiguity
-// scoped to two nearby doors of the same building beats a coincidental
-// text match three buildings down.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 func pickStation(bb *agent.Blackboard) {
 	if len(bb.Candidates) == 0 {
 		return
@@ -298,9 +298,9 @@ func pickStation(bb *agent.Blackboard) {
 		named := filterByName(bb.Candidates, bb.VisionStopName)
 		switch len(named) {
 		case 0:
-			// Vision's reading didn't match any nearby station name — too
-			// unreliable to also trust for direction matching against the
-			// full (largely unrelated) pool, so fall through to nearest.
+			
+			
+			
 		case 1:
 			lockStation(bb, named[0])
 			return
@@ -309,7 +309,7 @@ func pickStation(bb *agent.Blackboard) {
 				lockStation(bb, c)
 				return
 			}
-			lockStation(bb, named[0]) // still narrowed by name; nearest among that group
+			lockStation(bb, named[0]) 
 			return
 		}
 	}
@@ -323,8 +323,8 @@ func lockStation(bb *agent.Blackboard, c agent.Candidate) {
 	bb.NearestDistM = c.Distance
 }
 
-// filterByName returns every candidate whose name matches visionName,
-// preserving bb.Candidates' nearest-first order.
+
+
 func filterByName(candidates []agent.Candidate, visionName string) []agent.Candidate {
 	visionName = strings.TrimSpace(visionName)
 	if visionName == "" {
@@ -358,10 +358,10 @@ func uniqueByDirection(candidates []agent.Candidate, visionDestination string) (
 	return match, matches == 1
 }
 
-// stationNameMatches compares a scraped station name against Gemini's
-// reading of the sign. Substring rather than exact equality because
-// pda5284's station names sometimes carry a parenthetical suffix (e.g.
-// "新北市政府(新府路)") that a photo reading may or may not include.
+
+
+
+
 func stationNameMatches(indexed, vision string) bool {
 	indexed, vision = strings.TrimSpace(indexed), strings.TrimSpace(vision)
 	if indexed == "" || vision == "" {
@@ -370,11 +370,11 @@ func stationNameMatches(indexed, vision string) bool {
 	return strings.Contains(indexed, vision) || strings.Contains(vision, indexed)
 }
 
-// decodeImage accepts either plain base64 or a data URI
-// ("data:image/jpeg;base64,...") and returns the raw bytes plus a MIME
-// type — from the data URI if present, otherwise sniffed from the bytes
-// themselves. Returns (nil, "") for anything it can't decode, which
-// VisionAgent treats the same as "no image submitted".
+
+
+
+
+
 func decodeImage(s string) ([]byte, string) {
 	if s == "" {
 		return nil, ""
